@@ -1,0 +1,100 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:LinkChat.Desktop.Avalonia.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="800"
+        x:Class="LinkChat.Desktop.Avalonia.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="LinkChat.Desktop.Avalonia">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid Background="{DynamicResource TitanWhite}" ColumnDefinitions="650, *">
+        <Border Padding="20" Background="White" HorizontalAlignment="Stretch" Grid.Column="0">
+            <Grid RowDefinitions="*,Auto" Background="White">
+                <StackPanel Spacing="40">
+                    <Button Classes="transparent" HorizontalAlignment="Left">
+                        <Image Source="/Assets/Images/ListOptions.png" Width="40" HorizontalAlignment="Left" Classes="IconOnly"></Image>
+                    </Button>
+                    <Button>
+                        <Grid ColumnDefinitions="100, 300, *">
+                            <StackPanel Grid.Column="0">
+                                <Image Source="/Assets/Images/Character1.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-5">
+                                <TextBlock Text="Bianca García" Classes="UserName"></TextBlock>
+                                <TextBlock Text="Bianca: Ok, nos vemos!" Classes="LastMessage"></TextBlock>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="14:05" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </Button>
+                    <Button>
+                        <Grid ColumnDefinitions="100, 300, *">
+                            <StackPanel Grid.Column="0">
+                                <Image Source="/Assets/Images/Character2.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-5">
+                                <TextBlock Text="Carmen Rodríguez" Classes="UserName"></TextBlock>
+                                <TextBlock Text="Tú: OK" Classes="LastMessage"></TextBlock>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="14:00" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </Button> 
+                    <Button>
+                        <Grid ColumnDefinitions="100, 300, *">
+                            <StackPanel Grid.Column="0">
+                                <Image Source="/Assets/Images/Character3.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-5">
+                                <TextBlock Text="Alejandro Torres" Classes="UserName"></TextBlock>
+                                <TextBlock Text="Tú: Ya enviaste el reporte?" Classes="LastMessage"></TextBlock>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="13:48" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </Button>  
+                    <Button>
+                        <Grid ColumnDefinitions="100, 300, *">
+                            <StackPanel Grid.Column="0">
+                                <Image Source="/Assets/Images/Character4.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-5">
+                                <TextBlock Text="Alicia García" Classes="UserName"></TextBlock>
+                                <TextBlock Text="Alicia: Ok, le diré a Bianca que te escriba" Classes="LastMessage"></TextBlock>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="12:25" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </Button>   
+                    <Button>
+                        <Grid ColumnDefinitions="100, 300, *">
+                            <StackPanel Grid.Column="0">
+                                <Image Source="/Assets/Images/Character5.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-5">
+                                <TextBlock Text="Carlos Rivera" Classes="UserName"></TextBlock>
+                                <TextBlock Text="Tú: Hola! Ya te sientes mejor?" Classes="LastMessage"></TextBlock>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="12:13" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </Button>    
+                </StackPanel>
+                
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

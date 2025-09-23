@@ -1,0 +1,99 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20" Background="White" Width="500" Height="300">
+            <!-- Add Controls for Previewer Here -->
+            <Grid>
+                <StackPanel>
+                    <Button>
+                        <Grid ColumnDefinitions="100, 300, *">
+                            <StackPanel Grid.Column="0">
+                                <Image Source="/Assets/Images/Character1.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-5">
+                                <TextBlock Text="Línea Superior" Classes="UserName"></TextBlock>
+                                <TextBlock Text="Línea inferior" Classes="LastMessage"></TextBlock>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="14:00" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </Button>
+                    <Button Classes="transparent" HorizontalAlignment="Left">
+                        <Image Source="/Assets/Images/ListOptions.png" Width="40" HorizontalAlignment="Left" Classes="IconOnly"></Image>
+                    </Button>
+                    
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Design.PreviewWith>
+
+    <!-- Add Styles Here -->
+    <Style Selector="Window">
+        <Setter Property="FontFamily" Value="{DynamicResource NotoSans}"></Setter>
+    </Style>
+    
+    
+    <Style Selector="Button">
+        <Setter Property="Background" Value="White"></Setter>
+        <Setter Property="Height" Value="80"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Stretch"> </Setter>
+    </Style>
+    
+    <Style Selector="Button TextBlock.UserName">
+        <Setter Property="FontSize" Value="21"></Setter>
+        <Setter Property="Margin" Value="2"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource EbonyClay}"></Setter>
+        <Setter Property="FontFamily" Value="{DynamicResource NotoSans}"></Setter>
+    </Style>
+   
+    <Style Selector="Button TextBlock.LastMessage">
+        <Setter Property="FontSize" Value="16"></Setter>
+        <Setter Property="Margin" Value="2"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource FontGrey}"></Setter>
+        <Setter Property="FontFamily" Value="{DynamicResource NotoSans}"></Setter>
+    </Style>
+    
+    <Style Selector="Button TextBlock.LastTimestamp">
+        <Setter Property="FontSize" Value="14"></Setter>
+        <Setter Property="Margin" Value="5"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource FontGrey}"></Setter>
+        <Setter Property="FontFamily" Value="{DynamicResource NotoSans}"></Setter>
+    </Style>
+    
+    <Style Selector="Button /template/ ContentPresenter">
+      <Setter Property="Transitions">
+         <Transitions>
+             <BrushTransition Property="Background" Duration="0:0:0.1"></BrushTransition>
+         </Transitions> 
+      </Setter> 
+    </Style>
+    
+    <Style Selector="Button.transparent">
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="RenderTransform" Value="scale(1)"></Setter>
+        <Setter Property="Transitions">
+            <Transitions>
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1"></TransformOperationsTransition>
+            </Transitions>
+        </Setter>
+    </Style>
+    
+    <Style Selector="Button.transparent /template/ ContentPresenter">
+        <Setter Property="RenderTransform" Value="scale(1)"></Setter>
+        <Setter Property="Transitions">
+            <Transitions>
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1"></TransformOperationsTransition>
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector= "Button:pointerover/template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource TitanWhite}"></Setter> 
+    </Style>
+    
+    <Style Selector= "Button.transparent:pointerover/template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="RenderTransform" Value="scale(1.2)"></Setter>
+    </Style>
+</Styles>

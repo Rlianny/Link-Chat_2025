@@ -1,0 +1,27 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="LinkChat.Desktop.Avalonia.App"
+             xmlns:local="using:LinkChat.Desktop.Avalonia"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+  
+             <Application.Styles>
+                 <FluentTheme />
+                 <StyleInclude Source="Styles/AppDefaultStyles.axaml"></StyleInclude>
+             </Application.Styles>
+             
+             <Application.Resources>
+                 <SolidColorBrush x:Key="TitanWhite">#eaf0fe</SolidColorBrush>
+                 <SolidColorBrush x:Key="CrocusPurple">#9787fe</SolidColorBrush>
+                 <SolidColorBrush x:Key="EbonyClay">#2d274b</SolidColorBrush>
+                 <SolidColorBrush x:Key="FontGrey">#bfbfbf</SolidColorBrush>
+                 
+                 <FontFamily x:Key="NotoSans">/Assets/Fonts/NotoSans-Regular.ttf#Noto Sans</FontFamily>
+                 <FontFamily x:Key="NotoSansBold">/Assets/Fonts/NotoSans-Bold.ttf#Noto Sans</FontFamily>
+             </Application.Resources>
+             
+</Application>
