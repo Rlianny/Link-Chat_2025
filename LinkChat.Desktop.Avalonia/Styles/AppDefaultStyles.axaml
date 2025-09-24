@@ -1,11 +1,12 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Design.PreviewWith>
-        <Border Padding="20" Background="White" Width="500" Height="300">
+        <Border Padding="20" Background="White" Width="500" Height="800">
             <!-- Add Controls for Previewer Here -->
-            <Grid>
+            <Grid RowDefinitions="Auto">
                 <StackPanel>
-                    <Button>
+                    
+                    <Button Classes="AvailableUser">
                         <Grid ColumnDefinitions="100, 300, *">
                             <StackPanel Grid.Column="0">
                                 <Image Source="/Assets/Images/Character1.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
@@ -19,10 +20,40 @@
                             </StackPanel>
                         </Grid>
                     </Button>
+                    
                     <Button Classes="transparent" HorizontalAlignment="Left">
                         <Image Source="/Assets/Images/ListOptions.png" Width="40" HorizontalAlignment="Left" Classes="IconOnly"></Image>
                     </Button>
                     
+                    <Button Classes="ChatMessage" >
+                        <Button.Content>
+                            <Grid ColumnDefinitions="70, 300" RowDefinitions="Auto">
+                                <!-- user image -->
+                                <Border Grid.Column="0" Padding="6">
+                                    <Image Source="/Assets/Images/Character1.png" VerticalAlignment="Top" HorizontalAlignment="Center"></Image>
+                                </Border>
+                                <!-- message -->
+                                <Border Grid.Column="1" Padding="6">
+                                    <Border Padding="6" 
+                                            Background="{DynamicResource CrocusPurple}" 
+                                            CornerRadius="10" >
+                                        <Border.Effect>
+                                            <DropShadowEffect BlurRadius="10" 
+                                                              OffsetX="0" 
+                                                              OffsetY="0" 
+                                                              Opacity="0.5" 
+                                                              Color="DimGray"/>
+                                        </Border.Effect>
+                                        <TextBlock Text="Hola Diana!"
+                                                   Foreground="White" 
+                                                   Margin="2" 
+                                                   TextWrapping="Wrap">
+                                        </TextBlock>
+                                    </Border>
+                                </Border>
+                            </Grid>
+                        </Button.Content>
+                    </Button>
                 </StackPanel>
             </Grid>
         </Border>
@@ -33,11 +64,17 @@
         <Setter Property="FontFamily" Value="{DynamicResource NotoSans}"></Setter>
     </Style>
     
-    
-    <Style Selector="Button">
+    <Style Selector="Button.AvailableUser">
         <Setter Property="Background" Value="White"></Setter>
         <Setter Property="Height" Value="80"></Setter>
         <Setter Property="HorizontalAlignment" Value="Stretch"> </Setter>
+    </Style>
+    
+    <Style Selector="Button.ChatMessage">
+        <Setter Property="Background" Value="Transparent"></Setter> 
+        <Setter Property="HorizontalAlignment" Value="Stretch"> </Setter>
+        <Setter Property="Padding" Value="0"></Setter>
+        <Setter Property="VerticalAlignment" Value="Top"></Setter>
     </Style>
     
     <Style Selector="Button TextBlock.UserName">

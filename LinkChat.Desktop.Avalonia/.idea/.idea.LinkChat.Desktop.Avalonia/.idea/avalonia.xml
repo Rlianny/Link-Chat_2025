@@ -5,6 +5,7 @@
       <map>
         <entry key="App.axaml" value="LinkChat.Desktop.Avalonia.csproj" />
         <entry key="Styles/AppDefaultStyles.axaml" value="LinkChat.Desktop.Avalonia.csproj" />
+        <entry key="Views/ChatWindow.axaml" value="LinkChat.Desktop.Avalonia.csproj" />
         <entry key="Views/MainWindow.axaml" value="LinkChat.Desktop.Avalonia.csproj" />
       </map>
     </option>
