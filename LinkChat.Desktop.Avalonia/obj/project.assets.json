@@ -598,6 +598,29 @@
         "runtime": {
           "lib/net8.0/Tmds.DBus.Protocol.dll": {}
         }
+      },
+      "LinkChat.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/LinkChat.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/LinkChat.Core.dll": {}
+        }
+      },
+      "LinkChat.Infrastructure.Linux/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "LinkChat.Core": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/LinkChat.Infrastructure.Linux.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/LinkChat.Infrastructure.Linux.dll": {}
+        }
       }
     }
   },
@@ -1451,6 +1474,16 @@
         "tmds.dbus.protocol.0.21.2.nupkg.sha512",
         "tmds.dbus.protocol.nuspec"
       ]
+    },
+    "LinkChat.Core/1.0.0": {
+      "type": "project",
+      "path": "../LinkChat.Core/LinkChat.Core.csproj",
+      "msbuildProject": "../LinkChat.Core/LinkChat.Core.csproj"
+    },
+    "LinkChat.Infrastructure.Linux/1.0.0": {
+      "type": "project",
+      "path": "../LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj",
+      "msbuildProject": "../LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -1460,7 +1493,9 @@
       "Avalonia.Diagnostics >= 11.3.6",
       "Avalonia.Fonts.Inter >= 11.3.6",
       "Avalonia.Themes.Fluent >= 11.3.6",
-      "CommunityToolkit.Mvvm >= 8.2.1"
+      "CommunityToolkit.Mvvm >= 8.2.1",
+      "LinkChat.Core >= 1.0.0",
+      "LinkChat.Infrastructure.Linux >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -1488,7 +1523,14 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj": {
+              "projectPath": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj"
+            },
+            "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj": {
+              "projectPath": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

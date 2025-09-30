@@ -1,6 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# 
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkChat.Desktop.Avalonia", "LinkChat.Desktop.Avalonia.csproj", "{AA01E944-73D7-4168-8278-842668638063}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkChat.ConsoleApp", "..\LinkChat.ConsoleApp\LinkChat.ConsoleApp.csproj", "{CEC66B3F-20CB-4C6F-B97F-9B00B63CDF2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +15,9 @@ Global
 		{AA01E944-73D7-4168-8278-842668638063}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA01E944-73D7-4168-8278-842668638063}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA01E944-73D7-4168-8278-842668638063}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEC66B3F-20CB-4C6F-B97F-9B00B63CDF2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEC66B3F-20CB-4C6F-B97F-9B00B63CDF2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEC66B3F-20CB-4C6F-B97F-9B00B63CDF2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEC66B3F-20CB-4C6F-B97F-9B00B63CDF2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
