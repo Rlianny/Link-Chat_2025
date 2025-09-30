@@ -22,7 +22,7 @@
                     <Button Classes="transparent" HorizontalAlignment="Left">
                         <Image Source="/Assets/Images/ListOptions.png" Width="40" HorizontalAlignment="Left" Classes="IconOnly"></Image>
                     </Button>
-                    <Button>
+                    <Button Classes="AvailableUser">
                         <Grid ColumnDefinitions="100, 300, *">
                             <StackPanel Grid.Column="0">
                                 <Image Source="/Assets/Images/Character1.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
@@ -36,7 +36,7 @@
                             </StackPanel>
                         </Grid>
                     </Button>
-                    <Button>
+                    <Button Classes="AvailableUser">
                         <Grid ColumnDefinitions="100, 300, *">
                             <StackPanel Grid.Column="0">
                                 <Image Source="/Assets/Images/Character2.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
@@ -50,7 +50,7 @@
                             </StackPanel>
                         </Grid>
                     </Button> 
-                    <Button>
+                    <Button Classes="AvailableUser">
                         <Grid ColumnDefinitions="100, 300, *">
                             <StackPanel Grid.Column="0">
                                 <Image Source="/Assets/Images/Character3.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
@@ -64,7 +64,7 @@
                             </StackPanel>
                         </Grid>
                     </Button>  
-                    <Button>
+                    <Button Classes="AvailableUser">
                         <Grid ColumnDefinitions="100, 300, *">
                             <StackPanel Grid.Column="0">
                                 <Image Source="/Assets/Images/Character4.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
@@ -78,7 +78,7 @@
                             </StackPanel>
                         </Grid>
                     </Button>   
-                    <Button>
+                    <Button Classes="AvailableUser">
                         <Grid ColumnDefinitions="100, 300, *">
                             <StackPanel Grid.Column="0">
                                 <Image Source="/Assets/Images/Character5.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
