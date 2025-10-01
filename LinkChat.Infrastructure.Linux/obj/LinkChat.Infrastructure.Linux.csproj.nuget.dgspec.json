@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj": {}
+    "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj": {}
   },
   "projects": {
-    "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj": {
+    "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj",
+        "projectUniqueName": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj",
         "projectName": "LinkChat.Core",
-        "projectPath": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj",
-        "packagesPath": "/home/kevin/.nuget/packages/",
-        "outputPath": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/obj/",
+        "projectPath": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj",
+        "packagesPath": "/home/lianny/.nuget/packages/",
+        "outputPath": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Core/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/kevin/.nuget/NuGet/NuGet.Config"
+          "/home/lianny/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -60,21 +60,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/9.0.109/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/9.0.110/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj": {
+    "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj",
+        "projectUniqueName": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj",
         "projectName": "LinkChat.Infrastructure.Linux",
-        "projectPath": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj",
-        "packagesPath": "/home/kevin/.nuget/packages/",
-        "outputPath": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Infrastructure.Linux/obj/",
+        "projectPath": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj",
+        "packagesPath": "/home/lianny/.nuget/packages/",
+        "outputPath": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Infrastructure.Linux/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/kevin/.nuget/NuGet/NuGet.Config"
+          "/home/lianny/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -87,8 +87,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj": {
-                "projectPath": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj"
+              "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj": {
+                "projectPath": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj"
               }
             }
           }
@@ -124,7 +124,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/9.0.109/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/9.0.110/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

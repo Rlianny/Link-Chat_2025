@@ -13,7 +13,9 @@
           "Avalonia.Diagnostics": "11.3.6",
           "Avalonia.Fonts.Inter": "11.3.6",
           "Avalonia.Themes.Fluent": "11.3.6",
-          "CommunityToolkit.Mvvm": "8.2.1"
+          "CommunityToolkit.Mvvm": "8.2.1",
+          "LinkChat.Core": "1.0.0",
+          "LinkChat.Infrastructure.Linux": "1.0.0"
         },
         "runtime": {
           "LinkChat.Desktop.Avalonia.dll": {}
@@ -444,6 +446,25 @@
             "fileVersion": "0.21.2.0"
           }
         }
+      },
+      "LinkChat.Core/1.0.0": {
+        "runtime": {
+          "LinkChat.Core.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "LinkChat.Infrastructure.Linux/1.0.0": {
+        "dependencies": {
+          "LinkChat.Core": "1.0.0"
+        },
+        "runtime": {
+          "LinkChat.Infrastructure.Linux.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -655,6 +676,16 @@
       "sha512": "sha512-ScSMrUrrw8px4kK1Glh0fZv/HQUlg1078bNXNPfRPKQ3WbRzV9HpsydYEOgSoMK5LWICMf2bMwIFH0pGjxjcMA==",
       "path": "tmds.dbus.protocol/0.21.2",
       "hashPath": "tmds.dbus.protocol.0.21.2.nupkg.sha512"
+    },
+    "LinkChat.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "LinkChat.Infrastructure.Linux/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }
