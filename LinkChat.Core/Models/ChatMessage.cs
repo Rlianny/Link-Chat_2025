@@ -1,9 +1,12 @@
-public class ChatMessage : Message
+namespace LinkChat.Core
 {
-    int messageId;
-    string content;
-    public ChatMessage(string name, DateTime dateTime, int messageId, string content) : base(name, dateTime)
+    public class ChatMessage : Message
     {
-        (this.messageId, this.content) = (messageId, content);
+        int messageId;
+        string content;
+        public ChatMessage(string name, DateTime dateTime, int messageId, string content) : base(name, dateTime)
+        {
+            (this.messageId, this.content) = (messageId, content);
+        }
     }
 }

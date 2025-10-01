@@ -1,11 +1,14 @@
-public class FileStart : Message
+namespace LinkChat.Core
 {
-    string fileName;
-    int fileSize;
-    int fileId;
-    int totalChunks;
-    public FileStart(string name, DateTime dateTime, string fileName, int fileSize, int fileId, int totalChunks) : base(name, dateTime)
+    public class FileStart : Message
     {
-        (this.fileName, this.fileSize, this.fileId, this.totalChunks) = (fileName, fileSize, fileId, totalChunks);
+        string fileName;
+        int fileSize;
+        int fileId;
+        int totalChunks;
+        public FileStart(string name, DateTime dateTime, string fileName, int fileSize, int fileId, int totalChunks) : base(name, dateTime)
+        {
+            (this.fileName, this.fileSize, this.fileId, this.totalChunks) = (fileName, fileSize, fileId, totalChunks);
+        }
     }
 }

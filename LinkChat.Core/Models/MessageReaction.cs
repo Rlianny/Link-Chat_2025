@@ -1,9 +1,12 @@
-class MessageReaction : Message
+namespace LinkChat.Core
 {
-    int messageId;
-    Emoji reaction;
-    public MessageReaction(string name, DateTime dateTime, int messageId, Emoji emoji) : base(name, dateTime)
+    class MessageReaction : Message
     {
-        (this.messageId, reaction) = (messageId, emoji);
+        int messageId;
+        Emoji reaction;
+        public MessageReaction(string name, DateTime dateTime, int messageId, Emoji emoji) : base(name, dateTime)
+        {
+            (this.messageId, reaction) = (messageId, emoji);
+        }
     }
 }

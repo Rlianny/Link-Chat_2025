@@ -1,12 +1,15 @@
-public class FileChunk : Message
+namespace LinkChat.Core
 {
-    int fileId;
-    int chunkNumber;
-    byte[] data;
-
-
-    public FileChunk(string name, DateTime dateTime, int fileId, int chunkNumber, byte[] data) : base(name, dateTime)
+    public class FileChunk : Message
     {
-        (this.fileId, this.chunkNumber, this.data) = (fileId, chunkNumber, data);
+        int fileId;
+        int chunkNumber;
+        byte[] data;
+
+
+        public FileChunk(string name, DateTime dateTime, int fileId, int chunkNumber, byte[] data) : base(name, dateTime)
+        {
+            (this.fileId, this.chunkNumber, this.data) = (fileId, chunkNumber, data);
+        }
     }
 }

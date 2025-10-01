@@ -1,26 +1,14 @@
-
-public abstract class Message
+namespace LinkChat.Core
 {
-    protected DateTime timestamp;
-    protected string userName;
-
-    public Message(string name, DateTime dateTime)
+    public abstract class Message
     {
-        (this.userName, this.timestamp) = (name, dateTime);
+        protected DateTime timestamp;
+        protected string userName;
+
+        public Message(string name, DateTime dateTime)
+        {
+            (this.userName, this.timestamp) = (name, dateTime);
+        }
     }
 }
-//-------------------------------------------
 
-//-----------------------------------------------
-
-//-----------------------------------------------
-
-//-------------------------------------------------
-
-//------------------------------------------
-
-//---------------------------------
-
-//--------------------------------------
-
-//--------------------------------------------

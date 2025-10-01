@@ -1,8 +1,11 @@
-public class HeartbeatMessage : Message
+namespace LinkChat.Core
 {
-    string macAddress;
-    public HeartbeatMessage(string name, DateTime dateTime, string Mac) : base(name, dateTime)
+    public class HeartbeatMessage : Message
     {
-        macAddress = Mac;
+        string macAddress;
+        public HeartbeatMessage(string name, DateTime dateTime, string Mac) : base(name, dateTime)
+        {
+            macAddress = Mac;
+        }
     }
 }

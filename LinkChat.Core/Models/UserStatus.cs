@@ -1,8 +1,11 @@
-public class UserStatus : Message
+namespace LinkChat.Core
 {
-    Status userStatus;
-    public UserStatus(string name, DateTime dateTime, Status userStatus) : base(name, dateTime)
+    public class UserStatus : Message
     {
-        this.userStatus = userStatus;
+        Status userStatus;
+        public UserStatus(string name, DateTime dateTime, Status userStatus) : base(name, dateTime)
+        {
+            this.userStatus = userStatus;
+        }
     }
 }

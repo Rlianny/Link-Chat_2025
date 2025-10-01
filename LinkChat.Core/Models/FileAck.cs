@@ -1,10 +1,13 @@
-public class FileAck : Message
+namespace LinkChat.Core
 {
-    int fileId;
-    int chunkNumber;
-
-    public FileAck(string name, DateTime dateTime, int fileId, int chunkNumber) : base(name, dateTime)
+    public class FileAck : Message
     {
-        (this.fileId, this.chunkNumber) = (fileId, chunkNumber);
+        int fileId;
+        int chunkNumber;
+
+        public FileAck(string name, DateTime dateTime, int fileId, int chunkNumber) : base(name, dateTime)
+        {
+            (this.fileId, this.chunkNumber) = (fileId, chunkNumber);
+        }
     }
 }

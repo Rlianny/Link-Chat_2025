@@ -1,9 +1,12 @@
-public class ChatAck : Message
+namespace LinkChat.Core
 {
-    int messageId;
-
-    public ChatAck(string name, DateTime dateTime, int messageId) : base(name, dateTime)
+    public class ChatAck : Message
     {
-        this.messageId = messageId;
+        int messageId;
+
+        public ChatAck(string name, DateTime dateTime, int messageId) : base(name, dateTime)
+        {
+            this.messageId = messageId;
+        }
     }
 }
