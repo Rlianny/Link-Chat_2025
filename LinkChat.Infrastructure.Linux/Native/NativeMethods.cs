@@ -1,4 +1,4 @@
-namespace LinkChat.Infrastructure.Linux
+namespace LinkChat
 {
     using System.Runtime.InteropServices;
 

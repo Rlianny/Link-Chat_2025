@@ -1,4 +1,4 @@
-namespace LinkChat.Core
+namespace LinkChat
 {
     public class FileStart : Message
     {

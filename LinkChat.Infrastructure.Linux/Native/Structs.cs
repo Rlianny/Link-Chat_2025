@@ -1,4 +1,4 @@
-namespace LinkChat.Infrastructure.Linux
+namespace LinkChat
 {
     internal static class NativeStructs
     {
