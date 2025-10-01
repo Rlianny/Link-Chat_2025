@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LinkChat.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9bf724f4bfbfa20deb6a329e39d4b42ff3746058")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+887538302d241d754da5c2734b496a5fa77d1683")]
 [assembly: System.Reflection.AssemblyProductAttribute("LinkChat.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LinkChat.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
