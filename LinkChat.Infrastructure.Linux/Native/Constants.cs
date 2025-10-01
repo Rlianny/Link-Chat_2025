@@ -1,4 +1,4 @@
-namespace LinkChat
+namespace LinkChat.Infrastructure.Linux.Native.Constants
 {
     internal static class NativeConstants
     {

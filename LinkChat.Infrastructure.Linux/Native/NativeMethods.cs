@@ -1,4 +1,4 @@
-namespace LinkChat
+namespace LinkChat.Infrastructure.Linux.Native.Methods
 {
     using System.Runtime.InteropServices;
     using static LinkChat.Infrastructure.Linux.Native.Structs.NativeStructs;

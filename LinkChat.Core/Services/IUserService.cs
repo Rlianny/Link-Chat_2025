@@ -1,5 +1,7 @@
-namespace LinkChat.Core
+namespace LinkChat.Core.Services
 {
+    using LinkChat.Core.Models;
+
     // manage the list of active users and their statuses
     public interface IUserService
     {

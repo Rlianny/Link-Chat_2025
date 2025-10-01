@@ -1,5 +1,7 @@
-namespace LinkChat.Core
+namespace LinkChat.Core.Services
 {
+    using LinkChat.Core.Models;
+
     // manages raw sockets, P/Invoke, and sending and receiving frames
     public interface INetworkService
     {
