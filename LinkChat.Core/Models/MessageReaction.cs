@@ -1,6 +1,6 @@
 namespace LinkChat
 {
-    public class MessageReaction : Message
+    public class MessageReaction : ChatMessage
     {
         int messageId;
         Emoji reaction;
