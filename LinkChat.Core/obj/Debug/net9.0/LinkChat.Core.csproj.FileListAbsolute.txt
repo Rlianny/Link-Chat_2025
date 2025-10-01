@@ -1,0 +1,12 @@
+/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/bin/Debug/net9.0/LinkChat.Core.deps.json
+/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/bin/Debug/net9.0/LinkChat.Core.dll
+/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/bin/Debug/net9.0/LinkChat.Core.pdb
+/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/obj/Debug/net9.0/LinkChat.Core.GeneratedMSBuildEditorConfig.editorconfig
+/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/obj/Debug/net9.0/LinkChat.Core.AssemblyInfoInputs.cache
+/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/obj/Debug/net9.0/LinkChat.Core.AssemblyInfo.cs
+/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/obj/Debug/net9.0/LinkChat.Core.csproj.CoreCompileInputs.cache
+/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/obj/Debug/net9.0/LinkChat.Core.sourcelink.json
+/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/obj/Debug/net9.0/LinkChat.Core.dll
+/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/obj/Debug/net9.0/refint/LinkChat.Core.dll
+/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/obj/Debug/net9.0/LinkChat.Core.pdb
+/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/obj/Debug/net9.0/ref/LinkChat.Core.dll
