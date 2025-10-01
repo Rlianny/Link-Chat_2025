@@ -4,5 +4,5 @@ public enum Emoji
 }
 public enum Status
 {
-    Typing, Online, Offline
+    Online, Offline
 }
