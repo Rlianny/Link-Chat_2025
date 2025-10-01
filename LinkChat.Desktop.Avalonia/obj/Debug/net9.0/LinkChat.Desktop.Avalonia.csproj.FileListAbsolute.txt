@@ -73,3 +73,7 @@
 /media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Desktop.Avalonia/obj/Debug/net9.0/LinkChat.Desktop.Avalonia.pdb
 /media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Desktop.Avalonia/obj/Debug/net9.0/LinkChat.Desktop.Avalonia.genruntimeconfig.cache
 /media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Desktop.Avalonia/obj/Debug/net9.0/ref/LinkChat.Desktop.Avalonia.dll
+/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Desktop.Avalonia/bin/Debug/net9.0/LinkChat.Core.dll
+/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Desktop.Avalonia/bin/Debug/net9.0/LinkChat.Infrastructure.Linux.dll
+/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Desktop.Avalonia/bin/Debug/net9.0/LinkChat.Core.pdb
+/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Desktop.Avalonia/bin/Debug/net9.0/LinkChat.Infrastructure.Linux.pdb
