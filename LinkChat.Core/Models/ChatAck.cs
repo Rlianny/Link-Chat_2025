@@ -2,11 +2,11 @@ namespace LinkChat.Core.Models;
 
 public class ChatAck : Message
 {
-    public int MessageId { get { return messageId; } private set { } }
+    public string MessageId { get { return messageId; } private set { } }
 
-    int messageId;
+    string messageId;
 
-    public ChatAck(string userName, DateTime timeStamp, int messageId) : base(userName, timeStamp)
+    public ChatAck(string userName, DateTime timeStamp, string messageId) : base(userName, timeStamp)
     {
         this.messageId = messageId;
     }

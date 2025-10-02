@@ -7,7 +7,7 @@ public class MessagingService : IMessagingService
     private Dictionary<string, List<ChatMessage>> Conversation = [];
     private Dictionary<string, ChatMessage> Messages = [];
     private Dictionary<string, Models.File> Files = [];
-
+    private Dictionary<string, bool> Confirmations = [];
 
     public MessagingService(IProtocolService protocolService, IFileTransferService fileTransferService)
     {
@@ -27,11 +27,10 @@ public class MessagingService : IMessagingService
     }
     private void AddChatMessage(ChatMessage chatMessage)
     {
-        if (Messages.ContainsKey(chatMessage.MessageId))
+        if (!Messages.ContainsKey(chatMessage.MessageId))
         {
-            throw new Exception($"Already exist a ChatMessage with ID {chatMessage.MessageId}");
+            Messages.Add(chatMessage.MessageId, chatMessage);
         }
-        Messages.Add(chatMessage.MessageId, chatMessage);
         if (!Conversation.ContainsKey(chatMessage.UserName))
         {
             Conversation.Add(chatMessage.UserName, []);
@@ -54,7 +53,11 @@ public class MessagingService : IMessagingService
     }
     private void OnChatAckFrameReceived(ChatAck chatAck)
     {
-
+        if (!Confirmations.ContainsKey(chatAck.MessageId))
+        {
+            throw new Exception($"Confirmation {chatAck} was missed");
+        }
+        Confirmations[chatAck.MessageId] = true;
     }
     private void OnTextMessageFrameReceived(TextMessage textMessage)
     {
@@ -79,6 +82,6 @@ public class MessagingService : IMessagingService
     }
     private void OnUserStatusFrameReceived(UserStatus status)
     {
-
+          
     }
 }
