@@ -10,5 +10,7 @@ namespace LinkChat.Core.Services
         public Status GetUserStatusByName();
         public string GetMacAddress(string userName);
         public string GetMacAddress(User user);
+        public event Action<User>? UserDisconnected;
+        public event Action<User>? NewUserConnected;
     }
 }
