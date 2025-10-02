@@ -7,6 +7,7 @@ namespace LinkChat.Core.Implementations;
 
 public class ProtocolService : IProtocolService
 {
+    private INetworkService networkService;
     public event Action<HeartbeatMessage>? HeartbeatFrameReceived;
     public event Action<ChatAck>? ChatAckFrameReceived;
     public event Action<FileAck>? FileAckFrameReceived;
@@ -17,9 +18,11 @@ public class ProtocolService : IProtocolService
     public event Action<UserStatus>? UserStatusFrameReceived;
     public event Action<byte[]>? FrameReadyToSend;
 
+
     public ProtocolService(INetworkService networkService)
     {
-        networkService.FrameReceived += OnFrameReceived;
+        this.networkService = networkService;
+        this.networkService.FrameReceived += OnFrameReceived;
     }
     public byte[] CreateFrameToSend(User? receiver, Message message, bool broadcast = false)
     {
