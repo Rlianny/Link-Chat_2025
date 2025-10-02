@@ -6,7 +6,7 @@ namespace LinkChat.Core.Services
     public interface IProtocolService
     {
         public Message? ParseFrame(byte[] frame);
-        public byte[] CreateFrame(Message message);
+        public byte[] CreateFrame(User receiver, Message message);
         public event Action<HeartbeatMessage>? HeartbeatFrameReceived;
         public event Action<ChatAck>? ChatAckFrameReceived;
         public event Action<FileAck>? FileAckFrameReceived;
@@ -15,5 +15,6 @@ namespace LinkChat.Core.Services
         public event Action<FileChunk>? FileChunkFrameReceived;
         public event Action<MessageReaction>? MessageReactionFrameReceived;
         public event Action<UserStatus>? UserStatusFrameReceived;
+        public event Action<byte[]>? FrameReadyToSend;
     }
 }

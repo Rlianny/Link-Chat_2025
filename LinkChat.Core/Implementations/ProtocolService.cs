@@ -14,10 +14,18 @@ public class ProtocolService : IProtocolService
     public event Action<FileChunk>? FileChunkFrameReceived;
     public event Action<MessageReaction>? MessageReactionFrameReceived;
     public event Action<UserStatus>? UserStatusFrameReceived;
+    public event Action<byte[]>? FrameReadyToSend;
 
     public ProtocolService(INetworkService networkService)
     {
         networkService.FrameReceived += OnFrameReceived;
+    }
+    public byte[] CreateFrame(User receiver, Message message)
+    {
+        byte[] destMacAddress = receiver.MacAddress;
+        byte[] localMacAddress;
+
+        return destMacAddress;
     }
     public byte[] CreateFrame(Message message)
     {

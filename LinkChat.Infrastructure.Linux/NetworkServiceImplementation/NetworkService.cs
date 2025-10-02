@@ -2,6 +2,8 @@ using LinkChat.Core.Models;
 using LinkChat.Core.Services;
 using LinkChat.Infrastructure.Linux.Native.Methods;
 using LinkChat.Infrastructure.Linux.Native.Structs;
+using LinkChat.Infrastructure.Linux.Native.Constants;
+using System.Runtime.InteropServices;
 
 namespace LinkChat.Infrastructure
 {
@@ -15,19 +17,46 @@ namespace LinkChat.Infrastructure
 
         public event Action<byte[]>? FrameReceived;
 
-        public void SendMessage(User user, Message message)
+        public LinuxNetworkService()
         {
-            throw new NotImplementedException();
+            
         }
 
         public Task SendFrameAsync(byte[] frame)
         {
-            throw new NotImplementedException();
+            if (socketFd == -1)
+                throw new InvalidOperationException("The socket is not initialized.");
+
+            var destAddr = new NativeStructs.sockaddr_ll
+            {
+                sll_family = NativeConstants.AF_PACKET,
+                sll_ifindex = interfaceIndex,
+                sll_halen = 6, // MAC Address length
+                sll_addr = new byte[8] // The first 6 bytes are the MAC, the rest are zero.
+            };
+
+            Array.Copy(frame, 0, destAddr.sll_addr, 0, 6); // The first 6 bytes (destination MAC) are copied to the struct
+
+            lock (sendLock)
+            {
+                int sentBytes = NativeMethods.sendto(socketFd, frame, frame.Length, 0, ref destAddr, Marshal.SizeOf(destAddr));
+                if (sentBytes < 0)
+                {
+                    var error = Marshal.GetLastWin32Error();
+                    throw new Exception($"Error sending package. System error code: {error}");
+                }
+            }
+
+            return Task.CompletedTask;
         }
 
         public void StartListening()
         {
-            throw new NotImplementedException();
+            if (socketFd == -1)
+                throw new InvalidOperationException("The socket is not initialized.");
+
+            // Start the listening loop in a new thread to avoid blocking the application.
+            Task.Run(() => ListenLoop());
         }
 
         private void ListenLoop()
