@@ -6,7 +6,7 @@ namespace LinkChat.Core.Services
     public interface IMessagingService
     {
         public void SendChatMessage(string userName, string content);
-        public TextMessage GetTextMessageById(int textMessageId);
-        public IEnumerable<ChatMessage> GetChatHistory();
+        public TextMessage GetTextMessageById(string textMessageId);
+        public IEnumerable<ChatMessage> GetChatHistory(string UserName);
     }
 }
