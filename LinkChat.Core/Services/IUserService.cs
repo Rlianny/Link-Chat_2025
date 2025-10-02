@@ -14,5 +14,6 @@ namespace LinkChat.Core.Services
         public event Action<User>? UserDisconnected;
         public event Action<User>? NewUserConnected;
         public event Action<User>? HeartbeatRequest;
+        public User GetSelfUser();
     }
 }

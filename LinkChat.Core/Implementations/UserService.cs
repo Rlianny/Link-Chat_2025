@@ -15,7 +15,10 @@ public class UserService : IUserService
         Self = new User(selfUserName, Status.Online, selfMacAddress);
         protocolService.HeartbeatFrameReceived += OnHeartbeatFrameReceived;
     }
-
+    public User GetSelfUser()
+    {
+        return Self;
+    }
     private void OnHeartbeatFrameReceived(HeartbeatMessage heartbeatMessage)
     {
         if (LastSeen.ContainsKey(heartbeatMessage.UserName))
@@ -39,13 +42,13 @@ public class UserService : IUserService
     {
         Task task = Task.Run(UpdateUsersStatuses);
     }
-    private void UpdateUsersStatuses()
+    private async void UpdateUsersStatuses()
     {
         while (true)
         {
             HeartbeatRequest.Invoke(Self);
             PruneInactiveUsers();
-            Task.Delay(10000);
+            await Task.Delay(10000);
         }
     }
 
