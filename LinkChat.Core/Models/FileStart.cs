@@ -1,18 +1,17 @@
-namespace LinkChat.Core.Models
+namespace LinkChat.Core.Models;
+
+public class FileStart : Message
 {
-    public class FileStart : Message
+    public string FileName { get { return fileName; } private set { } }
+    public int FileSize { get { return fileSize; } private set { } }
+    public int FileId { get { return fileId; } private set { } }
+    public int TotalChunks { get { return totalChunks; } private set { } }
+    string fileName;
+    int fileSize;
+    int fileId;
+    int totalChunks;
+    public FileStart(string name, DateTime dateTime, string fileName, int fileSize, int fileId, int totalChunks) : base(name, dateTime)
     {
-        public string FileName { get { return fileName; } private set { } }
-        public int FileSize { get { return fileSize; } private set { } }
-        public int FileId { get { return fileId; } private set { } }
-        public int TotalChunks { get { return totalChunks; } private set { } }
-        string fileName;
-        int fileSize;
-        int fileId;
-        int totalChunks;
-        public FileStart(string name, DateTime dateTime, string fileName, int fileSize, int fileId, int totalChunks) : base(name, dateTime)
-        {
-            (this.fileName, this.fileSize, this.fileId, this.totalChunks) = (fileName, fileSize, fileId, totalChunks);
-        }
+        (this.fileName, this.fileSize, this.fileId, this.totalChunks) = (fileName, fileSize, fileId, totalChunks);
     }
 }

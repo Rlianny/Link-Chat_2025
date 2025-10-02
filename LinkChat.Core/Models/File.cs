@@ -1,25 +1,23 @@
-namespace LinkChat.Core.Models
+using LinkChat.Core.Interfaces;
+namespace LinkChat.Core.Models;
+public class File : ChatMessage, IReactable
 {
+    public string Path { get { return path; } private set { } }
+    public string Name { get { return name; } private set { } }
+    public int Size { get { return size; } private set { } }
+    public Emoji Reaction => reaction;
 
-    public class File : ChatMessage, IReactable
+    string path;
+    string name;
+    int size;
+    Emoji reaction;
+    public File(string name, DateTime dateTime, string path, int size, string fileName) : base(name, dateTime)
     {
-        public string Path { get { return path; } private set { } }
-        public string Name { get { return name; } private set { } }
-        public int Size { get { return size; } private set { } }
-        public Emoji Reaction => reaction;
+        (this.path, this.name, this.size) = (path, fileName, size);
+    }
 
-        string path;
-        string name;
-        int size;
-        Emoji reaction;
-        public File(string name, DateTime dateTime, string path, int size, string fileName) : base(name, dateTime)
-        {
-            (this.path, this.name, this.size) = (path, fileName, size);
-        }
-
-        public void SetReaction(Emoji emoji)
-        {
-            reaction = emoji;
-        }
+    public void SetReaction(Emoji emoji)
+    {
+        reaction = emoji;
     }
 }
