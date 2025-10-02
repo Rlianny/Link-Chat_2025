@@ -2,6 +2,8 @@ namespace LinkChat.Core.Models
 {
     public class FileAck : Message
     {
+        public int FileID { get { return fileId; } private set { } }
+        public int ChunkNumber { get { return chunkNumber; } private set { } }
         int fileId;
         int chunkNumber;
 
