@@ -14,6 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 <<<<<<< HEAD
+<<<<<<< HEAD
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9335ccf1a0574365d5b5dcd4ddcdfe93833f94d2")]
 =======
 <<<<<<< HEAD
@@ -22,6 +23,9 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+76353e12367a23dc3179dba2ea149df8d3cfd0b2")]
 >>>>>>> 9335ccf1a0574365d5b5dcd4ddcdfe93833f94d2
 >>>>>>> 3b726659edac7b6a1e0119eaba7c9cafb19a69a9
+=======
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3a4ba3a7b1d3062fef718f8c171cc101fdbb6d23")]
+>>>>>>> 3f6e5a89f48497ac2caa50080c723c37acfe0e19
 [assembly: System.Reflection.AssemblyProductAttribute("LinkChat.Infrastructure.Linux")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LinkChat.Infrastructure.Linux")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
