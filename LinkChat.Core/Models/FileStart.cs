@@ -10,7 +10,7 @@ public class FileStart : Message
     int fileSize;
     int fileId;
     int totalChunks;
-    public FileStart(string name, DateTime dateTime, string fileName, int fileSize, int fileId, int totalChunks) : base(name, dateTime)
+    public FileStart(string userName, DateTime timeStamp, string fileName, int fileSize, int fileId, int totalChunks) : base(userName, timeStamp)
     {
         (this.fileName, this.fileSize, this.fileId, this.totalChunks) = (fileName, fileSize, fileId, totalChunks);
     }

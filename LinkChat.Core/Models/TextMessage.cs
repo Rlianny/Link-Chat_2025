@@ -10,7 +10,7 @@ public class TextMessage : ChatMessage, IReactable
     int messageId;
     string content;
     Emoji reaction;
-    public TextMessage(string name, DateTime dateTime, int messageId, string content) : base(name, dateTime)
+    public TextMessage(string userName, DateTime timeStamp, int messageId, string content) : base(userName, timeStamp)
     {
         (this.messageId, this.content) = (messageId, content);
     }

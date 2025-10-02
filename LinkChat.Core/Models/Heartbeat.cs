@@ -4,8 +4,8 @@ public class HeartbeatMessage : Message
 {
     public string MacAddress { get { return macAddress; } private set { } }
     string macAddress;
-    public HeartbeatMessage(string name, DateTime dateTime, string Mac) : base(name, dateTime)
+    public HeartbeatMessage(string userName, DateTime timeStamp, string macAddress) : base(userName, timeStamp)
     {
-        macAddress = Mac;
+        this.macAddress = macAddress;
     }
 }

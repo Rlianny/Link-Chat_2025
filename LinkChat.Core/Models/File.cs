@@ -1,5 +1,6 @@
 using LinkChat.Core.Interfaces;
 namespace LinkChat.Core.Models;
+
 public class File : ChatMessage, IReactable
 {
     public string Path { get { return path; } private set { } }
@@ -11,9 +12,9 @@ public class File : ChatMessage, IReactable
     string name;
     int size;
     Emoji reaction;
-    public File(string name, DateTime dateTime, string path, int size, string fileName) : base(name, dateTime)
+    public File(string userName, DateTime timeStamp, string path, int size, string name) : base(userName, timeStamp)
     {
-        (this.path, this.name, this.size) = (path, fileName, size);
+        (this.path, this.name, this.size) = (path, name, size);
     }
 
     public void SetReaction(Emoji emoji)

@@ -6,8 +6,8 @@ public class MessageReaction : ChatMessage
     public Emoji Reaction { get { return reaction; } private set { } }
     int messageId;
     Emoji reaction;
-    public MessageReaction(string name, DateTime dateTime, int messageId, Emoji emoji) : base(name, dateTime)
+    public MessageReaction(string userName, DateTime timeStamp, int messageId, Emoji reaction) : base(userName, timeStamp)
     {
-        (this.messageId, reaction) = (messageId, emoji);
+        (this.messageId, this.reaction) = (messageId, reaction);
     }
 }

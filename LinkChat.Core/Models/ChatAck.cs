@@ -6,7 +6,7 @@ public class ChatAck : Message
 
     int messageId;
 
-    public ChatAck(string name, DateTime dateTime, int messageId) : base(name, dateTime)
+    public ChatAck(string userName, DateTime timeStamp, int messageId) : base(userName, timeStamp)
     {
         this.messageId = messageId;
     }

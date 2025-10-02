@@ -1,6 +1,6 @@
 namespace LinkChat.Core.Models;
 public abstract class ChatMessage : Message
 {
-    public ChatMessage(string name, DateTime dateTime) : base(name, dateTime)
+    public ChatMessage(string userName, DateTime timeStamp) : base(userName, timeStamp)
     { }
 }

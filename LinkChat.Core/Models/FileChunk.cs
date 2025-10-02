@@ -10,7 +10,7 @@ public class FileChunk : Message
     byte[] data;
 
 
-    public FileChunk(string name, DateTime dateTime, int fileId, int chunkNumber, byte[] data) : base(name, dateTime)
+    public FileChunk(string userName, DateTime timeStamp, int fileId, int chunkNumber, byte[] data) : base(userName, timeStamp)
     {
         (this.fileId, this.chunkNumber, this.data) = (fileId, chunkNumber, data);
     }

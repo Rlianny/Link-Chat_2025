@@ -6,7 +6,7 @@ public class FileAck : Message
     int fileId;
     int chunkNumber;
 
-    public FileAck(string name, DateTime dateTime, int fileId, int chunkNumber) : base(name, dateTime)
+    public FileAck(string userName, DateTime timeStamp, int fileId, int chunkNumber) : base(userName, timeStamp)
     {
         (this.fileId, this.chunkNumber) = (fileId, chunkNumber);
     }
