@@ -21,14 +21,23 @@ public class ProtocolService : IProtocolService
     {
         networkService.FrameReceived += OnFrameReceived;
     }
-    public void CreateFrameToSend(User receiver, Message message)
+    public byte[] CreateFrameToSend(User? receiver, Message message, bool broadcast = false)
     {
-        byte[] destMacAddress = receiver.MacAddress;
-        byte[] localMacAddress = Tools.Tools.GetLocalMacAddress();
+        byte[] destMacAddress = new byte[6];
+        if (broadcast)
+            destMacAddress = [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF];
+        else if (receiver is null)
+            throw new Exception("The message receiver cannot be null, but broadcast");
+        else
+            destMacAddress = receiver.MacAddress;
+
+
         byte[] header = new byte[14];
+        byte[] localMacAddress = Tools.Tools.GetLocalMacAddress();
 
         Buffer.BlockCopy(destMacAddress, 0, header, 0, 6); // Copy the destination MAC (first 6 bytes).
         Buffer.BlockCopy(localMacAddress, 0, header, 6, 6); // Copy our source MAC (next 6 bytes).
+
         byte[] etherTypeBytes = BitConverter.GetBytes(Tools.Tools.htons(Tools.Tools.ETHER_TYPE));
         Buffer.BlockCopy(etherTypeBytes, 0, header, 12, 2); // Copy our app ether type.
 
@@ -38,8 +47,9 @@ public class ProtocolService : IProtocolService
         Buffer.BlockCopy(header, 0, frame, 0, header.Length);
         Buffer.BlockCopy(payload, 0, frame, header.Length, payload.Length);
 
-        FrameReadyToSend?.Invoke(frame);
+        return frame;
     }
+
     private byte[] GetPayload(Message message)
     {
         var options = new JsonSerializerOptions
