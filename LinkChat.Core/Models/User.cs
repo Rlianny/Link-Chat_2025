@@ -20,11 +20,12 @@ public class User
     string userName;
     byte[] macAddress;
     Status status;
-
-
+    public void SetStatus(Status Status)
+    {
+        status = Status;
+    }
     public User(string name, Status status, byte[] macAddress)
     {
         (userName, this.status, this.macAddress) = (name, status, macAddress);
-
     }
 }
