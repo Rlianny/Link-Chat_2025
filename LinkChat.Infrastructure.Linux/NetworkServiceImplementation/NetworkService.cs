@@ -4,6 +4,7 @@ using LinkChat.Infrastructure.Linux.Native.Methods;
 using LinkChat.Infrastructure.Linux.Native.Structs;
 using LinkChat.Infrastructure.Linux.Native.Constants;
 using System.Runtime.InteropServices;
+using LinkChat.Core.Tools;
 
 namespace LinkChat.Infrastructure
 {
@@ -17,9 +18,19 @@ namespace LinkChat.Infrastructure
 
         public event Action<byte[]>? FrameReceived;
 
-        public LinuxNetworkService()
+        public LinuxNetworkService(string interfaceName)
         {
-            
+            this.interfaceName = interfaceName;
+            CreateSocket();
+            GetInterfaceIndex();
+            GetLocalMacAddress();
+            BindSocketToInterface();
+        }
+
+        private void OnFrameReadyToSend(byte[] frame)
+        {
+            SendFrameAsync(frame);
+            Console.WriteLine("The frame has been sended");
         }
 
         public Task SendFrameAsync(byte[] frame)
@@ -48,6 +59,52 @@ namespace LinkChat.Infrastructure
             }
 
             return Task.CompletedTask;
+        }
+
+        private void CreateSocket()
+        {
+            ushort protocol = Tools.htons(NativeConstants.LINK_CHAT_ETHER_TYPE);
+            socketFd = NativeMethods.socket(NativeConstants.AF_PACKET, NativeConstants.SOCK_RAW, protocol);
+
+            if (socketFd < 0)
+            {
+                var error = Marshal.GetLastWin32Error();
+                throw new Exception($"Error creating socket. System error code: {error}");
+            }
+        }
+
+        private void GetInterfaceIndex()
+        {
+            var ifr = new NativeStructs.ifreq { ifr_name = this.interfaceName };
+
+            if (NativeMethods.ioctl(socketFd, NativeConstants.SIOCGIFINDEX, ref ifr) < 0)
+            {
+                var error = Marshal.GetLastWin32Error();
+                throw new Exception($"Error getting index for interface '{this.interfaceName}'. Code: {error}");
+            }
+
+            this.interfaceIndex = ifr.ifr_ifindex;
+        }
+
+        private void GetLocalMacAddress()
+        {
+            localMacAddress = Tools.GetLocalMacAddress();
+        }
+
+        private void BindSocketToInterface()
+        {
+            var addr = new NativeStructs.sockaddr_ll
+            {
+                sll_family = NativeConstants.AF_PACKET,
+                sll_protocol = Tools.htons(NativeConstants.LINK_CHAT_ETHER_TYPE),
+                sll_ifindex = this.interfaceIndex
+            };
+
+            if (NativeMethods.bind(socketFd, ref addr, Marshal.SizeOf(addr)) < 0)
+            {
+                var error = Marshal.GetLastWin32Error();
+                throw new Exception($"Error al hacer bind del socket a la interfaz. Código: {error}");
+            }
         }
 
         public void StartListening()

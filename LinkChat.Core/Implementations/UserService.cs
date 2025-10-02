@@ -4,20 +4,23 @@ namespace LinkChat.Core.Implementations;
 
 public class UserService : IUserService
 {
-    User Self;
+    private User self;
     Dictionary<string, User> Users = [];
     Dictionary<string, DateTime> LastSeen = [];
     public event Action<User>? UserDisconnected;
     public event Action<User>? NewUserConnected;
-    public event Action<User>? HeartbeatRequest;
-    public UserService(IProtocolService protocolService, string selfUserName, byte[] selfMacAddress)
+    private IProtocolService protocolService;
+    private INetworkService networkService;
+    public UserService(IProtocolService protocolService, INetworkService networkService, string selfUserName)
     {
-        Self = new User(selfUserName, Status.Online, selfMacAddress);
-        protocolService.HeartbeatFrameReceived += OnHeartbeatFrameReceived;
+        self = new User(selfUserName, Status.Online, Tools.Tools.GetLocalMacAddress());
+        this.protocolService = protocolService;
+        this.protocolService.HeartbeatFrameReceived += OnHeartbeatFrameReceived;
+        this.networkService = networkService;
     }
     public User GetSelfUser()
     {
-        return Self;
+        return self;
     }
     private void OnHeartbeatFrameReceived(HeartbeatMessage heartbeatMessage)
     {
@@ -46,10 +49,17 @@ public class UserService : IUserService
     {
         while (true)
         {
-            HeartbeatRequest.Invoke(Self);
+            SendHeartbeatRequest();
             PruneInactiveUsers();
             await Task.Delay(10000);
         }
+    }
+
+    private void SendHeartbeatRequest()
+    {
+        HeartbeatMessage heartbeatToSend = new HeartbeatMessage(self.UserName, DateTime.Now, self.MacAddress);
+        byte[] frame = protocolService.CreateFrameToSend(null, heartbeatToSend, true);
+        networkService.SendFrameAsync(frame);
     }
 
     public List<User> GetAvailableUsers()

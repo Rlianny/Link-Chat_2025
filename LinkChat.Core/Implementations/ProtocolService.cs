@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using LinkChat.Core.Models;
 using LinkChat.Core.Services;
+using LinkChat.Core.Tools;
 namespace LinkChat.Core.Implementations;
 
 public class ProtocolService : IProtocolService
@@ -20,14 +21,36 @@ public class ProtocolService : IProtocolService
     {
         networkService.FrameReceived += OnFrameReceived;
     }
-    public byte[] CreateFrame(User receiver, Message message)
+    public byte[] CreateFrameToSend(User? receiver, Message message, bool broadcast = false)
     {
-        byte[] destMacAddress = receiver.MacAddress;
-        byte[] localMacAddress;
+        byte[] destMacAddress = new byte[6];
+        if (broadcast)
+            destMacAddress = [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF];
+        else if (receiver is null)
+            throw new Exception("The message receiver cannot be null, but broadcast");
+        else
+            destMacAddress = receiver.MacAddress;
 
-        return destMacAddress;
+
+        byte[] header = new byte[14];
+        byte[] localMacAddress = Tools.Tools.GetLocalMacAddress();
+
+        Buffer.BlockCopy(destMacAddress, 0, header, 0, 6); // Copy the destination MAC (first 6 bytes).
+        Buffer.BlockCopy(localMacAddress, 0, header, 6, 6); // Copy our source MAC (next 6 bytes).
+
+        byte[] etherTypeBytes = BitConverter.GetBytes(Tools.Tools.htons(Tools.Tools.ETHER_TYPE));
+        Buffer.BlockCopy(etherTypeBytes, 0, header, 12, 2); // Copy our app ether type.
+
+        byte[] payload = GetPayload(message);
+
+        byte[] frame = new byte[header.Length + payload.Length];
+        Buffer.BlockCopy(header, 0, frame, 0, header.Length);
+        Buffer.BlockCopy(payload, 0, frame, header.Length, payload.Length);
+
+        return frame;
     }
-    public byte[] CreateFrame(Message message)
+
+    private byte[] GetPayload(Message message)
     {
         var options = new JsonSerializerOptions
         {
@@ -47,7 +70,7 @@ public class ProtocolService : IProtocolService
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
         string RecoveryMessage = Encoding.UTF8.GetString(frame);
-        Message Message = JsonSerializer.Deserialize<Message>(RecoveryMessage, options);
+        Message? Message = JsonSerializer.Deserialize<Message>(RecoveryMessage, options);
         return Message;
     }
 
