@@ -7,11 +7,12 @@ namespace LinkChat.Core.Services
     {
         public List<User> GetAvailableUsers();
         public void PruneInactiveUsers();
-        public User GetUserByName();
-        public Status GetUserStatusByName();
-        public string GetMacAddress(string userName);
-        public string GetMacAddress(User user);
+        public User GetUserByName(string userName);
+        public Status GetUserStatusByName(string userName);
+        public byte[] GetMacAddress(string userName);
+        public byte[] GetMacAddress(User user);
         public event Action<User>? UserDisconnected;
         public event Action<User>? NewUserConnected;
+        public event Action<User>? HeartbeatRequest;
     }
 }
