@@ -1,12 +1,11 @@
-namespace LinkChat.Core.Models
+namespace LinkChat.Core.Models;
+
+public class UserStatus : Message
 {
-    public class UserStatus : Message
+    public Status UsrStatus { get { return userStatus; } private set { } }
+    Status userStatus;
+    public UserStatus(string userName, DateTime timeStamp, Status userStatus) : base(userName, timeStamp)
     {
-        public Status UsrStatus { get { return userStatus; } private set { } }
-        Status userStatus;
-        public UserStatus(string name, DateTime dateTime, Status userStatus) : base(name, dateTime)
-        {
-            this.userStatus = userStatus;
-        }
+        this.userStatus = userStatus;
     }
 }

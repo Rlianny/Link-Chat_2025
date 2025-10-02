@@ -1,7 +1,15 @@
-namespace LinkChat.Core.Models
+namespace LinkChat.Core.Models;
+
+public class User
 {
-    public class User
+    public string UserName { get { return userName; } private set { } }
+    public Status Status { get { return status; } private set { } }
+    string userName;
+    Status status;
+
+    public User(string name, Status status)
     {
+<<<<<<< HEAD
         public string UserName
         {
             get { return userName; }
@@ -27,5 +35,9 @@ namespace LinkChat.Core.Models
             (userName, this.status) = (name, status);
 
         }
+=======
+        (userName, this.status) = (name, status);
+
+>>>>>>> 59c79e51c75d90827cba4f1aecfd8ee147ab2dc5
     }
 }
