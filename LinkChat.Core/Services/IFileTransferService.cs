@@ -1,5 +1,6 @@
-namespace LinkChat.Core
+namespace LinkChat.Core.Services
 {
+    using LinkChat.Core.Models;
     // manages sending and receiving files, acknowledgements and sending retries
     public interface IFileTransferService
     {

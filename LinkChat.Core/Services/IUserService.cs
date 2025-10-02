@@ -1,5 +1,7 @@
-namespace LinkChat.Core
+namespace LinkChat.Core.Services
 {
+    using LinkChat.Core.Models;
+
     // manage the list of active users and their statuses
     public interface IUserService
     {
@@ -8,5 +10,7 @@ namespace LinkChat.Core
         public Status GetUserStatusByName();
         public string GetMacAddress(string userName);
         public string GetMacAddress(User user);
+        public event Action<User>? UserDisconnected;
+        public event Action<User>? NewUserConnected;
     }
 }

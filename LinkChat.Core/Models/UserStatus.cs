@@ -1,4 +1,4 @@
-namespace LinkChat
+namespace LinkChat.Core.Models
 {
     public class UserStatus : Message
     {

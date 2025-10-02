@@ -1,8 +1,13 @@
-public enum Emoji
+namespace LinkChat.Core.Tools
 {
-    HappyFace, SadFace, Like, Dislike, Heart, AngryFace
-}
-public enum Status
-{
-    Online, Offline
+    public static class Tools
+    {
+        public static byte[] ParseMacAddress(string macAddress)
+        {
+            return macAddress.Split(':', '-')
+                             .Select(b => Convert.ToByte(b, 16))
+                             .ToArray();
+        }
+    }
+
 }

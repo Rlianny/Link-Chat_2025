@@ -1,6 +1,7 @@
-namespace LinkChat
+namespace LinkChat.Infrastructure.Linux.Native.Methods
 {
     using System.Runtime.InteropServices;
+    using static LinkChat.Infrastructure.Linux.Native.Structs.NativeStructs;
 
     internal static partial class NativeMethods
     {
@@ -23,7 +24,7 @@ namespace LinkChat
         /// <param name="addrlen">Size in bytes of the steering structure (sockaddr_ll) that is passed</param>
         /// <returns>0 for success, -1 for failure.</returns>
         [DllImport("libc", SetLastError = true)]
-        private static extern int bind(int sockfd, ref sockaddr_ll addr, socklen_t addrlen);
+        private static extern int bind(int sockfd, ref sockaddr_ll addr, int addrlen);
 
         /// <summary>
         /// Used to manipulate underlying device parameters
@@ -68,5 +69,16 @@ namespace LinkChat
         /// <returns>0 for success, -1 for failure.</returns>
         [DllImport("libc", SetLastError = true)]
         private static extern int close(int fd);
+
+        // VERY IMPORTANT HELPER FUNCTION: htons (Host to Network Short)
+        // Networks use a different byte order (Big Endian) than most CPUs (Little Endian). This function performs the conversion.
+        public static ushort htons(ushort value)
+        {
+            if (!BitConverter.IsLittleEndian)
+            {
+                return value;
+            }
+            return (ushort)((value << 8) | (value >> 8));
+        }
     }
 }
