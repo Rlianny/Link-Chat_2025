@@ -6,7 +6,7 @@ namespace LinkChat.Core.Services
     public interface IProtocolService
     {
         public Message? ParseFrame(byte[] frame);
-        public byte[] CreateFrame(User receiver, Message message);
+        public void CreateFrameToSend(User receiver, Message message);
         public event Action<HeartbeatMessage>? HeartbeatFrameReceived;
         public event Action<ChatAck>? ChatAckFrameReceived;
         public event Action<FileAck>? FileAckFrameReceived;

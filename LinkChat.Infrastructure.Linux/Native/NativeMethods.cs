@@ -69,16 +69,5 @@ namespace LinkChat.Infrastructure.Linux.Native.Methods
         /// <returns>0 for success, -1 for failure.</returns>
         [DllImport("libc", SetLastError = true)]
         public static extern int close(int fd);
-
-        // VERY IMPORTANT HELPER FUNCTION: htons (Host to Network Short)
-        // Networks use a different byte order (Big Endian) than most CPUs (Little Endian). This function performs the conversion.
-        public static ushort htons(ushort value)
-        {
-            if (!BitConverter.IsLittleEndian)
-            {
-                return value;
-            }
-            return (ushort)((value << 8) | (value >> 8));
-        }
     }
 }
