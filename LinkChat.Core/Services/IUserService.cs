@@ -6,6 +6,7 @@ namespace LinkChat.Core.Services
     public interface IUserService
     {
         public List<User> GetAvailableUsers();
+        public void PruneInactiveUsers();
         public User GetUserByName();
         public Status GetUserStatusByName();
         public string GetMacAddress(string userName);

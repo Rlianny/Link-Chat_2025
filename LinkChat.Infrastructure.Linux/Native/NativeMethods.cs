@@ -24,7 +24,7 @@ namespace LinkChat.Infrastructure.Linux.Native.Methods
         /// <param name="addrlen">Size in bytes of the steering structure (sockaddr_ll) that is passed</param>
         /// <returns>0 for success, -1 for failure.</returns>
         [DllImport("libc", SetLastError = true)]
-        private static extern int bind(int sockfd, ref sockaddr_ll addr, int addrlen);
+        public static extern int bind(int sockfd, ref sockaddr_ll addr, int addrlen);
 
         /// <summary>
         /// Used to manipulate underlying device parameters
@@ -34,7 +34,7 @@ namespace LinkChat.Infrastructure.Linux.Native.Methods
         /// <param name="ifr">Pointer to an ifreq structure used to pass information to or from the controller. Its contents depend on the request code used.</param>
         /// <returns>0 for success, -1 for failure.</returns>
         [DllImport("libc", SetLastError = true)]
-        private static extern int ioctl(int fd, uint request, ref ifreq ifr);
+        public static extern int ioctl(int fd, uint request, ref ifreq ifr);
 
         /// <summary>
         /// It is used to receive data through the raw socket
@@ -47,7 +47,7 @@ namespace LinkChat.Infrastructure.Linux.Native.Methods
         /// <param name="addrlen">Variable indicating the size of the src_addr structure.</param>
         /// <returns>Number of bytes received, or -1 on error.</returns>
         [DllImport("libc", SetLastError = true)]
-        private static extern long recvfrom(int sockfd, byte[] buf, int len, int flags, ref sockaddr_ll saddr, ref int addrlen);
+        public static extern long recvfrom(int sockfd, byte[] buf, int len, int flags, ref sockaddr_ll saddr, ref int addrlen);
 
         /// <summary>
         /// It is used to send data through the raw socket.
@@ -60,7 +60,7 @@ namespace LinkChat.Infrastructure.Linux.Native.Methods
         /// <param name="addrlen">Variable indicating the size of the src_addr structure.</param>
         /// <returns>Number of bytes sent, or -1 on error.</returns>
         [DllImport("libc", SetLastError = true)]
-        private static extern int sendto(int sockfd, byte[] buf, int len, int flags, ref sockaddr_ll addr, int addrlen);
+        public static extern int sendto(int sockfd, byte[] buf, int len, int flags, ref sockaddr_ll addr, int addrlen);
 
         /// <summary>
         /// Closes the socket descriptor when it is no longer needed.
@@ -68,7 +68,7 @@ namespace LinkChat.Infrastructure.Linux.Native.Methods
         /// <param name="fd">The socket descriptor returned by the socket function.</param>
         /// <returns>0 for success, -1 for failure.</returns>
         [DllImport("libc", SetLastError = true)]
-        private static extern int close(int fd);
+        public static extern int close(int fd);
 
         // VERY IMPORTANT HELPER FUNCTION: htons (Host to Network Short)
         // Networks use a different byte order (Big Endian) than most CPUs (Little Endian). This function performs the conversion.
