@@ -46,19 +46,32 @@
     ]
   },
   "packageFolders": {
+<<<<<<< HEAD
     "/home/lianny/.nuget/packages/": {}
+=======
+    "/root/.nuget/packages/": {}
+>>>>>>> 6a1902807ba0a7df88fb37fd02ac067871e13340
   },
   "project": {
     "version": "1.0.0",
     "restore": {
       "projectUniqueName": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.ConsoleApp/LinkChat.ConsoleApp.csproj",
       "projectName": "LinkChat.ConsoleApp",
+<<<<<<< HEAD
       "projectPath": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.ConsoleApp/LinkChat.ConsoleApp.csproj",
       "packagesPath": "/home/lianny/.nuget/packages/",
       "outputPath": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.ConsoleApp/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/lianny/.nuget/NuGet/NuGet.Config"
+=======
+      "projectPath": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.ConsoleApp/LinkChat.ConsoleApp.csproj",
+      "packagesPath": "/root/.nuget/packages/",
+      "outputPath": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.ConsoleApp/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/root/.nuget/NuGet/NuGet.Config"
+>>>>>>> 6a1902807ba0a7df88fb37fd02ac067871e13340
       ],
       "originalTargetFrameworks": [
         "net9.0"
