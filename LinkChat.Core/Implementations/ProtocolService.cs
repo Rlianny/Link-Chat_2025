@@ -72,7 +72,9 @@ public class ProtocolService : IProtocolService
             WriteIndented = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
-        string RecoveryMessage = Encoding.UTF8.GetString(frame);
+        byte[] frameToSerialize = new byte[frame.Length - 14];
+        Buffer.BlockCopy(frame, 14, frameToSerialize, 0, frameToSerialize.Length);
+        string RecoveryMessage = Encoding.UTF8.GetString(frameToSerialize);
         Message? Message = JsonSerializer.Deserialize<Message>(RecoveryMessage, options);
         return Message;
     }

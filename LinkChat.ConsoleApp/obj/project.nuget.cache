@@ -1,10 +1,6 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "sAapk0RsTo4=",
-=======
-  "dgSpecHash": "rXeFBPf+C+U=",
->>>>>>> e8687e00702b9d79fb9e4d553342ffc664f4f5be
+  "dgSpecHash": "hw7mxpxKM1o=",
   "success": true,
   "projectFilePath": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.ConsoleApp/LinkChat.ConsoleApp.csproj",
   "expectedPackageFiles": [],

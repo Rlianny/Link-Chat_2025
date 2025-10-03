@@ -27,32 +27,19 @@
     ]
   },
   "packageFolders": {
-<<<<<<< HEAD
     "/root/.nuget/packages/": {}
-=======
-    "/home/kevin/.nuget/packages/": {}
->>>>>>> e8687e00702b9d79fb9e4d553342ffc664f4f5be
   },
   "project": {
     "version": "1.0.0",
     "restore": {
       "projectUniqueName": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj",
       "projectName": "LinkChat.Infrastructure.Linux",
-<<<<<<< HEAD
-      "projectPath": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj",
-      "packagesPath": "/root/.nuget/packages/",
-      "outputPath": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Infrastructure.Linux/obj/",
-      "projectStyle": "PackageReference",
-      "configFilePaths": [
-        "/root/.nuget/NuGet/NuGet.Config"
-=======
       "projectPath": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj",
-      "packagesPath": "/home/kevin/.nuget/packages/",
+      "packagesPath": "/root/.nuget/packages/",
       "outputPath": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Infrastructure.Linux/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/kevin/.nuget/NuGet/NuGet.Config"
->>>>>>> e8687e00702b9d79fb9e4d553342ffc664f4f5be
+        "/root/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
