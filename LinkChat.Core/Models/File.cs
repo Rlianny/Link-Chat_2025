@@ -10,7 +10,7 @@ public class File : ChatMessage
     string path;
     string name;
     int size;
-    public File(string userName, DateTime timeStamp, int messageId, string path, int size, string name) : base(userName, timeStamp, messageId)
+    public File(string userName, DateTime timeStamp, string messageId, string path, int size, string name) : base(userName, timeStamp, messageId)
     {
         (this.path, this.name, this.size) = (path, name, size);
     }
