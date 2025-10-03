@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LinkChat.Desktop.Avalonia")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a16c170f1cb227b9506c714996da74f7614d660d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+39d69b2d91d12056c6b32f5438c4d8257e7c5024")]
 [assembly: System.Reflection.AssemblyProductAttribute("LinkChat.Desktop.Avalonia")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LinkChat.Desktop.Avalonia")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
