@@ -26,16 +26,24 @@ public class Program
         IMessagingService messagingService = new MessagingService(protocolService, fileTransferService, userService, networkService);
 
         networkService.StartListening();
+        userService.UpdateUsersStatuses();
 
         while (true)
         {
+            List<User> users = userService.GetAvailableUsers();
+            Console.WriteLine("Usuarios disponibles:");
+            foreach (User user in users)
+            {
+                Console.WriteLine($"- {user.UserName}");
+            }
+
             Console.WriteLine("Escriba el nombre del receptor del mensaje");
             string receiver = Console.ReadLine();
 
             Console.WriteLine("Escriba el mensaje");
             string message = Console.ReadLine();
 
-            messagingService.SendChatMessageWithMac(MacAddresses[receiver], message);
+            messagingService.SendTextMessage(receiver, message);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using LinkChat.Core.Models;
 using LinkChat.Core.Services;
 namespace LinkChat.Core.Implementations;
@@ -5,8 +6,8 @@ namespace LinkChat.Core.Implementations;
 public class UserService : IUserService
 {
     private User self;
-    Dictionary<string, User> Users = [];
-    Dictionary<string, DateTime> LastSeen = [];
+    ConcurrentDictionary<string, User> Users = [];
+    ConcurrentDictionary<string, DateTime> LastSeen = [];
     public event Action<User>? UserDisconnected;
     public event Action<User>? NewUserConnected;
     private IProtocolService protocolService;
@@ -24,22 +25,10 @@ public class UserService : IUserService
     }
     private void OnHeartbeatFrameReceived(HeartbeatMessage heartbeatMessage)
     {
-        if (LastSeen.ContainsKey(heartbeatMessage.UserName))
-        {
-            LastSeen[heartbeatMessage.UserName] = DateTime.Now;
-        }
-        else
-        {
-            LastSeen.Add(heartbeatMessage.UserName, DateTime.Now);
-        }
-        if (Users.ContainsKey(heartbeatMessage.UserName))
-        {
-            Users[heartbeatMessage.UserName].SetStatus(Status.Online);
-        }
-        else
-        {
-            Users.Add(heartbeatMessage.UserName, new User(heartbeatMessage.UserName, Status.Online, heartbeatMessage.MacAddress));
-        }
+        
+        LastSeen.AddOrUpdate(heartbeatMessage.UserName, addValue: DateTime.Now, updateValueFactory: (key, existing) => DateTime.Now);
+        Users.AddOrUpdate(heartbeatMessage.UserName, addValue: new User(heartbeatMessage.UserName, Status.Online, heartbeatMessage.MacAddress), (key, existing) => new User(heartbeatMessage.UserName, Status.Online, heartbeatMessage.MacAddress));
+        
     }
     public void UpdateUserStatuses()
     {
@@ -116,9 +105,14 @@ public class UserService : IUserService
             {
                 if (Users.ContainsKey(user.Key))
                 {
-                    Users.Remove(user.Key);
+                    Users.TryRemove(user.Key, out User disconnectedUser);
                 }
             }
         }
+    }
+
+    void IUserService.UpdateUsersStatuses()
+    {
+        UpdateUsersStatuses();
     }
 }
