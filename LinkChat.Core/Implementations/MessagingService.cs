@@ -83,6 +83,7 @@ public class MessagingService : IMessagingService
     private void OnTextMessageFrameReceived(TextMessage textMessage)
     {
         AddChatMessage(textMessage);
+        Console.WriteLine($"{textMessage.UserName}:{textMessage.Content}");
     }
     private void OnFileMessageFrameReceived(Models.File file)
     {
@@ -112,5 +113,14 @@ public class MessagingService : IMessagingService
         var random = Random.Shared.Next(10000);
         string userName = userService.GetSelfUser().UserName;
         return $"{userName}_{timestamp}_{random:0000}";
+    }
+
+    public void SendChatMessageWithMac(byte[] mac, string content)
+    {
+        User receiver = new User("John Doe", Status.Online, mac);
+        TextMessage textMessage = new TextMessage(userService.GetSelfUser().UserName, DateTime.Now, GetNewId(), content);
+        byte[] frame = protocolService.CreateFrameToSend(receiver, textMessage, false);
+        networkService.SendFrameAsync(frame);
+        // pending wait for ack implementation
     }
 }

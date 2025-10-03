@@ -5,6 +5,7 @@ namespace LinkChat.Core.Services
     // manages sending and receiving messages, acknowledgements and reactions to messages
     public interface IMessagingService
     {
+        public void SendChatMessageWithMac(byte[] mac, string content);
         public void SendTextMessage(string receiverUserName, string content);
         public void ReactToMessage(string messageId, Emoji emoji);
         public string GetNewId();
