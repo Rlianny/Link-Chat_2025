@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Threading.Tasks;
 using LinkChat.Core.Models;
 using LinkChat.Core.Services;
 namespace LinkChat.Core.Implementations;
@@ -28,11 +29,12 @@ public class UserService : IUserService
         //Console.WriteLine($"Un hearbeat ha llegado de {heartbeatMessage.UserName}");
         LastSeen.AddOrUpdate(heartbeatMessage.UserName, addValue: DateTime.Now, updateValueFactory: (key, existing) => DateTime.Now);
         Users.AddOrUpdate(heartbeatMessage.UserName, addValue: new User(heartbeatMessage.UserName, Status.Online, heartbeatMessage.MacAddress), (key, existing) => new User(heartbeatMessage.UserName, Status.Online, heartbeatMessage.MacAddress));
-        
+
     }
-    public void UpdateUserStatuses()
+    public async Task UpdateUserStatuses()
     {
         Task task = Task.Run(UpdateUsersStatuses);
+        await task;
     }
     private async void UpdateUsersStatuses()
     {

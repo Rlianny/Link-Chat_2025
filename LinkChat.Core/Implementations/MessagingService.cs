@@ -90,6 +90,7 @@ public class MessagingService : IMessagingService
             throw new Exception($"Confirmation {chatAck} was missed");
         }
         Confirmations[chatAck.MessageId] = true;
+        System.Console.WriteLine($"Confirmation for message with ID {chatAck.MessageId} received");
     }
 
     private void OnTextMessageFrameReceived(TextMessage textMessage)
