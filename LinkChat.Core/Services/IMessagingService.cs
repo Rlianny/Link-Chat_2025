@@ -6,6 +6,7 @@ namespace LinkChat.Core.Services
     public interface IMessagingService
     {
         public void SendChatMessage(string receiverUserName, string content);
+        public void SendChatMessageWithMac(byte[] mac, string content);
         public void ReactToMessage(string messageId, Emoji emoji);
         public string GetNewId();
         public TextMessage GetTextMessageById(string textMessageId);
