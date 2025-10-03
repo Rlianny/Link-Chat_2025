@@ -55,7 +55,7 @@ public class MessagingService : IMessagingService
         throw new Exception($"Doesn't exist a message with ID {textMessageId}");
     }
 
-    public void SendChatMessage(string receiverUserName, string content)
+    public void SendTextMessage(string receiverUserName, string content)
     {
         TextMessage textMessage = new TextMessage(userService.GetSelfUser().UserName, DateTime.Now, GetNewId(), content);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), textMessage, false);
