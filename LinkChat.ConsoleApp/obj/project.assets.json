@@ -51,11 +51,17 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.ConsoleApp/LinkChat.ConsoleApp.csproj",
+      "projectUniqueName": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.ConsoleApp/LinkChat.ConsoleApp.csproj",
       "projectName": "LinkChat.ConsoleApp",
+<<<<<<< HEAD
       "projectPath": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.ConsoleApp/LinkChat.ConsoleApp.csproj",
       "packagesPath": "/root/.nuget/packages/",
       "outputPath": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.ConsoleApp/obj/",
+=======
+      "projectPath": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.ConsoleApp/LinkChat.ConsoleApp.csproj",
+      "packagesPath": "/root/.nuget/packages/",
+      "outputPath": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.ConsoleApp/obj/",
+>>>>>>> ee0d25830926132377197378e76d2e3b7d9a3c37
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/root/.nuget/NuGet/NuGet.Config"
@@ -71,11 +77,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj": {
-              "projectPath": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj"
+            "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj": {
+              "projectPath": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj"
             },
-            "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj": {
-              "projectPath": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj"
+            "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj": {
+              "projectPath": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj"
             }
           }
         }
@@ -111,7 +117,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/9.0.109/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/9.0.110/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

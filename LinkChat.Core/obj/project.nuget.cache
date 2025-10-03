@@ -1,8 +1,12 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "6J0XxP4HrgM=",
+=======
+  "dgSpecHash": "fboa+eNVBz8=",
+>>>>>>> ee0d25830926132377197378e76d2e3b7d9a3c37
   "success": true,
-  "projectFilePath": "/home/kevin/Desktop/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj",
+  "projectFilePath": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Core/LinkChat.Core.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
