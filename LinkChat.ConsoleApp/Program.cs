@@ -25,6 +25,8 @@ public class Program
         IFileTransferService fileTransferService = new FileTransferService();
         IMessagingService messagingService = new MessagingService(protocolService, fileTransferService, userService, networkService);
 
+        networkService.StartListening();
+
         while (true)
         {
             Console.WriteLine("Escriba el nombre del receptor del mensaje");
