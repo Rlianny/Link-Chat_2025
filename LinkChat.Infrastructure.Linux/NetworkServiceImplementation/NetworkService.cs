@@ -27,12 +27,6 @@ namespace LinkChat.Infrastructure
             BindSocketToInterface();
         }
 
-        private void OnFrameReadyToSend(byte[] frame)
-        {
-            SendFrameAsync(frame);
-            Console.WriteLine("The frame has been sended");
-        }
-
         public Task SendFrameAsync(byte[] frame)
         {
             if (socketFd == -1)
@@ -58,6 +52,7 @@ namespace LinkChat.Infrastructure
                 }
             }
 
+            Console.WriteLine("Send completed");
             return Task.CompletedTask;
         }
 
@@ -103,7 +98,7 @@ namespace LinkChat.Infrastructure
             if (NativeMethods.bind(socketFd, ref addr, Marshal.SizeOf(addr)) < 0)
             {
                 var error = Marshal.GetLastWin32Error();
-                throw new Exception($"Error al hacer bind del socket a la interfaz. Código: {error}");
+                throw new Exception($"Error binding socket to interface. Code: {error}");
             }
         }
 
