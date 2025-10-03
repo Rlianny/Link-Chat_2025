@@ -52,7 +52,7 @@ namespace LinkChat.Infrastructure
                 }
             }
 
-            Console.WriteLine("Send completed");
+            //Console.WriteLine("Send completed");
             return Task.CompletedTask;
         }
 
