@@ -1,10 +1,6 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "E+fCXt4QwEM=",
-=======
   "dgSpecHash": "wINqpwjoiQ8=",
->>>>>>> ee0d25830926132377197378e76d2e3b7d9a3c37
   "success": true,
   "projectFilePath": "/media/lianny/1AB44624B44602AD/projects/Link-Chat/Link-Chat_2025/LinkChat.Infrastructure.Linux/LinkChat.Infrastructure.Linux.csproj",
   "expectedPackageFiles": [],

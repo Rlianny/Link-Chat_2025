@@ -1,0 +1,55 @@
+# Ignorar directorios de compilación comunes
+LinkChat.ConsoleApp/bin/
+LinkChat.ConsoleApp/obj/
+LinkChat.ConsoleApp/out/
+LinkChat.ConsoleApp/target/
+LinkChat.ConsoleApp/build/
+LinkChat.ConsoleApp/dist/
+
+LinkChat.Core/bin/
+LinkChat.Core/obj
+LinkChat.Core/out/
+LinkChat.Core/target/
+LinkChat.Core/build/
+LinkChat.Core/dist/
+
+LinkChat.Desktop.Avalonia/bin/
+LinkChat.Desktop.Avalonia/obj
+LinkChat.Desktop.Avalonia/out/
+LinkChat.Desktop.Avalonia/target/
+LinkChat.Desktop.Avalonia/build/
+LinkChat.Desktop.Avalonia/dist/
+
+LinkChat.Infrastructure.Linux/bin/
+LinkChat.Infrastructure.Linux/obj
+LinkChat.Infrastructure.Linux/out/
+LinkChat.Infrastructure.Linux/target/
+LinkChat.Infrastructure.Linux/build/
+LinkChat.Infrastructure.Linux/dist/
+
+# Ignorar archivos objeto de C
+*.o
+
+# Ignorar archivos ejecutables (sin extensión o con extensiones comunes en Linux)
+/program
+*.exe
+*.out
+*.app
+
+# Ignorar archivos de dependencias
+LinkChat.Core/node_modules/
+LinkChat.Core/packages/
+
+LinkChat.ConsoleApp/node_modules/
+LinkChat.ConsoleApp/packages/
+
+LinkChat.Desktop.Avalonia/node_modules/
+LinkChat.Desktop.Avalonia/packages/
+
+LinkChat.Infrastructure.Linux/node_modules/
+LinkChat.Infrastructure.Linux/packages/
+
+# Ignorar archivos de registro y temporales del sistema
+*.log
+*.tmp
+.DS_Store
