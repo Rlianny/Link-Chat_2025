@@ -51,8 +51,6 @@ namespace LinkChat.Infrastructure
                     throw new Exception($"Error sending package. System error code: {error}");
                 }
             }
-
-            Console.WriteLine("Send completed");
             return Task.CompletedTask;
         }
 
