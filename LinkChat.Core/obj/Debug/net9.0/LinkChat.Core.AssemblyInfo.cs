@@ -13,19 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LinkChat.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< HEAD
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+97b59ff70698f01a2ae2727b18626bbc010c4591")]
-=======
-<<<<<<< HEAD
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b05ab53573c31e4117b75fdc21d25511fc0b525e")]
-=======
-<<<<<<< HEAD
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5337feec931195fccb72846ca9f78abbaf330415")]
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4bc5095e2c70f8fc97ff7c88b29973fbc070bced")]
->>>>>>> b05ab53573c31e4117b75fdc21d25511fc0b525e
->>>>>>> 97b59ff70698f01a2ae2727b18626bbc010c4591
->>>>>>> 97f606e92a95b69757b0500d9c093b50fc95aa5b
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+854d53a849d6176d907b32ba063873438daee1dc")]
 [assembly: System.Reflection.AssemblyProductAttribute("LinkChat.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LinkChat.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
