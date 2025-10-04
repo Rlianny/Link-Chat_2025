@@ -102,7 +102,7 @@ public class MessagingService : IMessagingService
         System.Console.WriteLine($"Confirmation for message with ID {chatAck.MessageId} received");
     }
 
-    private async Task OnTextMessageFrameReceived(TextMessage textMessage)
+    private async void OnTextMessageFrameReceived(TextMessage textMessage)
     {
         AddChatMessage(textMessage);
         Console.WriteLine($"{textMessage.UserName}:{textMessage.Content}");
