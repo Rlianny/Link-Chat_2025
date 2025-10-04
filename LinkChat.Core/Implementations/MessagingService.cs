@@ -73,7 +73,16 @@ public class MessagingService : IMessagingService
         });
 
         await sendAndWait;
+    }
 
+    public void SendBroadcastTextMessage(string content)
+    {
+        TextMessage textMessage = new TextMessage(userService.GetSelfUser().UserName, DateTime.Now, GetNewId(), content);
+        byte[] frame = protocolService.CreateFrameToSend(null, textMessage, true);
+        networkService.SendFrameAsync(frame);
+        System.Console.WriteLine($"Broadcast message sended with ID {textMessage.MessageId}");
+
+        //pending to decide acks or not
     }
 
     public void ReactToMessage(string messageId, Emoji emoji)
@@ -137,12 +146,4 @@ public class MessagingService : IMessagingService
         return $"{userName}_{timestamp}_{random:0000}";
     }
 
-    public void SendChatMessageWithMac(byte[] mac, string content)
-    {
-        User receiver = new User("John Doe", Status.Online, mac);
-        TextMessage textMessage = new TextMessage(userService.GetSelfUser().UserName, DateTime.Now, GetNewId(), content);
-        byte[] frame = protocolService.CreateFrameToSend(receiver, textMessage, false);
-        networkService.SendFrameAsync(frame);
-        // pending wait for ack implementation
-    }
 }
