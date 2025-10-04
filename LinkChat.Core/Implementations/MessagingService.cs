@@ -94,12 +94,11 @@ public class MessagingService : IMessagingService
 
     private void OnChatAckFrameReceived(ChatAck chatAck)
     {
-        if (!Confirmations.ContainsKey(chatAck.MessageId))
+        if (Confirmations.ContainsKey(chatAck.MessageId))
         {
-            throw new Exception($"Confirmation {chatAck} was missed");
+            Confirmations[chatAck.MessageId] = true;
+            System.Console.WriteLine($"Confirmation for message with ID {chatAck.MessageId} received");
         }
-        Confirmations[chatAck.MessageId] = true;
-        System.Console.WriteLine($"Confirmation for message with ID {chatAck.MessageId} received");
     }
 
     private async void OnTextMessageFrameReceived(TextMessage textMessage)
@@ -108,19 +107,19 @@ public class MessagingService : IMessagingService
         Console.WriteLine($"{textMessage.UserName}:{textMessage.Content}");
         try
         {
-            SendConfirmation(textMessage);
+            await SendConfirmation(textMessage);
         }
         catch (Exception e)
         {
             try
             {
                 await Task.Delay(11000);
-                SendConfirmation(textMessage);
+                await SendConfirmation(textMessage);
             }
             catch { }
         }
     }
-    private async void SendConfirmation(ChatMessage chatMessage)
+    private async Task SendConfirmation(ChatMessage chatMessage)
     {
         ChatAck ack = new ChatAck(chatMessage.UserName, DateTime.Now, chatMessage.MessageId);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(chatMessage.UserName), ack, false);
