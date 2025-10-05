@@ -40,6 +40,7 @@ public class Program
             Console.WriteLine("Escriba el nombre del receptor del archivo");
             string receiver = Console.ReadLine();
 
+
             Console.WriteLine("Escriba la ruta del archivo");
             string filePath = Console.ReadLine();
 

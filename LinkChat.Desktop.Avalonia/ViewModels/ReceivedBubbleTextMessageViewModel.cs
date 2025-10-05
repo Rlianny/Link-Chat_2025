@@ -1,3 +1,6 @@
+using System;
+using System.Windows.Input;
+
 namespace LinkChat.Desktop.Avalonia.ViewModels;
 using LinkChat.Core.Models;
 
