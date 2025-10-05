@@ -1,0 +1,81 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:LinkChat.Desktop.Avalonia.ViewModels"
+             mc:Ignorable="d" Background="White" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LinkChat.Desktop.Avalonia.Views.ViewReceivedBubbleTextMessage"
+             x:DataType="vm:ReceivedBubbleTextMessageViewModel">
+    
+    <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Left">
+        <Border Background="#F0F0F0" 
+                CornerRadius="20" 
+                Padding="8,4"
+                Margin="70,0,0,0"
+                IsVisible="{Binding IsReactionMenuVisible}"
+                HorizontalAlignment="Left">
+            <StackPanel Orientation="Horizontal" Spacing="5">
+                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactToMessageCommand}" CommandParameter="Happy">
+                    <Image Source="/Assets/Images/happy.png" 
+                           Width="25" 
+                           HorizontalAlignment="Left" 
+                           Classes="IconOnly"></Image>
+                </Button>
+                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactToMessageCommand}" CommandParameter="Like">
+                    <Image Source="/Assets/Images/like.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
+                </Button>
+                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactToMessageCommand}" CommandParameter="Dislike">
+                    <Image Source="/Assets/Images/dislike.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
+                </Button>
+                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactToMessageCommand}" CommandParameter="Heart">
+                    <Image Source="/Assets/Images/heart.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
+                </Button>
+                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactToMessageCommand}" CommandParameter="Sad">
+                    <Image Source="/Assets/Images/sad.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
+                </Button>
+                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactToMessageCommand}" CommandParameter="Angry">
+                    <Image Source="/Assets/Images/angry.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
+                </Button>
+            </StackPanel>
+        </Border>
+        <Button Classes="ChatMessage" Command="{Binding ToggleReactionMenuCommand}" >
+            <Button.Content>
+                <Grid ColumnDefinitions="70, 300" RowDefinitions="Auto">
+                    <!-- user image -->
+                    <Border Grid.Column="0" Padding="6">
+                        <Image Source="/Assets/Images/Character1.png" VerticalAlignment="Top" HorizontalAlignment="Center"></Image> <!-- bind to userImage-->
+                    </Border>
+                    <!-- message -->
+                    <Border Grid.Column="1" Padding="6">
+                        <Border Padding="6" 
+                                Background="{DynamicResource CrocusPurple}" 
+                                CornerRadius="10" 
+                                >
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="10" 
+                                                  OffsetX="0" 
+                                                  OffsetY="0" 
+                                                  Opacity="0.5" 
+                                                  Color="DimGray"/>
+                            </Border.Effect>
+                            <Grid RowDefinitions="*, 20">
+                                <TextBlock Text="{Binding Content}"
+                                           Foreground="White" 
+                                           Margin="2" 
+                                           TextWrapping="Wrap">
+                                </TextBlock>
+                                <TextBlock Grid.Row="1"
+                                           Text = "{Binding Date}"
+                                           HorizontalAlignment="Right"
+                                           Foreground="White"
+                                           FontSize="12">
+                                </TextBlock>
+                            </Grid>
+                        </Border>
+                    </Border>
+                </Grid>
+            </Button.Content>
+        </Button>
+    </StackPanel>
+    
+</UserControl>

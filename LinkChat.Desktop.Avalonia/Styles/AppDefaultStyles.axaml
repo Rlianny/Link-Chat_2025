@@ -54,6 +54,9 @@
                             </Grid>
                         </Button.Content>
                     </Button>
+                    <Button Classes="transparent" HorizontalAlignment="Left">
+                        <Image Source="/Assets/Images/sad.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
+                    </Button>
                 </StackPanel>
             </Grid>
         </Border>
@@ -106,6 +109,10 @@
       </Setter> 
     </Style>
     
+    <Style Selector= "Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource TitanWhite}"></Setter> 
+    </Style>
+    
     <Style Selector="Button.transparent">
         <Setter Property="Background" Value="Transparent"></Setter>
         <Setter Property="RenderTransform" Value="scale(1)"></Setter>
@@ -116,21 +123,13 @@
         </Setter>
     </Style>
     
-    <Style Selector="Button.transparent /template/ ContentPresenter">
-        <Setter Property="RenderTransform" Value="scale(1)"></Setter>
-        <Setter Property="Transitions">
-            <Transitions>
-                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1"></TransformOperationsTransition>
-            </Transitions>
-        </Setter>
-    </Style>
-
-    <Style Selector= "Button:pointerover/template/ ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource TitanWhite}"></Setter> 
-    </Style>
-    
-    <Style Selector= "Button.transparent:pointerover/template/ ContentPresenter">
+    <Style Selector= "Button.transparent:pointerover /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="Transparent"></Setter>
         <Setter Property="RenderTransform" Value="scale(1.2)"></Setter>
+    </Style>
+    
+    <Style Selector= "Button.transparent:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="RenderTransform" Value="scale(1.1)"></Setter> 
     </Style>
 </Styles>
