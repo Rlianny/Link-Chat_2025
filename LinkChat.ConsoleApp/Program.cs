@@ -37,13 +37,15 @@ public class Program
                 Console.WriteLine($"- {user.UserName}");
             }
 
-            Console.WriteLine("Escriba el nombre del receptor del mensaje");
-            string receiver = Console.ReadLine();
+            //Console.WriteLine("Escriba el nombre del receptor del mensaje");
+            //string receiver = Console.ReadLine();
 
             Console.WriteLine("Escriba el mensaje");
             string message = Console.ReadLine();
 
-           messagingService.SendTextMessage(receiver, message);
+            //messagingService.SendTextMessage(receiver, message);
+
+            messagingService.SendBroadcastTextMessage(message);
         }
     }
 }

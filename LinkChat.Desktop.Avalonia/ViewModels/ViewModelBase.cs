@@ -4,4 +4,5 @@ namespace LinkChat.Desktop.Avalonia.ViewModels;
 
 public class ViewModelBase : ObservableObject
 {
+    
 }

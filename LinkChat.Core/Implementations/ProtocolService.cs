@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using LinkChat.Core.Models;
@@ -18,6 +19,11 @@ public class ProtocolService : IProtocolService
     public event Action<UserStatus>? UserStatusFrameReceived;
     public event Action<byte[]>? FrameReadyToSend;
 
+    private readonly JsonSerializerOptions options = new JsonSerializerOptions
+    {
+        WriteIndented = false,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
 
     public ProtocolService(INetworkService networkService)
     {
@@ -55,28 +61,35 @@ public class ProtocolService : IProtocolService
 
     private byte[] GetPayload(Message message)
     {
-        var options = new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        };
         string json = JsonSerializer.Serialize(message, options);
         byte[] bytes = Encoding.UTF8.GetBytes(json);
+        byte[] encryptedBytes = AesEncryptor.Encrypt(bytes);
         return bytes;
     }
 
     public Message? ParseFrame(byte[] frame)
     {
-        var options = new JsonSerializerOptions
+        byte[] encryptedPayload = new byte[frame.Length - 14];
+        Buffer.BlockCopy(frame, 14, encryptedPayload, 0, encryptedPayload.Length);
+
+        try
         {
-            WriteIndented = true,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        };
-        byte[] frameToSerialize = new byte[frame.Length - 14];
-        Buffer.BlockCopy(frame, 14, frameToSerialize, 0, frameToSerialize.Length);
-        string RecoveryMessage = Encoding.UTF8.GetString(frameToSerialize);
-        Message? Message = JsonSerializer.Deserialize<Message>(RecoveryMessage, options);
-        return Message;
+            byte[] decryptedBytes = AesEncryptor.Decrypt(encryptedPayload);
+            string recoveryMessage = Encoding.UTF8.GetString(decryptedBytes);
+            Message? message = JsonSerializer.Deserialize<Message>(recoveryMessage, options);
+            return message;
+        }
+        catch (CryptographicException)
+        {
+            Console.WriteLine("WARNING: Frame received with corrupted data or wrong key (decrypting failure).");
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error parsing the decrypted message: {ex.Message}");
+            return null;
+        }
+
     }
 
     private void OnFrameReceived(byte[] frameData)
