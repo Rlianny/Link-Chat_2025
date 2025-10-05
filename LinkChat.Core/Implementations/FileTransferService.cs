@@ -139,13 +139,15 @@ public class FileTransferService : IFileTransferService
         }
     }
 
-    private void OnFileChunkFrameReceived(FileChunk fileChunk)
+    private async void OnFileChunkFrameReceived(FileChunk fileChunk)
     {
         if (FileChunks.ContainsKey(fileChunk.FileId))
         {
             if (!FileChunks[fileChunk.FileId].ContainsKey(fileChunk.ChunkNumber))
             {
                 FileChunks[fileChunk.FileId].Add(fileChunk.ChunkNumber, fileChunk);
+                Task task = SendChunkConfirmation(fileChunk);
+                await task;
                 System.Console.WriteLine($"Receiving chunck {fileChunk.ChunkNumber}");
             }
 
@@ -197,23 +199,25 @@ public class FileTransferService : IFileTransferService
         }
     }
 
-    private void OnFileStartFrameReceived(FileStart fileStart)
+    private async void OnFileStartFrameReceived(FileStart fileStart)
     {
         if (!FileChunks.ContainsKey(fileStart.FileId))
         {
             FileStarts.Add(fileStart.FileId, fileStart);
             FileChunks.Add(fileStart.FileId, []);
+            Task task = SendStartConfirmation(fileStart);
+            await task;
         }
         System.Console.WriteLine($"Recibiendo {fileStart.FileId} mediante {fileStart.TotalChunks} chunks");
     }
-    public async void SendStartConfirmation(FileStart fileStart)
+    public async Task SendStartConfirmation(FileStart fileStart)
     {
         FileStartAck fileStartAck = new FileStartAck(fileStart.UserName, DateTime.Now, fileStart.FileId);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileStart.UserName), fileStartAck, false);
         System.Console.WriteLine($"Confirmation sended to message with ID {fileStart.FileId}");
         await networkService.SendFrameAsync(frame);
     }
-    public async void SendChunkConfirmation(FileChunk fileChunk)
+    public async Task SendChunkConfirmation(FileChunk fileChunk)
     {
         FileStartAck fileChunkAck = new FileStartAck(fileChunk.UserName, DateTime.Now, fileChunk.FileId);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileChunk.UserName), fileChunkAck, false);
