@@ -32,8 +32,15 @@ public class FileTransferService : IFileTransferService
     public List<FileChunk> SplitFile(
         string filePath,
         string userName,
-        int chunkSize = 1024) // 1 KB
+        int chunkSize = 1000) // 1000 bytes maximum
     {
+        // Ensure chunk size doesn't exceed 1000 bytes
+        if (chunkSize > 1000)
+        {
+            chunkSize = 1000;
+            Console.WriteLine("Warning: Chunk size reduced to 1000 bytes maximum");
+        }
+
         List<FileChunk> chunks = new();
         string fileId = Tools.Tools.GetNewId(userService);
 
@@ -64,8 +71,8 @@ public class FileTransferService : IFileTransferService
 
     public async void SendFile(string receiverUserName, string filePath)
     {
-        var chunks = SplitFile(filePath, receiverUserName, 64 * 1024).ToList();
-        double size = new FileInfo(filePath).Length / 1024;
+        var chunks = SplitFile(filePath, receiverUserName, 1000).ToList(); // Ensure chunks are 1000 bytes or less
+        double size = new FileInfo(filePath).Length;
         var start = new FileStart(
             userService.GetSelfUser().UserName,
             DateTime.Now,
@@ -86,6 +93,9 @@ public class FileTransferService : IFileTransferService
             System.Console.WriteLine(!ConfirmingStarts[start.FileId]);
             while (!ConfirmingStarts[start.FileId])
             {
+
+                byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), start, false);
+
                 Console.WriteLine("in while");
                 byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), start, false);
                 Console.WriteLine("Frame has been created");
