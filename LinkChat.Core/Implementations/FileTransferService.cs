@@ -78,29 +78,34 @@ public class FileTransferService : IFileTransferService
         {
             Confirmations[start.FileId].Add(chunk.ChunkNumber, false);
         }
-
-        await SendFileStart(start);
-        System.Console.WriteLine("FileStart sended");
-        while (true)
+        ConfirmingStarts.Add(start.FileId, false);
+        Task sendAndWait = Task.Run(async () =>
         {
-            bool changed = false;
-            foreach (var chunk in chunks)
+            while (!ConfirmingStarts[start.FileId])
             {
-                if (!Confirmations[start.FileId][chunk.ChunkNumber])
+                byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(start.UserName), start, false);
+                await networkService.SendFrameAsync(frame);
+                System.Console.WriteLine($"Starting sending fileStart from {start.UserName}");
+                Task task = Task.Delay(1000);
+                await task;
+            }
+        });
+        await sendAndWait;
+        System.Console.WriteLine("FileStart sended");
+        foreach (var chunk in chunks)
+        {
+            Task sendAndWaitChunk = Task.Run(async () =>
+            {
+                while (!Confirmations[start.FileId][chunk.ChunkNumber])
                 {
-                    Task sendFC = Task.Run(() => SendFileChunk(chunk));
-                    await sendFC;
-                    changed = true;
-                    System.Console.WriteLine($"FileChunck {chunk.ChunkNumber} sended");
+                    byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), chunk, false);
+                    await networkService.SendFrameAsync(frame);
+                    System.Console.WriteLine($"Message sended with ID {chunk.ChunkNumber}");
+                    await Task.Delay(3000);
                 }
-            }
-            if (!changed)
-            {
-                break;
-            }
-            await Task.Delay(1000);
+            });
+            await sendAndWaitChunk;
         }
-
     }
 
     public void OnFileStartAckFrameReceived(FileStartAck fileStartAck)
@@ -109,26 +114,6 @@ public class FileTransferService : IFileTransferService
         Console.WriteLine("FileStart ack received");
     }
 
-    public async Task SendFileChunk(FileChunk chunk)
-    {
-        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(chunk.UserName), chunk, false);
-        System.Console.WriteLine($"Sending fileChunk {chunk.ChunkNumber}");
-        await networkService.SendFrameAsync(frame);
-    }
-
-    public async Task SendFileStart(FileStart fileStart)
-    {
-        ConfirmingStarts.Add(fileStart.FileId, false);
-        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileStart.UserName), fileStart, false);
-        while (ConfirmingStarts[fileStart.FileId] == false)
-        {
-            await networkService.SendFrameAsync(frame);
-            System.Console.WriteLine($"Starting sending fileStart from {fileStart.UserName}");
-            Task task = Task.Delay(1000);
-            await task;
-        }
-
-    }
     private void OnFileChunkAckFrameReceived(FileChunkAck fileAck)
     {
         if (Confirmations.ContainsKey(fileAck.FileID) && Confirmations[fileAck.FileID].ContainsKey(fileAck.ChunkNumber))
