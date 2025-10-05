@@ -96,7 +96,6 @@ public class FileTransferService : IFileTransferService
             System.Console.WriteLine(!ConfirmingStarts[start.FileId]);
             while (!ConfirmingStarts[start.FileId])
             {
-
                 Console.WriteLine("in while");
                 byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), start, false);
                 Console.WriteLine("Frame has been created");
