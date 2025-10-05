@@ -3,6 +3,9 @@ using LinkChat.Core.Models;
 using LinkChat.Core.Tools;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Text.Json.Nodes;
+using System.Text.Json;
+using System.Text;
 namespace LinkChat.Core.Implementations;
 
 public class FileTransferService : IFileTransferService
@@ -123,7 +126,6 @@ public class FileTransferService : IFileTransferService
     public void OnFileStartAckFrameReceived(FileStartAck fileStartAck)
     {
         ConfirmingStarts[fileStartAck.FileId] = true;
-        Console.WriteLine("FileStart ack received");
     }
 
     private void OnFileChunkAckFrameReceived(FileChunkAck fileAck)
@@ -131,12 +133,12 @@ public class FileTransferService : IFileTransferService
         if (Confirmations.ContainsKey(fileAck.FileID) && Confirmations[fileAck.FileID].ContainsKey(fileAck.ChunkNumber))
         {
             Confirmations[fileAck.FileID][fileAck.ChunkNumber] = true;
-            System.Console.WriteLine($"Filechunk {fileAck.ChunkNumber} received");
         }
     }
 
     private async void OnFileChunkFrameReceived(FileChunk fileChunk)
     {
+        await SendChunkConfirmation(fileChunk);
         if (FileChunks.ContainsKey(fileChunk.FileId))
         {
             if (!FileChunks[fileChunk.FileId].ContainsKey(fileChunk.ChunkNumber))
@@ -144,16 +146,28 @@ public class FileTransferService : IFileTransferService
                 FileChunks[fileChunk.FileId].Add(fileChunk.ChunkNumber, fileChunk);
                 Task task = SendChunkConfirmation(fileChunk);
                 await task;
-                System.Console.WriteLine($"Receiving chunck {fileChunk.ChunkNumber}");
             }
 
             int cant = FileStarts[fileChunk.FileId].TotalChunks;
             if (cant == FileChunks[fileChunk.FileId].Count)
             {
-                string downloadPath = "/home/" + Environment.UserName + "/Downloads";
+                var currentUser = Environment.GetEnvironmentVariable("SUDO_USER");
+                System.Console.WriteLine($"Detected user: {currentUser}");
 
+                string downloadPath = Path.Combine("/home", currentUser, "Downloads", "LinkChatDownloads");
+                System.Console.WriteLine($"Using downloads directory: {downloadPath}");
+
+                if (!Directory.Exists(downloadPath))
+                {
+                    Directory.CreateDirectory(downloadPath);
+                    System.Console.WriteLine($"Created Downloads directory at: {downloadPath}");
+                }
                 string fileName = FileStarts[fileChunk.FileId].FileName;
                 string filePath = Path.Combine(downloadPath, fileName);
+                if (!Directory.Exists(downloadPath))
+                {
+                    throw new DirectoryNotFoundException($"Failed to create directory: {downloadPath}");
+                }
 
                 int counter = 1;
                 while (System.IO.File.Exists(filePath))
@@ -163,17 +177,24 @@ public class FileTransferService : IFileTransferService
                     filePath = Path.Combine(downloadPath, $"{nameWithoutExt}({counter}){extension}");
                     counter++;
                 }
-                using (FileStream fs = new FileStream(filePath, FileMode.Create))
+
+                using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                     var orderedChunks = FileChunks[fileChunk.FileId]
                         .OrderBy(chunk => chunk.Key)
-                        .Select(chunk => chunk.Value);
+                        .ToList();
 
-                    foreach (var chunk in orderedChunks)
+                    System.Console.WriteLine($"Chunks ordered, about to write {orderedChunks.Count} chunks");
+
+                    foreach (var pair in orderedChunks)
                     {
+                        var chunk = pair.Value;
+                        System.Console.WriteLine($"Writing chunk {chunk.ChunkNumber}, size: {chunk.Data.Length} bytes");
                         fs.Write(chunk.Data, 0, chunk.Data.Length);
+                        fs.Flush();
                     }
                 }
+
                 var fileStart = FileStarts[fileChunk.FileId];
                 double fileSize = new FileInfo(filePath).Length / 1024.0;
                 var file = new Models.File(
@@ -184,6 +205,7 @@ public class FileTransferService : IFileTransferService
                     fileSize,
                     fileName
                 );
+                System.Console.WriteLine($"File saved successfully at: {filePath}");
                 // Agregar a la lista y notificar
                 Files.Add(fileChunk.FileId, file);
                 System.Console.WriteLine("Invoke called");
@@ -208,8 +230,8 @@ public class FileTransferService : IFileTransferService
     }
     public async Task SendChunkConfirmation(FileChunk fileChunk)
     {
-        FileStartAck fileStartAck = new FileStartAck(fileChunk.UserName, DateTime.Now, fileChunk.FileId);
-        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileChunk.UserName), fileStartAck, false);
+        FileChunkAck fileChunkAck = new FileChunkAck(fileChunk.UserName, DateTime.Now, fileChunk.FileId, fileChunk.ChunkNumber);
+        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileChunk.UserName), fileChunkAck, false);
         System.Console.WriteLine($"Confirmation sended to fileChunk with ID {fileChunk.FileId}");
         await networkService.SendFrameAsync(frame);
     }
