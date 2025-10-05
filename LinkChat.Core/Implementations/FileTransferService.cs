@@ -50,7 +50,7 @@ public class FileTransferService : IFileTransferService
             Array.Copy(buffer, chunkData, bytesRead);
 
             var chunk = new FileChunk(
-                userName,
+                userService.GetSelfUser().UserName,
                 DateTime.Now,
                 fileId,
                 chunkNumber,
@@ -67,7 +67,7 @@ public class FileTransferService : IFileTransferService
         var chunks = SplitFile(filePath, receiverUserName, 64 * 1024).ToList();
         double size = new FileInfo(filePath).Length / 1024;
         var start = new FileStart(
-            receiverUserName,
+            userService.GetSelfUser().UserName,
             DateTime.Now,
             Path.GetFileName(filePath),
             size,
