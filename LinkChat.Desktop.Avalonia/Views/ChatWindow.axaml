@@ -7,10 +7,6 @@
         x:Class="LinkChat.Desktop.Avalonia.Views.ChatWindow"
         Title="ChatWindow">
     
-    <Window.DataContext>
-        <vm:SendedBubbleTextMessageViewModel></vm:SendedBubbleTextMessageViewModel>
-    </Window.DataContext>
-    
     <Grid Background="{DynamicResource TitanWhite}" ColumnDefinitions="650, *">
         <Border Padding="20" Background="White" Grid.Column="0">
             <StackPanel Spacing="40">
@@ -282,7 +278,7 @@
                 CornerRadius="20" 
                 Padding="8,4"
                 Margin="70,0,0,0"
-                IsVisible="{Binding IsReactionMenuVisible}"
+                IsVisible="True"
                 HorizontalAlignment="Left">
             <StackPanel Orientation="Horizontal" Spacing="5">
                 <Button Classes="transparent" HorizontalAlignment="Left">
