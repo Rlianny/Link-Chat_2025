@@ -9,7 +9,6 @@ namespace LinkChat.Core.Services
         public Task SendTextMessage(string receiverUserName, string content);
         public void SendBroadcastTextMessage(string content);
         public void ReactToMessage(string messageId, Emoji emoji);
-        public string GetNewId();
         public TextMessage GetTextMessageById(string textMessageId);
         public IEnumerable<ChatMessage> GetChatHistory(string UserName);
     }

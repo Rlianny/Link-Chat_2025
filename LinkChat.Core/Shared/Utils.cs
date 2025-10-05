@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using LinkChat.Core.Services;
 using System.Net.NetworkInformation;
 
 namespace LinkChat.Core.Tools
@@ -12,6 +13,13 @@ namespace LinkChat.Core.Tools
             return macAddress.Split(':', '-')
                              .Select(b => Convert.ToByte(b, 16))
                              .ToArray();
+        }
+        public static string GetNewId(IUserService userService)
+        {
+            var timestamp = DateTime.UtcNow.Ticks; // 100ns precision
+            var random = Random.Shared.Next(10000);
+            string userName = userService.GetSelfUser().UserName;
+            return $"{userName}_{timestamp}_{random:0000}";
         }
 
         public static byte[] GetLocalMacAddress()
