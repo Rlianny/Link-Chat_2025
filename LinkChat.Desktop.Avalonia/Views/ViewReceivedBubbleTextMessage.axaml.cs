@@ -13,8 +13,8 @@ public partial class ViewReceivedBubbleTextMessage : UserControl
     
     public ReceivedBubbleTextMessageViewModel BubbleTextMessage
     {
-        get => GetValue(MiClaseAProperty);
-        set => SetValue(MiClaseAProperty, value);
+        get => GetValue(BubbleTextMessageProperty);
+        set => SetValue(BubbleTextMessageProperty, value);
     }
     public ViewReceivedBubbleTextMessage()
     {
