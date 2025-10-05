@@ -143,7 +143,10 @@ public class FileTransferService : IFileTransferService
             {
                 var currentUser = Environment.GetEnvironmentVariable("SUDO_USER");
 
-                string downloadPath = Path.Combine("/home", currentUser, "Downloads", "LinkChatDownloads");
+                string homePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                Console.WriteLine($"Directorio Home: {homePath}");
+
+                string downloadPath = Path.Combine(homePath, currentUser, "Downloads", "LinkChatDownloads");
 
                 if (!Directory.Exists(downloadPath))
                 {
