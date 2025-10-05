@@ -207,7 +207,7 @@ public class FileTransferService : IFileTransferService
     }
     public async Task SendChunkConfirmation(FileChunk fileChunk)
     {
-        FileStartAck fileStartAck = new FileStartAck(fileChunk.UserName, DateTime.Now, fileChunk.FileId);
+        FileChunkAck fileStartAck = new FileChunkAck(fileChunk.UserName, DateTime.Now, fileChunk.FileId, fileChunk.ChunkNumber);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileChunk.UserName), fileStartAck, false);
         System.Console.WriteLine($"Confirmation sended to fileChunk with ID {fileChunk.FileId}");
         await networkService.SendFrameAsync(frame);
