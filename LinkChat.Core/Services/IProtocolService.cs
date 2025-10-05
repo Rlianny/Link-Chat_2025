@@ -9,7 +9,8 @@ namespace LinkChat.Core.Services
         public byte[] CreateFrameToSend(User receiver, Message message, bool broadcast);
         public event Action<HeartbeatMessage>? HeartbeatFrameReceived;
         public event Action<ChatAck>? ChatAckFrameReceived;
-        public event Action<FileAck>? FileAckFrameReceived;
+        public event Action<FileChunkAck>? FileChunkAckFrameReceived;
+        public event Action<FileStartAck>? FileStartAckFrameReceived;
         public event Action<TextMessage>? TextMessageFrameReceived;
         public event Action<FileStart>? FileStartFrameReceived;
         public event Action<FileChunk>? FileChunkFrameReceived;

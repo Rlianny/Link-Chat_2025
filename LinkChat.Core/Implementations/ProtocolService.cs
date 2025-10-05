@@ -11,13 +11,14 @@ public class ProtocolService : IProtocolService
     private INetworkService networkService;
     public event Action<HeartbeatMessage>? HeartbeatFrameReceived;
     public event Action<ChatAck>? ChatAckFrameReceived;
-    public event Action<FileAck>? FileAckFrameReceived;
+    public event Action<FileChunkAck>? FileChunkAckFrameReceived;
     public event Action<TextMessage>? TextMessageFrameReceived;
     public event Action<FileStart>? FileStartFrameReceived;
     public event Action<FileChunk>? FileChunkFrameReceived;
     public event Action<MessageReaction>? MessageReactionFrameReceived;
     public event Action<UserStatus>? UserStatusFrameReceived;
     public event Action<byte[]>? FrameReadyToSend;
+    public event Action<FileStartAck>? FileStartAckFrameReceived;
 
     private readonly JsonSerializerOptions options = new JsonSerializerOptions
     {
@@ -103,9 +104,14 @@ public class ProtocolService : IProtocolService
                 ChatAckFrameReceived?.Invoke(chatAck);
                 break;
 
-            case FileAck fileAck:
-                FileAckFrameReceived?.Invoke(fileAck);
+            case FileChunkAck fileChunkAck:
+                FileChunkAckFrameReceived?.Invoke(fileChunkAck);
                 break;
+
+            case FileStartAck fileStartAck:
+                FileStartAckFrameReceived?.Invoke(fileStartAck);
+                break;
+
 
             case FileChunk fileChunk:
                 FileChunkFrameReceived?.Invoke(fileChunk);

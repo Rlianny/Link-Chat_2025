@@ -26,7 +26,8 @@ public class FileTransferService : IFileTransferService
         this.userService = userService;
         protocolService.FileStartFrameReceived += OnFileStartFrameReceived;
         protocolService.FileChunkFrameReceived += OnFileChunkFrameReceived;
-        protocolService.FileAckFrameReceived += OnFileChunkAckFrameReceived;
+        protocolService.FileChunkAckFrameReceived += OnFileChunkAckFrameReceived;
+        protocolService.FileStartAckFrameReceived += OnFileStartAckFrameReceived;
     }
     public List<FileChunk> SplitFile(
         string filePath,
@@ -103,6 +104,11 @@ public class FileTransferService : IFileTransferService
         await task;
     }
 
+    public void OnFileStartAckFrameReceived(FileStartAck fileStartAck)
+    {
+        ConfirmingStarts[fileStartAck.FileId] = true;
+    }
+
     public async Task SendFileChunk(FileChunk chunk)
     {
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(chunk.UserName), chunk, false);
@@ -125,7 +131,7 @@ public class FileTransferService : IFileTransferService
         await task;
 
     }
-    private void OnFileChunkAckFrameReceived(FileAck fileAck)
+    private void OnFileChunkAckFrameReceived(FileChunkAck fileAck)
     {
         if (Confirmations.ContainsKey(fileAck.FileID) && Confirmations[fileAck.FileID].ContainsKey(fileAck.ChunkNumber))
         {
@@ -140,6 +146,7 @@ public class FileTransferService : IFileTransferService
             if (!FileChunks[fileChunk.FileId].ContainsKey(fileChunk.ChunkNumber))
             {
                 FileChunks[fileChunk.FileId].Add(fileChunk.ChunkNumber, fileChunk);
+                System.Console.WriteLine($"Receiving chunck {fileChunk.ChunkNumber}");
             }
 
             int cant = FileStarts[fileChunk.FileId].TotalChunks;
@@ -181,6 +188,7 @@ public class FileTransferService : IFileTransferService
                 );
                 // Agregar a la lista y notificar
                 Files.Add(fileChunk.FileId, file);
+                System.Console.WriteLine("Invoke called");
                 FileFrameReceived?.Invoke(file);
                 // Limpiar los diccionarios temporales
                 FileChunks.Remove(fileChunk.FileId);
@@ -195,7 +203,9 @@ public class FileTransferService : IFileTransferService
         {
             FileStarts.Add(fileStart.FileId, fileStart);
             FileChunks.Add(fileStart.FileId, []);
+
         }
+        System.Console.WriteLine($"Recibiendo {fileStart.FileId} mediante {fileStart.TotalChunks} chunks");
     }
 
     public Models.File GetFileById(string messageId)
