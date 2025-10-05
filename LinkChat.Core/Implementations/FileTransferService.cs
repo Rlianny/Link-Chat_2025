@@ -126,6 +126,52 @@ public class FileTransferService : IFileTransferService
         }
     }
 
+
+    private string GetUserDownloadsPath()
+    {
+        string homeDir = Environment.GetEnvironmentVariable("SUDO_USER") is { } sudoUser && !string.IsNullOrEmpty(sudoUser)
+            ? Path.Combine("/home", sudoUser)
+            : Environment.GetEnvironmentVariable("HOME") ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+        if (string.IsNullOrEmpty(homeDir))
+        {
+            
+            return "/tmp/LinkChatDownloads";
+        }
+
+        string userDirsPath = Path.Combine(homeDir, ".config", "user-dirs.dirs");
+        string xdgDownloadDir = null;
+
+        if (System.IO.File.Exists(userDirsPath))
+        {
+            try
+            {
+                var lines = System.IO.File.ReadAllLines(userDirsPath);
+                foreach (var line in lines)
+                {
+                    if (line.StartsWith("XDG_DOWNLOAD_DIR="))
+                    {
+                        xdgDownloadDir = line.Substring("XDG_DOWNLOAD_DIR=".Length)
+                                             .Trim('"')
+                                             .Replace("$HOME", homeDir);
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"Error reading {userDirsPath}: {ex.Message}");
+            }
+        }
+        
+        string downloadsFolder = xdgDownloadDir ?? Path.Combine(homeDir, "Downloads");
+
+        return Path.Combine(downloadsFolder, "LinkChatDownloads");
+    }
+
+
+
+
     private async void OnFileChunkFrameReceived(FileChunk fileChunk)
     {
         await SendChunkConfirmation(fileChunk);
@@ -141,23 +187,14 @@ public class FileTransferService : IFileTransferService
             int cant = FileStarts[fileChunk.FileId].TotalChunks;
             if (cant == FileChunks[fileChunk.FileId].Count)
             {
-                var currentUser = Environment.GetEnvironmentVariable("SUDO_USER");
 
-                string homePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-                Console.WriteLine($"Directorio Home: {homePath}");
+                string downloadPath = GetUserDownloadsPath();
+                System.Console.WriteLine($"Final download path: {downloadPath}");
 
-                string downloadPath = Path.Combine(homePath, currentUser, "Downloads", "LinkChatDownloads");
+                Directory.CreateDirectory(downloadPath);
 
-                if (!Directory.Exists(downloadPath))
-                {
-                    Directory.CreateDirectory(downloadPath);
-                }
                 string fileName = FileStarts[fileChunk.FileId].FileName;
                 string filePath = Path.Combine(downloadPath, fileName);
-                if (!Directory.Exists(downloadPath))
-                {
-                    throw new DirectoryNotFoundException($"Failed to create directory: {downloadPath}");
-                }
 
                 int counter = 1;
                 while (System.IO.File.Exists(filePath))
