@@ -86,15 +86,22 @@ public class FileTransferService : IFileTransferService
             Confirmations[start.FileId].Add(chunk.ChunkNumber, false);
         }
         ConfirmingStarts.Add(start.FileId, false);
+        Console.WriteLine("Confirming Starting");
         Task sendAndWait = Task.Run(async () =>
         {
+            Console.WriteLine("Async method");
+            System.Console.WriteLine(!ConfirmingStarts[start.FileId]);
             while (!ConfirmingStarts[start.FileId])
             {
+
                 byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), start, false);
+
+                Console.WriteLine("in while");
+                byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), start, false);
+                Console.WriteLine("Frame has been created");
                 await networkService.SendFrameAsync(frame);
                 System.Console.WriteLine($"Starting sending fileStart from {start.UserName}");
-                Task task = Task.Delay(1000);
-                await task;
+                await Task.Delay(1000);
             }
         });
         await sendAndWait;

@@ -27,21 +27,6 @@ public abstract partial class BubbleMessageViewModel : ViewModelBase
 
     [ObservableProperty] private bool _isReactionMenuVisible = false;
 
-    [RelayCommand]
-    private void ToggleReactionMenu()
-    {
-        IsReactionMenuVisible = !IsReactionMenuVisible;
-    }
-
-    [RelayCommand]
-    private void ReactToMessage(String emoji)
-    {
-        // Aquí va tu lógica para manejar la reacción.
-        // Por ejemplo, enviar la reacción al servidor.
-        Console.WriteLine($"Reacción seleccionada: {emoji}");
-
-        // Opcional: Ocultar el menú después de reaccionar.
-        IsReactionMenuVisible = false;
-    }
+    
 
 }
