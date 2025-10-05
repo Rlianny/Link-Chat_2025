@@ -1,22 +1,210 @@
 using LinkChat.Core.Services;
-
+using LinkChat.Core.Models;
+using LinkChat.Core.Tools;
+using System.Threading.Tasks;
+using System.Drawing;
 namespace LinkChat.Core.Implementations;
 
 public class FileTransferService : IFileTransferService
 {
+    Dictionary<string, Models.File> Files = [];
+    Dictionary<string, Dictionary<int, FileChunk>> FileChunks = [];
+    Dictionary<string, FileStart> FileStarts = [];
+    Dictionary<string, Dictionary<int, bool>> Confirmations = [];
+    Dictionary<string, bool> ConfirmingStarts = [];
+    private IProtocolService protocolService;
+    private INetworkService networkService;
+    private IUserService userService;
+
     public event Action<Models.File> FileFrameReceived;
 
-    public FileTransferService()
+
+    public FileTransferService(IProtocolService protocolService, INetworkService networkService, IUserService userService)
     {
-    
+        this.protocolService = protocolService;
+        this.networkService = networkService;
+        this.userService = userService;
+        protocolService.FileStartFrameReceived += OnFileStartFrameReceived;
+        protocolService.FileChunkFrameReceived += OnFileChunkFrameReceived;
+        protocolService.FileAckFrameReceived += OnFileChunkAckFrameReceived;
     }
-    public Models.File GetFileById(int message)
+    public List<FileChunk> SplitFile(
+        string filePath,
+        string userName,
+        int chunkSize = 64 * 1024) // 64 KB
     {
-        throw new NotImplementedException();
+        List<FileChunk> chunks = new();
+        string fileId = Tools.Tools.GetNewId(userService);
+
+        byte[] buffer = new byte[chunkSize];
+        using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read);
+
+        int bytesRead;
+        int chunkNumber = 0;
+        int totalChunks = (int)Math.Ceiling((double)fs.Length / chunkSize);
+
+        while ((bytesRead = fs.Read(buffer, 0, buffer.Length)) > 0)
+        {
+            byte[] chunkData = new byte[bytesRead];
+            Array.Copy(buffer, chunkData, bytesRead);
+
+            var chunk = new FileChunk(
+                userName,
+                DateTime.Now,
+                fileId,
+                chunkNumber,
+                chunkData
+            );
+            chunks.Add(chunk);
+            chunkNumber++;
+        }
+        return chunks;
     }
 
-    public void SendFile(string receiverUserName, string filePath)
+    public async Task SendFile(string receiverUserName, string filePath)
     {
-        throw new NotImplementedException();
+        var chunks = SplitFile(filePath, receiverUserName, 64 * 1024).ToList();
+        double size = new FileInfo(filePath).Length / 1024;
+        var start = new FileStart(
+            receiverUserName,
+            DateTime.Now,
+            Path.GetFileName(filePath),
+            size,
+            chunks.First().FileId,
+            chunks.Count);
+        Confirmations.Add(start.FileId, []);
+        foreach (var chunk in chunks)
+        {
+            Confirmations[start.FileId].Add(chunk.ChunkNumber, false);
+        }
+
+        await SendFileStart(start);
+        Task task = Task.Run(async () =>
+        {
+            while (true)
+            {
+                bool changed = false;
+                foreach (var chunk in chunks)
+                {
+                    if (!Confirmations[start.FileId][chunk.ChunkNumber])
+                    {
+                        Task sendFC = Task.Run(() => SendFileChunk(chunk));
+                        await sendFC;
+                        changed = true;
+                    }
+                }
+                if (!changed)
+                {
+                    break;
+                }
+                await Task.Delay(1000);
+            }
+        });
+        await task;
     }
+
+    public async Task SendFileChunk(FileChunk chunk)
+    {
+        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(chunk.UserName), chunk, false);
+        await networkService.SendFrameAsync(frame);
+    }
+
+    public async Task SendFileStart(FileStart fileStart)
+    {
+        ConfirmingStarts.Add(fileStart.FileId, false);
+        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileStart.UserName), fileStart, false);
+        Task task = Task.Run(async () =>
+        {
+            while (ConfirmingStarts[fileStart.FileId] == false)
+            {
+                await networkService.SendFrameAsync(frame);
+                Task task = Task.Delay(1000);
+                await task;
+            }
+        });
+        await task;
+
+    }
+    private void OnFileChunkAckFrameReceived(FileAck fileAck)
+    {
+        if (Confirmations.ContainsKey(fileAck.FileID) && Confirmations[fileAck.FileID].ContainsKey(fileAck.ChunkNumber))
+        {
+            Confirmations[fileAck.FileID][fileAck.ChunkNumber] = true;
+        }
+    }
+
+    private void OnFileChunkFrameReceived(FileChunk fileChunk)
+    {
+        if (FileChunks.ContainsKey(fileChunk.FileId))
+        {
+            if (!FileChunks[fileChunk.FileId].ContainsKey(fileChunk.ChunkNumber))
+            {
+                FileChunks[fileChunk.FileId].Add(fileChunk.ChunkNumber, fileChunk);
+            }
+
+            int cant = FileStarts[fileChunk.FileId].TotalChunks;
+            if (cant == FileChunks[fileChunk.FileId].Count)
+            {
+                string downloadPath = "/home/" + Environment.UserName + "/Downloads";
+
+                string fileName = FileStarts[fileChunk.FileId].FileName;
+                string filePath = Path.Combine(downloadPath, fileName);
+
+                int counter = 1;
+                while (System.IO.File.Exists(filePath))
+                {
+                    string nameWithoutExt = Path.GetFileNameWithoutExtension(fileName);
+                    string extension = Path.GetExtension(fileName);
+                    filePath = Path.Combine(downloadPath, $"{nameWithoutExt}({counter}){extension}");
+                    counter++;
+                }
+                using (FileStream fs = new FileStream(filePath, FileMode.Create))
+                {
+                    var orderedChunks = FileChunks[fileChunk.FileId]
+                        .OrderBy(chunk => chunk.Key)
+                        .Select(chunk => chunk.Value);
+
+                    foreach (var chunk in orderedChunks)
+                    {
+                        fs.Write(chunk.Data, 0, chunk.Data.Length);
+                    }
+                }
+                var fileStart = FileStarts[fileChunk.FileId];
+                double fileSize = new FileInfo(filePath).Length / 1024.0;
+                var file = new Models.File(
+                    fileStart.UserName,
+                    DateTime.Now,
+                    fileChunk.FileId,
+                    filePath,
+                    fileSize,
+                    fileName
+                );
+                // Agregar a la lista y notificar
+                Files.Add(fileChunk.FileId, file);
+                FileFrameReceived?.Invoke(file);
+                // Limpiar los diccionarios temporales
+                FileChunks.Remove(fileChunk.FileId);
+                FileStarts.Remove(fileChunk.FileId);
+            }
+        }
+    }
+
+    private void OnFileStartFrameReceived(FileStart fileStart)
+    {
+        if (!FileChunks.ContainsKey(fileStart.FileId))
+        {
+            FileStarts.Add(fileStart.FileId, fileStart);
+            FileChunks.Add(fileStart.FileId, []);
+        }
+    }
+
+    public Models.File GetFileById(string messageId)
+    {
+        if (Files.ContainsKey(messageId))
+        {
+            return Files[messageId];
+        }
+        throw new Exception($"File with Id {messageId} not found");
+    }
+
 }

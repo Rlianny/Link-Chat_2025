@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using LinkChat.Core.Models;
+using LinkChat.Core.Tools;
 using LinkChat.Core.Services;
 namespace LinkChat.Core.Implementations;
 
@@ -59,7 +60,7 @@ public class MessagingService : IMessagingService
 
     public async Task SendTextMessage(string receiverUserName, string content)
     {
-        TextMessage textMessage = new TextMessage(userService.GetSelfUser().UserName, DateTime.Now, GetNewId(), content);
+        TextMessage textMessage = new TextMessage(userService.GetSelfUser().UserName, DateTime.Now, Tools.Tools.GetNewId(userService), content);
         Confirmations.Add(textMessage.MessageId, false);
         Task sendAndWait = Task.Run(async () =>
         {
@@ -77,7 +78,7 @@ public class MessagingService : IMessagingService
 
     public void SendBroadcastTextMessage(string content)
     {
-        TextMessage textMessage = new TextMessage(userService.GetSelfUser().UserName, DateTime.Now, GetNewId(), content);
+        TextMessage textMessage = new TextMessage(userService.GetSelfUser().UserName, DateTime.Now, Tools.Tools.GetNewId(userService), content);
         byte[] frame = protocolService.CreateFrameToSend(null, textMessage, true);
         networkService.SendFrameAsync(frame);
         System.Console.WriteLine($"Broadcast message sended with ID {textMessage.MessageId}");
@@ -94,12 +95,11 @@ public class MessagingService : IMessagingService
 
     private void OnChatAckFrameReceived(ChatAck chatAck)
     {
-        if (!Confirmations.ContainsKey(chatAck.MessageId))
+        if (Confirmations.ContainsKey(chatAck.MessageId))
         {
-            throw new Exception($"Confirmation {chatAck} was missed");
+            Confirmations[chatAck.MessageId] = true;
+            System.Console.WriteLine($"Confirmation for message with ID {chatAck.MessageId} received");
         }
-        Confirmations[chatAck.MessageId] = true;
-        System.Console.WriteLine($"Confirmation for message with ID {chatAck.MessageId} received");
     }
 
     private async void OnTextMessageFrameReceived(TextMessage textMessage)
@@ -108,19 +108,19 @@ public class MessagingService : IMessagingService
         Console.WriteLine($"{textMessage.UserName}:{textMessage.Content}");
         try
         {
-            SendConfirmation(textMessage);
+            await SendConfirmation(textMessage);
         }
         catch (Exception e)
         {
             try
             {
                 await Task.Delay(11000);
-                SendConfirmation(textMessage);
+                await SendConfirmation(textMessage);
             }
             catch { }
         }
     }
-    private async void SendConfirmation(ChatMessage chatMessage)
+    private async Task SendConfirmation(ChatMessage chatMessage)
     {
         ChatAck ack = new ChatAck(chatMessage.UserName, DateTime.Now, chatMessage.MessageId);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(chatMessage.UserName), ack, false);
@@ -135,7 +135,6 @@ public class MessagingService : IMessagingService
             throw new Exception($"Already exist a message with ID {file.MessageId}");
         }
         Files.Add(file.MessageId, file);
-
     }
     private void OnMessageReactionFrameReceived(MessageReaction reaction)
     {
@@ -150,12 +149,6 @@ public class MessagingService : IMessagingService
         // pending implementation
     }
 
-    public string GetNewId()
-    {
-        var timestamp = DateTime.UtcNow.Ticks; // 100ns precision
-        var random = Random.Shared.Next(10000);
-        string userName = userService.GetSelfUser().UserName;
-        return $"{userName}_{timestamp}_{random:0000}";
-    }
+
 
 }
