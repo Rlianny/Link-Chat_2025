@@ -107,17 +107,20 @@ public class FileTransferService : IFileTransferService
     public void OnFileStartAckFrameReceived(FileStartAck fileStartAck)
     {
         ConfirmingStarts[fileStartAck.FileId] = true;
+        Console.WriteLine("FileStart ack received");
     }
 
     public async Task SendFileChunk(FileChunk chunk)
     {
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(chunk.UserName), chunk, false);
+        System.Console.WriteLine($"Sending fileChunk {chunk.ChunkNumber}");
         await networkService.SendFrameAsync(frame);
     }
 
     public async Task SendFileStart(FileStart fileStart)
     {
         ConfirmingStarts.Add(fileStart.FileId, false);
+        System.Console.WriteLine($"Starting sending fileStart from {fileStart.UserName}");
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileStart.UserName), fileStart, false);
         Task task = Task.Run(async () =>
         {
