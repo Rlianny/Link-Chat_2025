@@ -25,7 +25,7 @@ public abstract partial class BubbleMessageViewModel : ViewModelBase
         _reaction = _message.Reaction;
     }
 
-    [ObservableProperty] private bool _isReactionMenuVisible;
+    [ObservableProperty] private bool _isReactionMenuVisible = false;
 
     [RelayCommand]
     private void ToggleReactionMenu()

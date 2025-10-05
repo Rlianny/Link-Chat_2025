@@ -15,7 +15,7 @@
                 IsVisible="{Binding IsReactionMenuVisible}"
                 HorizontalAlignment="Left">
             <StackPanel Orientation="Horizontal" Spacing="5">
-                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactToMessageCommand}" CommandParameter="Happy">
+                <Button Classes="transparent" HorizontalAlignment="Left">
                     <Image Source="/Assets/Images/happy.png" 
                            Width="25" 
                            HorizontalAlignment="Left" 
