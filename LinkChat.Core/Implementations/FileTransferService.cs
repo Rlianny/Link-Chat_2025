@@ -32,7 +32,7 @@ public class FileTransferService : IFileTransferService
     public List<FileChunk> SplitFile(
         string filePath,
         string userName,
-        int chunkSize = 1000) // 1000 bytes maximum
+        int chunkSize = 800) // Reduced to account for protocol overhead
     {
         // Ensure chunk size doesn't exceed 1000 bytes
         if (chunkSize > 1000)
@@ -71,7 +71,7 @@ public class FileTransferService : IFileTransferService
 
     public async void SendFile(string receiverUserName, string filePath)
     {
-        var chunks = SplitFile(filePath, receiverUserName, 1000).ToList(); // Ensure chunks are 1000 bytes or less
+        var chunks = SplitFile(filePath, receiverUserName, 800).ToList(); // Using smaller chunks to account for overhead
         double size = new FileInfo(filePath).Length;
         var start = new FileStart(
             userService.GetSelfUser().UserName,
