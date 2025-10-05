@@ -32,7 +32,7 @@ public class FileTransferService : IFileTransferService
     public List<FileChunk> SplitFile(
         string filePath,
         string userName,
-        int chunkSize = 64 * 1024) // 64 KB
+        int chunkSize = 1024) // 1 KB
     {
         List<FileChunk> chunks = new();
         string fileId = Tools.Tools.GetNewId(userService);
@@ -62,7 +62,7 @@ public class FileTransferService : IFileTransferService
         return chunks;
     }
 
-    public async Task SendFile(string receiverUserName, string filePath)
+    public async void SendFile(string receiverUserName, string filePath)
     {
         var chunks = SplitFile(filePath, receiverUserName, 64 * 1024).ToList();
         double size = new FileInfo(filePath).Length / 1024;
@@ -79,15 +79,19 @@ public class FileTransferService : IFileTransferService
             Confirmations[start.FileId].Add(chunk.ChunkNumber, false);
         }
         ConfirmingStarts.Add(start.FileId, false);
+        Console.WriteLine("Confirming Starting");
         Task sendAndWait = Task.Run(async () =>
         {
+            Console.WriteLine("Async method");
+            System.Console.WriteLine(!ConfirmingStarts[start.FileId]);
             while (!ConfirmingStarts[start.FileId])
             {
-                byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(start.UserName), start, false);
+                Console.WriteLine("in while");
+                byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), start, false);
+                Console.WriteLine("Frame has been created");
                 await networkService.SendFrameAsync(frame);
                 System.Console.WriteLine($"Starting sending fileStart from {start.UserName}");
-                Task task = Task.Delay(1000);
-                await task;
+                await Task.Delay(1000);
             }
         });
         await sendAndWait;
