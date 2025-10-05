@@ -4,7 +4,8 @@ namespace LinkChat.Core.Models;
 
 [JsonDerivedType(typeof(ChatAck), typeDiscriminator: "ChatAck")]
 [JsonDerivedType(typeof(File), typeDiscriminator: "File")]
-[JsonDerivedType(typeof(FileAck), typeDiscriminator: "FileAck")]
+[JsonDerivedType(typeof(FileChunkAck), typeDiscriminator: "FileChunkAck")]
+[JsonDerivedType(typeof(FileStartAck), typeDiscriminator: "FileStartAck")]
 [JsonDerivedType(typeof(FileChunk), typeDiscriminator: "FileChunk")]
 [JsonDerivedType(typeof(FileStart), typeDiscriminator: "FileStart")]
 [JsonDerivedType(typeof(HeartbeatMessage), typeDiscriminator: "HeartbeatMessage")]

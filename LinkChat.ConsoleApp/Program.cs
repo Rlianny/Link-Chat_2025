@@ -37,13 +37,13 @@ public class Program
                 Console.WriteLine($"- {user.UserName}");
             }
 
-            Console.WriteLine("Escriba el nombre del receptor del mensaje");
+            Console.WriteLine("Escriba el nombre del receptor del archivo");
             string receiver = Console.ReadLine();
 
-            Console.WriteLine("Escriba el mensaje");
-            string message = Console.ReadLine();
+            Console.WriteLine("Escriba la ruta del archivo");
+            string filePath = Console.ReadLine();
 
-            messagingService.SendTextMessage(receiver, message);
+            fileTransferService.SendFile(receiver, filePath);
 
         }
     }
