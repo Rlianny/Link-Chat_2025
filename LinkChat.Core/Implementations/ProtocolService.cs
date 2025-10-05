@@ -33,7 +33,6 @@ public class ProtocolService : IProtocolService
     }
     public byte[] CreateFrameToSend(User? receiver, Message message, bool broadcast = false)
     {
-        Console.WriteLine("in create frame method");
         byte[] destMacAddress = new byte[6];
         if (broadcast)
             destMacAddress = [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF];
@@ -51,18 +50,12 @@ public class ProtocolService : IProtocolService
         byte[] etherTypeBytes = BitConverter.GetBytes(Tools.Tools.htons(Tools.Tools.ETHER_TYPE));
         Buffer.BlockCopy(etherTypeBytes, 0, header, 12, 2); // Copy our app ether type.
 
-        if(message is FileStart)
-        Console.WriteLine("Before payload");
         byte[] payload = GetPayload(message);
-        if(message is FileStart)
-        Console.WriteLine("AfterPayload");
 
         byte[] frame = new byte[header.Length + payload.Length];
         Buffer.BlockCopy(header, 0, frame, 0, header.Length);
         Buffer.BlockCopy(payload, 0, frame, header.Length, payload.Length);
 
-        if(message is FileStart)
-        Console.WriteLine("The frame will be returned");
 
         return frame;
     }

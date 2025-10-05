@@ -3,6 +3,9 @@ using LinkChat.Core.Models;
 using LinkChat.Core.Tools;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Text.Json.Nodes;
+using System.Text.Json;
+using System.Text;
 namespace LinkChat.Core.Implementations;
 
 public class FileTransferService : IFileTransferService
@@ -32,13 +35,11 @@ public class FileTransferService : IFileTransferService
     public List<FileChunk> SplitFile(
         string filePath,
         string userName,
-        int chunkSize = 800) // Reduced to account for protocol overhead
+        int chunkSize = 800)
     {
-        // Ensure chunk size doesn't exceed 1000 bytes
-        if (chunkSize > 1000)
+        if (chunkSize > 800)
         {
-            chunkSize = 1000;
-            Console.WriteLine("Warning: Chunk size reduced to 1000 bytes maximum");
+            chunkSize = 800;
         }
 
         List<FileChunk> chunks = new();
@@ -71,7 +72,7 @@ public class FileTransferService : IFileTransferService
 
     public async void SendFile(string receiverUserName, string filePath)
     {
-        var chunks = SplitFile(filePath, receiverUserName, 800).ToList(); // Using smaller chunks to account for overhead
+        var chunks = SplitFile(filePath, receiverUserName, 800).ToList();
         double size = new FileInfo(filePath).Length;
         var start = new FileStart(
             userService.GetSelfUser().UserName,
@@ -86,23 +87,17 @@ public class FileTransferService : IFileTransferService
             Confirmations[start.FileId].Add(chunk.ChunkNumber, false);
         }
         ConfirmingStarts.Add(start.FileId, false);
-        Console.WriteLine("Confirming Starting");
         Task sendAndWait = Task.Run(async () =>
         {
-            Console.WriteLine("Async method");
             System.Console.WriteLine(!ConfirmingStarts[start.FileId]);
             while (!ConfirmingStarts[start.FileId])
             {
-                Console.WriteLine("in while");
                 byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), start, false);
-                Console.WriteLine("Frame has been created");
                 await networkService.SendFrameAsync(frame);
-                System.Console.WriteLine($"Starting sending fileStart from {start.UserName}");
                 await Task.Delay(1000);
             }
         });
         await sendAndWait;
-        System.Console.WriteLine("FileStart sended");
         foreach (var chunk in chunks)
         {
             Task sendAndWaitChunk = Task.Run(async () =>
@@ -111,7 +106,6 @@ public class FileTransferService : IFileTransferService
                 {
                     byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), chunk, false);
                     await networkService.SendFrameAsync(frame);
-                    System.Console.WriteLine($"Message sended with ID {chunk.ChunkNumber}");
                     await Task.Delay(3000);
                 }
             });
@@ -122,7 +116,6 @@ public class FileTransferService : IFileTransferService
     public void OnFileStartAckFrameReceived(FileStartAck fileStartAck)
     {
         ConfirmingStarts[fileStartAck.FileId] = true;
-        Console.WriteLine("FileStart ack received");
     }
 
     private void OnFileChunkAckFrameReceived(FileChunkAck fileAck)
@@ -130,12 +123,12 @@ public class FileTransferService : IFileTransferService
         if (Confirmations.ContainsKey(fileAck.FileID) && Confirmations[fileAck.FileID].ContainsKey(fileAck.ChunkNumber))
         {
             Confirmations[fileAck.FileID][fileAck.ChunkNumber] = true;
-            System.Console.WriteLine($"Filechunk {fileAck.ChunkNumber} received");
         }
     }
 
     private async void OnFileChunkFrameReceived(FileChunk fileChunk)
     {
+        await SendChunkConfirmation(fileChunk);
         if (FileChunks.ContainsKey(fileChunk.FileId))
         {
             if (!FileChunks[fileChunk.FileId].ContainsKey(fileChunk.ChunkNumber))
@@ -143,16 +136,25 @@ public class FileTransferService : IFileTransferService
                 FileChunks[fileChunk.FileId].Add(fileChunk.ChunkNumber, fileChunk);
                 Task task = SendChunkConfirmation(fileChunk);
                 await task;
-                System.Console.WriteLine($"Receiving chunck {fileChunk.ChunkNumber}");
             }
 
             int cant = FileStarts[fileChunk.FileId].TotalChunks;
             if (cant == FileChunks[fileChunk.FileId].Count)
             {
-                string downloadPath = "/home/" + Environment.UserName + "/Downloads";
+                var currentUser = Environment.GetEnvironmentVariable("SUDO_USER");
 
+                string downloadPath = Path.Combine("/home", currentUser, "Downloads", "LinkChatDownloads");
+
+                if (!Directory.Exists(downloadPath))
+                {
+                    Directory.CreateDirectory(downloadPath);
+                }
                 string fileName = FileStarts[fileChunk.FileId].FileName;
                 string filePath = Path.Combine(downloadPath, fileName);
+                if (!Directory.Exists(downloadPath))
+                {
+                    throw new DirectoryNotFoundException($"Failed to create directory: {downloadPath}");
+                }
 
                 int counter = 1;
                 while (System.IO.File.Exists(filePath))
@@ -162,17 +164,22 @@ public class FileTransferService : IFileTransferService
                     filePath = Path.Combine(downloadPath, $"{nameWithoutExt}({counter}){extension}");
                     counter++;
                 }
-                using (FileStream fs = new FileStream(filePath, FileMode.Create))
+
+                using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                     var orderedChunks = FileChunks[fileChunk.FileId]
                         .OrderBy(chunk => chunk.Key)
-                        .Select(chunk => chunk.Value);
+                        .ToList();
 
-                    foreach (var chunk in orderedChunks)
+
+                    foreach (var pair in orderedChunks)
                     {
+                        var chunk = pair.Value;
                         fs.Write(chunk.Data, 0, chunk.Data.Length);
+                        fs.Flush();
                     }
                 }
+
                 var fileStart = FileStarts[fileChunk.FileId];
                 double fileSize = new FileInfo(filePath).Length / 1024.0;
                 var file = new Models.File(
@@ -183,11 +190,8 @@ public class FileTransferService : IFileTransferService
                     fileSize,
                     fileName
                 );
-                // Agregar a la lista y notificar
                 Files.Add(fileChunk.FileId, file);
-                System.Console.WriteLine("Invoke called");
                 FileFrameReceived?.Invoke(file);
-                // Limpiar los diccionarios temporales
                 FileChunks.Remove(fileChunk.FileId);
                 FileStarts.Remove(fileChunk.FileId);
             }
@@ -207,16 +211,15 @@ public class FileTransferService : IFileTransferService
     }
     public async Task SendChunkConfirmation(FileChunk fileChunk)
     {
-        FileChunkAck fileStartAck = new FileChunkAck(fileChunk.UserName, DateTime.Now, fileChunk.FileId, fileChunk.ChunkNumber);
-        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileChunk.UserName), fileStartAck, false);
-        System.Console.WriteLine($"Confirmation sended to fileChunk with ID {fileChunk.FileId}");
+
+        FileChunkAck fileChunkAck = new FileChunkAck(fileChunk.UserName, DateTime.Now, fileChunk.FileId, fileChunk.ChunkNumber);
+        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileChunk.UserName), fileChunkAck, false);
         await networkService.SendFrameAsync(frame);
     }
     public async Task SendStartConfirmation(FileStart fileStart)
     {
         FileStartAck fileStartAck = new FileStartAck(fileStart.UserName, DateTime.Now, fileStart.FileId);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileStart.UserName), fileStartAck, false);
-        System.Console.WriteLine($"Confirmation sended to fileStart with ID {fileStart.FileId}");
         await networkService.SendFrameAsync(frame);
     }
 
