@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:LinkChat.Desktop.Avalonia.ViewModels"
              mc:Ignorable="d" Background="{DynamicResource TitanWhite}" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LinkChat.Desktop.Avalonia.Views.ViewReceivedBubbleTextMessage"
-             x:DataType="vm:ReceivedBubbleTextMessageViewModel">
+             x:Class="LinkChat.Desktop.Avalonia.Views.ViewReceivedBubbleFileMessage"
+             x:DataType="vm:ReceivedBubbleFileMessageViewModel">
     
     <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Left">
         <Border Background="White" 
@@ -59,13 +59,25 @@
                                                   Color="DimGray"/>
                             </Border.Effect>
                             <Grid RowDefinitions="*, 20">
-                                <TextBlock Text="{Binding Content}"
-                                           Foreground="White" 
-                                           Margin="2" 
-                                           TextWrapping="Wrap">
-                                </TextBlock>
+                                <Grid ColumnDefinitions="40, *">
+                                    <Image Source="/Assets/Images/FileWhiteRegular.png"></Image>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Grid.Column="1" Text="File Name "
+                                               Foreground="White" 
+                                               Margin="2" 
+                                               TextWrapping="Wrap">
+                                        </TextBlock>
+                                        <TextBlock Grid.Column="1" Text="6,5 MB"
+                                                   Foreground="White" 
+                                                   Margin="2" 
+                                                   TextWrapping="Wrap"
+                                                   FontSize="10">
+                                        </TextBlock> 
+                                        
+                                    </StackPanel>
+                                </Grid>
                                 <TextBlock Grid.Row="1"
-                                           Text = "{Binding Date}"
+                                           Text = "20:14"
                                            HorizontalAlignment="Right"
                                            Foreground="White"
                                            FontSize="12">

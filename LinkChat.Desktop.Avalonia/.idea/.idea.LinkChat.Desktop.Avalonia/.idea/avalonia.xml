@@ -7,6 +7,7 @@
         <entry key="Styles/AppDefaultStyles.axaml" value="LinkChat.Desktop.Avalonia.csproj" />
         <entry key="Views/ChatWindow.axaml" value="LinkChat.Desktop.Avalonia.csproj" />
         <entry key="Views/MainWindow.axaml" value="LinkChat.Desktop.Avalonia.csproj" />
+        <entry key="Views/ViewReceivedBubbleFileMessage.axaml" value="LinkChat.Desktop.Avalonia.csproj" />
         <entry key="Views/ViewReceivedBubbleTextMessage.axaml" value="LinkChat.Desktop.Avalonia.csproj" />
       </map>
     </option>
