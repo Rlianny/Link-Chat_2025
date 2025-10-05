@@ -64,7 +64,7 @@ public class ProtocolService : IProtocolService
         string json = JsonSerializer.Serialize(message, options);
         byte[] bytes = Encoding.UTF8.GetBytes(json);
         byte[] encryptedBytes = AesEncryptor.Encrypt(bytes);
-        return bytes;
+        return encryptedBytes;
     }
 
     public Message? ParseFrame(byte[] frame)
@@ -79,9 +79,10 @@ public class ProtocolService : IProtocolService
             Message? message = JsonSerializer.Deserialize<Message>(recoveryMessage, options);
             return message;
         }
-        catch (CryptographicException)
+        catch (CryptographicException ex)
         {
             Console.WriteLine("WARNING: Frame received with corrupted data or wrong key (decrypting failure).");
+            Console.WriteLine(ex.Message);
             return null;
         }
         catch (Exception ex)

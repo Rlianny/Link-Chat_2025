@@ -22,7 +22,7 @@ public class Program
         INetworkService networkService = new LinuxNetworkService(interfaceName);
         IProtocolService protocolService = new ProtocolService(networkService);
         IUserService userService = new UserService(protocolService, networkService, myUserName);
-        IFileTransferService fileTransferService = new FileTransferService();
+        IFileTransferService fileTransferService = new FileTransferService(protocolService, networkService, userService);
         IMessagingService messagingService = new MessagingService(protocolService, fileTransferService, userService, networkService);
 
         networkService.StartListening();
@@ -37,15 +37,14 @@ public class Program
                 Console.WriteLine($"- {user.UserName}");
             }
 
-            //Console.WriteLine("Escriba el nombre del receptor del mensaje");
-            //string receiver = Console.ReadLine();
+            Console.WriteLine("Escriba el nombre del receptor del mensaje");
+            string receiver = Console.ReadLine();
 
             Console.WriteLine("Escriba el mensaje");
             string message = Console.ReadLine();
 
-            //messagingService.SendTextMessage(receiver, message);
+            messagingService.SendTextMessage(receiver, message);
 
-            messagingService.SendBroadcastTextMessage(message);
         }
     }
 }
