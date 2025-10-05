@@ -80,6 +80,7 @@ public class FileTransferService : IFileTransferService
         }
 
         await SendFileStart(start);
+        System.Console.WriteLine("FileStart sended");
         Task task = Task.Run(async () =>
         {
             while (true)
@@ -92,6 +93,7 @@ public class FileTransferService : IFileTransferService
                         Task sendFC = Task.Run(() => SendFileChunk(chunk));
                         await sendFC;
                         changed = true;
+                        System.Console.WriteLine($"FileChunck {chunk.ChunkNumber} sended");
                     }
                 }
                 if (!changed)
@@ -139,7 +141,9 @@ public class FileTransferService : IFileTransferService
         if (Confirmations.ContainsKey(fileAck.FileID) && Confirmations[fileAck.FileID].ContainsKey(fileAck.ChunkNumber))
         {
             Confirmations[fileAck.FileID][fileAck.ChunkNumber] = true;
+            System.Console.WriteLine($"Filechunk {fileAck.ChunkNumber} received");
         }
+
     }
 
     private async void OnFileChunkFrameReceived(FileChunk fileChunk)
@@ -213,18 +217,18 @@ public class FileTransferService : IFileTransferService
         }
         System.Console.WriteLine($"Recibiendo {fileStart.FileId} mediante {fileStart.TotalChunks} chunks");
     }
+    public async Task SendChunkConfirmation(FileChunk fileChunk)
+    {
+        FileStartAck fileStartAck = new FileStartAck(fileChunk.UserName, DateTime.Now, fileChunk.FileId);
+        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileChunk.UserName), fileStartAck, false);
+        System.Console.WriteLine($"Confirmation sended to fileChunk with ID {fileChunk.FileId}");
+        await networkService.SendFrameAsync(frame);
+    }
     public async Task SendStartConfirmation(FileStart fileStart)
     {
         FileStartAck fileStartAck = new FileStartAck(fileStart.UserName, DateTime.Now, fileStart.FileId);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileStart.UserName), fileStartAck, false);
-        System.Console.WriteLine($"Confirmation sended to message with ID {fileStart.FileId}");
-        await networkService.SendFrameAsync(frame);
-    }
-    public async Task SendChunkConfirmation(FileChunk fileChunk)
-    {
-        FileStartAck fileChunkAck = new FileStartAck(fileChunk.UserName, DateTime.Now, fileChunk.FileId);
-        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileChunk.UserName), fileChunkAck, false);
-        System.Console.WriteLine($"Confirmation sended to message with ID {fileChunk.FileId}");
+        System.Console.WriteLine($"Confirmation sended to fileStart with ID {fileStart.FileId}");
         await networkService.SendFrameAsync(frame);
     }
 
