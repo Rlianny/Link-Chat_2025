@@ -203,9 +203,22 @@ public class FileTransferService : IFileTransferService
         {
             FileStarts.Add(fileStart.FileId, fileStart);
             FileChunks.Add(fileStart.FileId, []);
-
         }
         System.Console.WriteLine($"Recibiendo {fileStart.FileId} mediante {fileStart.TotalChunks} chunks");
+    }
+    public async void SendStartConfirmation(FileStart fileStart)
+    {
+        FileStartAck fileStartAck = new FileStartAck(fileStart.UserName, DateTime.Now, fileStart.FileId);
+        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileStart.UserName), fileStartAck, false);
+        System.Console.WriteLine($"Confirmation sended to message with ID {fileStart.FileId}");
+        await networkService.SendFrameAsync(frame);
+    }
+    public async void SendChunkConfirmation(FileChunk fileChunk)
+    {
+        FileStartAck fileChunkAck = new FileStartAck(fileChunk.UserName, DateTime.Now, fileChunk.FileId);
+        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileChunk.UserName), fileChunkAck, false);
+        System.Console.WriteLine($"Confirmation sended to message with ID {fileChunk.FileId}");
+        await networkService.SendFrameAsync(frame);
     }
 
     public Models.File GetFileById(string messageId)
