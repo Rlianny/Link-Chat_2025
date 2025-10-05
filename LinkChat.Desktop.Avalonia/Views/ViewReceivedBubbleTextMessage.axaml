@@ -21,7 +21,7 @@
                            HorizontalAlignment="Left" 
                            Classes="IconOnly"></Image>
                 </Button>
-                <Button Classes="transparent" HorizontalAlignment="Left">
+                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding SelectReactionCommand}" CommandParameter=" ">
                     <Image Source="/Assets/Images/like.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
                 </Button>
                 <Button Classes="transparent" HorizontalAlignment="Left">
