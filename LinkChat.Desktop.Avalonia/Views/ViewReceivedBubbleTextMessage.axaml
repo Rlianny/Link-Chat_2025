@@ -21,24 +21,24 @@
                            HorizontalAlignment="Left" 
                            Classes="IconOnly"></Image>
                 </Button>
-                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactToMessageCommand}" CommandParameter="Like">
+                <Button Classes="transparent" HorizontalAlignment="Left">
                     <Image Source="/Assets/Images/like.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
                 </Button>
-                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactToMessageCommand}" CommandParameter="Dislike">
+                <Button Classes="transparent" HorizontalAlignment="Left">
                     <Image Source="/Assets/Images/dislike.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
                 </Button>
-                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactToMessageCommand}" CommandParameter="Heart">
+                <Button Classes="transparent" HorizontalAlignment="Left">
                     <Image Source="/Assets/Images/heart.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
                 </Button>
-                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactToMessageCommand}" CommandParameter="Sad">
+                <Button Classes="transparent" HorizontalAlignment="Left">
                     <Image Source="/Assets/Images/sad.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
                 </Button>
-                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactToMessageCommand}" CommandParameter="Angry">
+                <Button Classes="transparent" HorizontalAlignment="Left">
                     <Image Source="/Assets/Images/angry.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
                 </Button>
             </StackPanel>
         </Border>
-        <Button Classes="ChatMessage" Command="{Binding ToggleReactionMenuCommand}" >
+        <Button Classes="ChatMessage">
             <Button.Content>
                 <Grid ColumnDefinitions="70, 300" RowDefinitions="Auto">
                     <!-- user image -->
