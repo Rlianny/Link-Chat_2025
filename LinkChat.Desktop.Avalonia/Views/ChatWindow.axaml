@@ -274,7 +274,7 @@
                                 </Button>
                                 
                                 <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Left">
-        <Border Background="#F0F0F0" 
+        <Border Background="White" 
                 CornerRadius="20" 
                 Padding="8,4"
                 Margin="70,0,0,0"
