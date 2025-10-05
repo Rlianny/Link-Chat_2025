@@ -21,7 +21,7 @@
                            HorizontalAlignment="Left" 
                            Classes="IconOnly"></Image>
                 </Button>
-                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding SelectReactionCommand}" CommandParameter=" ">
+                <Button Classes="transparent" HorizontalAlignment="Left">
                     <Image Source="/Assets/Images/like.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
                 </Button>
                 <Button Classes="transparent" HorizontalAlignment="Left">
@@ -38,7 +38,7 @@
                 </Button>
             </StackPanel>
         </Border>
-        <Button Classes="ChatMessage">
+        <Button Classes="ChatMessage" Command="{Binding ToggleReactionMenuCommand}">
             <Button.Content>
                 <Grid ColumnDefinitions="70, 300" RowDefinitions="Auto">
                     <!-- user image -->
