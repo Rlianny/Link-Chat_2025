@@ -10,6 +10,10 @@ namespace LinkChat.Infrastructure
 {
     public sealed class LinuxNetworkService : INetworkService, IDisposable
     {
+        private const int MTU = 1500; // Ethernet standard MTU
+        private const int ETHERNET_HEADER_SIZE = 14; // Size of Ethernet frame header
+        private const int MAX_PAYLOAD_SIZE = MTU - ETHERNET_HEADER_SIZE - 100; // Leave some room for protocol overhead
+
         private readonly string interfaceName;
         private int socketFd = -1; // Socket File Descriptor, -1 means it is not initialized
         private int interfaceIndex;
@@ -42,12 +46,21 @@ namespace LinkChat.Infrastructure
 
             Array.Copy(frame, 0, destAddr.sll_addr, 0, 6); // The first 6 bytes (destination MAC) are copied to the struct
 
+            if (frame.Length > MTU)
+            {
+                throw new InvalidOperationException($"Frame size ({frame.Length} bytes) exceeds MTU ({MTU} bytes). Consider reducing chunk size.");
+            }
+
             lock (sendLock)
             {
                 int sentBytes = NativeMethods.sendto(socketFd, frame, frame.Length, 0, ref destAddr, Marshal.SizeOf(destAddr));
                 if (sentBytes < 0)
                 {
                     var error = Marshal.GetLastWin32Error();
+                    if (error == 90) // EMSGSIZE
+                    {
+                        throw new InvalidOperationException($"Frame size ({frame.Length} bytes) is too large for the network interface. Maximum payload size should be {MAX_PAYLOAD_SIZE} bytes.");
+                    }
                     throw new Exception($"Error sending package. System error code: {error}");
                 }
             }
