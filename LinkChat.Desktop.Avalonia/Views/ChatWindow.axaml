@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="clr-namespace:LinkChat.Desktop.Avalonia.ViewModels"
+        xmlns:local="clr-namespace:LinkChat.Desktop.Avalonia.Views;"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="800"
         x:Class="LinkChat.Desktop.Avalonia.Views.ChatWindow"
         Title="ChatWindow">
@@ -272,79 +272,7 @@
                                         </Grid>
                                     </Button.Content>
                                 </Button>
-                                
-                                <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Left">
-        <Border Background="White" 
-                CornerRadius="20" 
-                Padding="8,4"
-                Margin="70,0,0,0"
-                IsVisible="True"
-                HorizontalAlignment="Left">
-            <StackPanel Orientation="Horizontal" Spacing="5">
-                <Button Classes="transparent" HorizontalAlignment="Left">
-                    <Image Source="/Assets/Images/happy.png" 
-                           Width="25" 
-                           HorizontalAlignment="Left" 
-                           Classes="IconOnly"></Image>
-                </Button>
-                <Button Classes="transparent" HorizontalAlignment="Left">
-                    <Image Source="/Assets/Images/like.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
-                </Button>
-                <Button Classes="transparent" HorizontalAlignment="Left">
-                    <Image Source="/Assets/Images/dislike.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
-                </Button>
-                <Button Classes="transparent" HorizontalAlignment="Left">
-                    <Image Source="/Assets/Images/heart.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
-                </Button>
-                <Button Classes="transparent" HorizontalAlignment="Left">
-                    <Image Source="/Assets/Images/sad.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
-                </Button>
-                <Button Classes="transparent" HorizontalAlignment="Left">
-                    <Image Source="/Assets/Images/angry.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
-                </Button>
-            </StackPanel>
-        </Border>
-        <Button Classes="ChatMessage">
-            <Button.Content>
-                <Grid ColumnDefinitions="70, 300" RowDefinitions="Auto">
-                    <!-- user image -->
-                    <Border Grid.Column="0" Padding="6">
-                        <Image Source="/Assets/Images/Character1.png" VerticalAlignment="Top" HorizontalAlignment="Center"></Image> <!-- bind to userImage-->
-                    </Border>
-                    <!-- message -->
-                    <Border Grid.Column="1" Padding="6">
-                        <Border Padding="6" 
-                                Background="{DynamicResource CrocusPurple}" 
-                                CornerRadius="10" 
-                                >
-                            <Border.Effect>
-                                <DropShadowEffect BlurRadius="10" 
-                                                  OffsetX="0" 
-                                                  OffsetY="0" 
-                                                  Opacity="0.5" 
-                                                  Color="DimGray"/>
-                            </Border.Effect>
-                            <Grid RowDefinitions="*, 20">
-                                <TextBlock Text="Ok, nos vemos!"
-                                           Foreground="White" 
-                                           Margin="2" 
-                                           TextWrapping="Wrap">
-                                </TextBlock>
-                                <TextBlock Grid.Row="1"
-                                           Text = "20:00"
-                                           HorizontalAlignment="Right"
-                                           Foreground="White"
-                                           FontSize="12">
-                                </TextBlock>
-                            </Grid>
-                        </Border>
-                    </Border>
-                </Grid>
-            </Button.Content>
-        </Button>
-    </StackPanel>
-
-                                
+                               
                             </StackPanel>
                         </Grid>
                     </Border>
