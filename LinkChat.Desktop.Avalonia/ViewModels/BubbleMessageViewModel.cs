@@ -26,19 +26,15 @@ public abstract partial class BubbleMessageViewModel : ViewModelBase
     
     public BubbleMessageViewModel(ChatMessage chatMessage)
     {
-        Console.WriteLine("BubbleMessageViewModel constructor called");
         _message = chatMessage;
         _reaction = _message.Reaction;
         _isReactionMenuVisible = false;
         _date = DateTime.Now.ToString("HH:mm");
-        Console.WriteLine($"IsReactionMenuVisible initialized to: {_isReactionMenuVisible}");
     }
 
     [RelayCommand]
     private void ToggleReactionMenu()
     {
-        Console.WriteLine("ToggleReactionMenu executed");
         IsReactionMenuVisible = !IsReactionMenuVisible;
-        Console.WriteLine($"IsReactionMenuVisible is now: {IsReactionMenuVisible}");
     }
 }

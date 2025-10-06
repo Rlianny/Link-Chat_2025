@@ -275,7 +275,7 @@
                                     </Button.Content>
                                 </Button>
                                
-                                <local:ViewReceivedBubbleTextMessage BubbleTextMessage="{Binding BubbleTextMessage}"/> <!-- This button had problem-->
+                                <local:ViewReceivedBubbleTextMessage x:Name="BubbleTextMessageComponent" BubbleTextMessage="{Binding BubbleTextMessage}"/> <!-- This button had problem-->
                                 <local:ViewReceivedBubbleFileMessage></local:ViewReceivedBubbleFileMessage>
                                 
                             </StackPanel>

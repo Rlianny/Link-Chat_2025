@@ -15,9 +15,16 @@ public partial class ChatWindow : Window
     {
         InitializeComponent();
         DataContext = new ChatWindowViewModel();
+
+        // Create the ViewModel for the bubble message
         TextMessage textMessage = new TextMessage("Lianny", DateTime.Now, "123", "Holaaaa");
         ReceivedBubbleTextMessageViewModel bubble = new ReceivedBubbleTextMessageViewModel(textMessage);
-        BubbleTextMessage = bubble;
-        
+
+        // Find the ViewReceivedBubbleTextMessage component and set its ViewModel
+        var bubbleComponent = this.FindControl<ViewReceivedBubbleTextMessage>("BubbleTextMessageComponent");
+        if (bubbleComponent != null)
+        {
+            bubbleComponent.BubbleTextMessage = bubble;
+        }
     }
 }
