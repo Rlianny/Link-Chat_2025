@@ -4,11 +4,17 @@ using System;
 
 public class ChatWindowViewModel: ViewModelBase
 {
-    public ReceivedBubbleTextMessageViewModel BubbleTextMessage { get; set; }
+    private ReceivedBubbleTextMessageViewModel _bubbleTextMessage;
+    
+    public ReceivedBubbleTextMessageViewModel BubbleTextMessage 
+    { 
+        get => _bubbleTextMessage;
+        set => SetProperty(ref _bubbleTextMessage, value);
+    }
+
     public ChatWindowViewModel()
     {
         TextMessage textMessage = new TextMessage("Lianny", DateTime.Now, "123", "Holaaaa");
-        ReceivedBubbleTextMessageViewModel bubble = new ReceivedBubbleTextMessageViewModel(textMessage);
-        BubbleTextMessage = bubble;
+        BubbleTextMessage = new ReceivedBubbleTextMessageViewModel(textMessage);
     }
 }

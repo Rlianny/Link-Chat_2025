@@ -21,4 +21,16 @@ public partial class ViewReceivedBubbleTextMessage : UserControl
     {
         InitializeComponent();
     }
+
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
+        this.PropertyChanged += (s, e) =>
+        {
+            if (e.Property == BubbleTextMessageProperty)
+            {
+                DataContext = BubbleTextMessage;
+            }
+        };
+    }
 }

@@ -2,10 +2,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:LinkChat.Desktop.Avalonia.ViewModels"
         xmlns:local="clr-namespace:LinkChat.Desktop.Avalonia.Views"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="800"
         x:Class="LinkChat.Desktop.Avalonia.Views.ChatWindow"
-        x:DataType="local:ChatWindow"
+        x:DataType="vm:ChatWindowViewModel"
         Title="ChatWindow">
     
     <Grid Background="{DynamicResource TitanWhite}" ColumnDefinitions="650, *">
@@ -274,7 +275,7 @@
                                     </Button.Content>
                                 </Button>
                                
-                                <local:ViewReceivedBubbleTextMessage BubbleTextMessage="{Binding BubbleTextMessage}"/>
+                                <local:ViewReceivedBubbleTextMessage BubbleTextMessage="{Binding BubbleTextMessage}"/> <!-- This button had problem-->
                                 <local:ViewReceivedBubbleFileMessage></local:ViewReceivedBubbleFileMessage>
                                 
                             </StackPanel>
