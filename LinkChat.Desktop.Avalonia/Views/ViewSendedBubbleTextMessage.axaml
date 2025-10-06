@@ -4,14 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:LinkChat.Desktop.Avalonia.ViewModels"
              mc:Ignorable="d" Background="{DynamicResource TitanWhite}" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LinkChat.Desktop.Avalonia.Views.ViewReceivedBubbleTextMessage"
-             x:DataType="vm:ReceivedBubbleTextMessageViewModel">
+             x:Class="LinkChat.Desktop.Avalonia.Views.ViewSendedBubbleTextMessage"
+             x:DataType="vm:SendedBubbleTextMessageViewModel">
     
-    <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Left">
+    <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Right">
         <Border Background="White" 
                 CornerRadius="20" 
                 Padding="8,4"
-                Margin="70,0,0,0"
+                Margin="0,0,70,0"
                 IsVisible="{Binding IsReactionMenuVisible}"
                 HorizontalAlignment="Left">
             <StackPanel Orientation="Horizontal" Spacing="5">
@@ -38,19 +38,18 @@
                 </Button>
             </StackPanel>
         </Border>
-        <Button Classes="ChatMessage" Command="{Binding ToggleReactionMenu}">
+        <Button Classes="ChatMessage" HorizontalAlignment="Right">
             <Button.Content>
-                <Grid ColumnDefinitions="70, 300" RowDefinitions="Auto" RenderOptions.BitmapInterpolationMode="HighQuality">
+                <Grid ColumnDefinitions="300, 70" RowDefinitions="Auto">
                     <!-- user image -->
-                    <Border Grid.Column="0" Padding="6">
-                        <Image Source="/Assets/Images/Character1.png" VerticalAlignment="Top" HorizontalAlignment="Center"></Image> <!-- bind to userImage-->
+                    <Border Grid.Column="1" Padding="6">
+                        <Image Source="/Assets/Images/Character6.png" VerticalAlignment="Top" HorizontalAlignment="Center"></Image>
                     </Border>
                     <!-- message -->
-                    <Border Grid.Column="1" Padding="6">
+                    <Border Grid.Column="0" Padding="6">
                         <Border Padding="6" 
-                                Background="{DynamicResource CrocusPurple}" 
-                                CornerRadius="10" 
-                                >
+                                Background="White" 
+                                CornerRadius="10" >
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="10" 
                                                   OffsetX="0" 
@@ -59,17 +58,32 @@
                                                   Color="DimGray"/>
                             </Border.Effect>
                             <Grid RowDefinitions="*, 20">
-                                <TextBlock Text="{Binding Content}"
-                                           Foreground="White" 
-                                           Margin="2" 
-                                           TextWrapping="Wrap">
-                                </TextBlock>
-                                <TextBlock Grid.Row="1"
-                                           Text = "{Binding Date}"
-                                           HorizontalAlignment="Right"
-                                           Foreground="White"
-                                           FontSize="12">
-                                </TextBlock>
+                                <Grid ColumnDefinitions="45, *">
+                                    <Image Source="/Assets/Images/FilePurpleRegular.png"></Image>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Grid.Column="1" Text="File Name"
+                                                   Foreground="{DynamicResource EbonyClay}" 
+                                                   Margin="2" 
+                                                   TextWrapping="Wrap">
+                                        </TextBlock>
+                                        <TextBlock Grid.Column="1" Text="6,5 MB"
+                                                   Foreground="{DynamicResource EbonyClay}" 
+                                                   Margin="2" 
+                                                   TextWrapping="Wrap"
+                                                   FontSize="10">
+                                        </TextBlock> 
+                                        
+                                    </StackPanel>
+                                </Grid>
+                                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+                                    <TextBlock Grid.Row="1"
+                                               Text = "20:21"
+                                               HorizontalAlignment="Right"
+                                               Foreground="{DynamicResource FontGrey}"
+                                               FontSize="12">
+                                    </TextBlock>
+                                    <Image Source="/Assets/Images/Accept.png"></Image>
+                                </StackPanel>
                             </Grid>
                         </Border>
                     </Border>
@@ -77,5 +91,4 @@
             </Button.Content>
         </Button>
     </StackPanel>
-    
 </UserControl>

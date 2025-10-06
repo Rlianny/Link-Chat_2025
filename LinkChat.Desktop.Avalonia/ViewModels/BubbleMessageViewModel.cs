@@ -16,7 +16,7 @@ using LinkChat.Core.Models;
 
 public abstract partial class BubbleMessageViewModel : ViewModelBase
 {
-    public Bitmap? UserImage { get; } = new Bitmap(AssetLoader.Open(new Uri("Assets/Images/Character1.png")));
+    // public Bitmap? UserImage { get; } = new Bitmap(AssetLoader.Open(new Uri("Assets/Images/Character1.png")));
     private ChatMessage _message;
     private DateTime _date;
 

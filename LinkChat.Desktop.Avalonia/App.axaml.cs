@@ -25,7 +25,7 @@ public partial class App : Application
             DisableAvaloniaDataAnnotationValidation();
             desktop.MainWindow = new ChatWindow()
             {
-                DataContext = new MainWindowViewModel(),
+                DataContext = new ChatWindowViewModel(),
             };
         }
 

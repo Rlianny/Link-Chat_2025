@@ -59,10 +59,10 @@
                                                   Color="DimGray"/>
                             </Border.Effect>
                             <Grid RowDefinitions="*, 20">
-                                <Grid ColumnDefinitions="40, *">
+                                <Grid ColumnDefinitions="45, *">
                                     <Image Source="/Assets/Images/FileWhiteRegular.png"></Image>
                                     <StackPanel Grid.Column="1">
-                                        <TextBlock Grid.Column="1" Text="File Name "
+                                        <TextBlock Grid.Column="1" Text="File Name"
                                                Foreground="White" 
                                                Margin="2" 
                                                TextWrapping="Wrap">
@@ -73,7 +73,6 @@
                                                    TextWrapping="Wrap"
                                                    FontSize="10">
                                         </TextBlock> 
-                                        
                                     </StackPanel>
                                 </Grid>
                                 <TextBlock Grid.Row="1"
