@@ -1,4 +1,4 @@
 public enum Emoji
 {
-    HappyFace, SadFace, Like, Dislike, Heart, AngryFace
+    HappyFace, SadFace, Like, Dislike, Heart, AngryFace, None
 }

@@ -14,7 +14,7 @@ public partial class ReceivedBubbleTextMessageViewModel : BubbleMessageViewModel
     private TextMessage _textMessage; 
     public string Content
     {
-        get { return _textMessage.Content.ToString(); }
+        get { return _textMessage.Content;}
         private set {}
     }
     

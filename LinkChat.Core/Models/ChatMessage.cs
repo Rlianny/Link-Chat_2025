@@ -7,6 +7,7 @@ public abstract class ChatMessage : Message, IReactable
     public ChatMessage(string userName, DateTime timeStamp, string messageId) : base(userName, timeStamp)
     {
         this.messageId = messageId;
+        reaction = Emoji.None;
     }
     public string MessageId => messageId;
     private string messageId;

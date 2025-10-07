@@ -17,7 +17,16 @@ namespace LinkChat.Desktop.Avalonia.ViewModels;
 public abstract partial class BubbleMessageViewModel : ViewModelBase
 {
     private ChatMessage _message;
-    private Dictionary<string, string> reactionDictionary = new Dictionary<string, string>()
+    
+    [ObservableProperty] private bool _isReactionMenuVisible = false;
+    
+    [ObservableProperty] private bool _isReactionVisible = false;
+    
+    [ObservableProperty] private string _date;
+
+    [ObservableProperty] private Bitmap _emojiImage; 
+    
+    private readonly Dictionary<string, string> reactionDictionary = new Dictionary<string, string>()
     {
         { "happy", "/Assets/Images/happy.png" },
         { "like", "/Assets/Images/like.png" },
@@ -26,31 +35,18 @@ public abstract partial class BubbleMessageViewModel : ViewModelBase
         { "sad", "/Assets/Images/sad.png" },
         { "heart", "/Assets/Images/heart.png" },
     };
-    
-    [ObservableProperty]
-    
-    private bool _isReactionMenuVisible;
-    [ObservableProperty] 
-    
-    private bool _isReactionVisible = false;
-    
-    [ObservableProperty]
-    private string _date;
-
-    [ObservableProperty] 
-    private Bitmap _emojiImage = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/happy.png"));
-    
-    private Emoji _reaction;
-
-    public Emoji? Reaction
+    public BubbleMessageViewModel(ChatMessage chatMessage)
     {
-        get => _reaction;
-        set
+        _message = chatMessage;
+        _date = DateTime.Now.ToString("HH:mm");
+        _emojiImage = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/happy.png"));
+        
+        if (_message.Reaction != Emoji.None)
         {
-            _reaction = _message.Reaction;
             ReactionSet();
         }
     }
+    
     private void ReactionSet()
     {
         Console.WriteLine("Se notificó correctamente");
@@ -67,14 +63,6 @@ public abstract partial class BubbleMessageViewModel : ViewModelBase
         
         EmojiImage =ImageHelper.LoadFromResource(new Uri($"avares://LinkChat.Desktop.Avalonia{reactionDictionary[emoji]}"));
         IsReactionVisible = true;
-    }
-    public BubbleMessageViewModel(ChatMessage chatMessage)
-    {
-        _message = chatMessage;
-        _reaction = _message.Reaction;
-        _isReactionMenuVisible = false;
-        _date = DateTime.Now.ToString("HH:mm");
-        _emojiImage = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/happy.png"));
     }
 
     [RelayCommand]
@@ -108,13 +96,8 @@ public abstract partial class BubbleMessageViewModel : ViewModelBase
                _message.SetReaction(Emoji.Heart);
                break;
         }
-
         ;
         ReactionSet();
-        Console.WriteLine(_reaction.ToString());
-        Console.WriteLine(_message.Reaction.ToString());
-        //EmojiImage =ImageHelper.LoadFromResource(new Uri($"avares://LinkChat.Desktop.Avalonia{reactionDictionary[emoji]}"));
-        //IsReactionVisible = true;
         IsReactionMenuVisible = !IsReactionMenuVisible;
     }
     

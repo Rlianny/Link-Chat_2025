@@ -59,12 +59,12 @@
                                 <Grid ColumnDefinitions="45, *">
                                     <Image Source="/Assets/Images/FileWhiteRegular.png"></Image>
                                     <StackPanel Grid.Column="1">
-                                        <TextBlock Grid.Column="1" Text="File Name"
+                                        <TextBlock Grid.Column="1" Text="{Binding FileName}"
                                                Foreground="White" 
                                                Margin="2" 
                                                TextWrapping="Wrap">
                                         </TextBlock>
-                                        <TextBlock Grid.Column="1" Text="6,5 MB"
+                                        <TextBlock Grid.Column="1" Text="{Binding FileSize}"
                                                    Foreground="White" 
                                                    Margin="2" 
                                                    TextWrapping="Wrap"
@@ -73,7 +73,7 @@
                                     </StackPanel>
                                 </Grid>
                                 <TextBlock Grid.Row="1"
-                                           Text = "20:14"
+                                           Text = "{Binding Date}"
                                            HorizontalAlignment="Right"
                                            Foreground="White"
                                            FontSize="12">
@@ -84,6 +84,14 @@
                 </Grid>
             </Button.Content>
         </Button>
+        <Border Background="White" 
+                CornerRadius="20" 
+                Padding="8,4"
+                Margin="70,-10,0,10"
+                IsVisible="{Binding IsReactionVisible}"
+                HorizontalAlignment="Left">
+            <Image Source="{Binding EmojiImage}" Width="25"></Image>
+        </Border>
     </StackPanel>
     
 </UserControl>

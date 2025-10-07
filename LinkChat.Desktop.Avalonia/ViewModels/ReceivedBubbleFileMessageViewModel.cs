@@ -23,6 +23,6 @@ public class ReceivedBubbleFileMessageViewModel : BubbleMessageViewModel
     {
         _file = file;
         _fileName = file.Name;
-        _fileSize = file.Size.ToString();
+        _fileSize = file.Size.ToString()+"MB";
     }
 }

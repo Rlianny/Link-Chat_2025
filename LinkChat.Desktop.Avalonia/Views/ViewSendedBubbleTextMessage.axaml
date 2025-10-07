@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:LinkChat.Desktop.Avalonia.ViewModels"
              mc:Ignorable="d" Background="{DynamicResource TitanWhite}" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LinkChat.Desktop.Avalonia.Views.ViewSendedBubbleFileMessage"
-             x:DataType="vm:SendedBubbleFileMessageViewModel">
+             x:Class="LinkChat.Desktop.Avalonia.Views.ViewSendedBubbleTextMessage"
+             x:DataType="vm:SendedBubbleTextMessageViewModel">
     
     <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Right">
         <Border Background="White" 
@@ -55,14 +55,14 @@
                                                   Color="DimGray"/>
                             </Border.Effect>
                             <Grid RowDefinitions="*, 20">
-                                <TextBlock Text="Por supuesto! Ahí estare."
+                                <TextBlock Text="{Binding Content}"
                                            Foreground="{DynamicResource EbonyClay}" 
                                            Margin="2" 
                                            TextWrapping="Wrap">
                                 </TextBlock>
                                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
                                     <TextBlock Grid.Row="1"
-                                               Text = "20:21"
+                                               Text = "{Binding Date}"
                                                HorizontalAlignment="Right"
                                                Foreground="{DynamicResource FontGrey}"
                                                FontSize="12">
@@ -75,6 +75,14 @@
                 </Grid>
             </Button.Content>
         </Button>
+        <Border Background="White" 
+                CornerRadius="20" 
+                Padding="8,4"
+                Margin="0,-10,0,10"
+                IsVisible="{Binding IsReactionVisible}"
+                HorizontalAlignment="Left">
+            <Image Source="{Binding EmojiImage}" Width="25"></Image>
+        </Border>
     </StackPanel>
 </UserControl>
 
