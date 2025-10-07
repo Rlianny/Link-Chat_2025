@@ -15,32 +15,29 @@
                 IsVisible="{Binding IsReactionMenuVisible}"
                 HorizontalAlignment="Left">
             <StackPanel Orientation="Horizontal" Spacing="5">
-                <Button Classes="transparent" HorizontalAlignment="Left">
-                    <Image Source="/Assets/Images/happy.png" 
-                           Width="25" 
-                           HorizontalAlignment="Left" 
-                           Classes="IconOnly"></Image>
+                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactCommand}" CommandParameter="happy">
+                    <Image Source="/Assets/Images/happy.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
                 </Button>
-                <Button Classes="transparent" HorizontalAlignment="Left">
+                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactCommand}" CommandParameter="like">
                     <Image Source="/Assets/Images/like.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
                 </Button>
-                <Button Classes="transparent" HorizontalAlignment="Left">
+                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactCommand}" CommandParameter="dislike">
                     <Image Source="/Assets/Images/dislike.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
                 </Button>
-                <Button Classes="transparent" HorizontalAlignment="Left">
+                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactCommand}" CommandParameter="heart">
                     <Image Source="/Assets/Images/heart.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
                 </Button>
-                <Button Classes="transparent" HorizontalAlignment="Left">
+                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactCommand}" CommandParameter="sad">
                     <Image Source="/Assets/Images/sad.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
                 </Button>
-                <Button Classes="transparent" HorizontalAlignment="Left">
+                <Button Classes="transparent" HorizontalAlignment="Left" Command="{Binding ReactCommand}" CommandParameter="angry">
                     <Image Source="/Assets/Images/angry.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
                 </Button>
             </StackPanel>
         </Border>
-        <Button Command="{Binding ToggleReactionMenuCommand}">
+        <Button Classes="ChatMessage" Command="{Binding ToggleReactionMenuCommand}">
             <Button.Content>
-                <Grid ColumnDefinitions="70, 300" RowDefinitions="Auto" RenderOptions.BitmapInterpolationMode="HighQuality">
+                <Grid ColumnDefinitions="70, 300" RowDefinitions="Auto">
                     <!-- user image -->
                     <Border Grid.Column="0" Padding="6">
                         <Image Source="/Assets/Images/Character1.png" VerticalAlignment="Top" HorizontalAlignment="Center"></Image> <!-- bind to userImage-->

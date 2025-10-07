@@ -22,8 +22,9 @@ public abstract partial class BubbleMessageViewModel : ViewModelBase
     [ObservableProperty]
     private string _date;
 
+    [ObservableProperty]
     private Emoji _reaction; // possible backend synchronization problem with this field
-    
+
     public BubbleMessageViewModel(ChatMessage chatMessage)
     {
         _message = chatMessage;
@@ -35,6 +36,13 @@ public abstract partial class BubbleMessageViewModel : ViewModelBase
     [RelayCommand]
     private void ToggleReactionMenu()
     {
+        IsReactionMenuVisible = !IsReactionMenuVisible;
+    }
+
+    [RelayCommand]
+    private void React(string emoji)
+    {
+        Console.WriteLine($"You reacted with {emoji} to a message");
         IsReactionMenuVisible = !IsReactionMenuVisible;
     }
 }
