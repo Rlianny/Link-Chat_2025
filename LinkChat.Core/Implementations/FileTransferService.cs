@@ -94,25 +94,24 @@ public class FileTransferService : IFileTransferService
             {
                 byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), start, false);
                 await networkService.SendFrameAsync(frame);
-                await Task.Delay(1000);
             }
         });
         await sendAndWait;
-        foreach (var chunk in chunks)
+        bool changed = true;
+        while (changed)
         {
-            Task sendAndWaitChunk = Task.Run(async () =>
+            changed = false;
+            foreach (var chunk in chunks)
             {
-                while (!Confirmations[start.FileId][chunk.ChunkNumber])
+                if (!Confirmations[start.FileId][chunk.ChunkNumber])
                 {
+                    changed = true;
                     byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), chunk, false);
                     await networkService.SendFrameAsync(frame);
-                    await Task.Delay(3000);
                 }
-            });
-            await sendAndWaitChunk;
+            }
         }
     }
-
     public void OnFileStartAckFrameReceived(FileStartAck fileStartAck)
     {
         ConfirmingStarts[fileStartAck.FileId] = true;
@@ -135,7 +134,6 @@ public class FileTransferService : IFileTransferService
 
         if (string.IsNullOrEmpty(homeDir))
         {
-            
             return "/tmp/LinkChatDownloads";
         }
 
@@ -163,7 +161,7 @@ public class FileTransferService : IFileTransferService
                 System.Console.WriteLine($"Error reading {userDirsPath}: {ex.Message}");
             }
         }
-        
+
         string downloadsFolder = xdgDownloadDir ?? Path.Combine(homeDir, "Downloads");
 
         return Path.Combine(downloadsFolder, "LinkChatDownloads");
@@ -207,14 +205,9 @@ public class FileTransferService : IFileTransferService
 
                 using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
-                    var orderedChunks = FileChunks[fileChunk.FileId]
-                        .OrderBy(chunk => chunk.Key)
-                        .ToList();
-
-
-                    foreach (var pair in orderedChunks)
+                    for (int i = 0; i < FileChunks[fileChunk.FileId].Count; i++)
                     {
-                        var chunk = pair.Value;
+                        var chunk = FileChunks[fileChunk.FileId][i];
                         fs.Write(chunk.Data, 0, chunk.Data.Length);
                         fs.Flush();
                     }
