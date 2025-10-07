@@ -73,6 +73,15 @@
                 </Grid>
             </Button.Content>
         </Button>
+        <Border Background="White" 
+                CornerRadius="20" 
+                Padding="8,4"
+                Margin="70,-10,0,10"
+                IsVisible="{Binding IsReactionVisible}"
+                HorizontalAlignment="Left">
+            <Image Source="{Binding EmojiImage}" Width="25"></Image>
+        </Border>
+        
     </StackPanel>
     
 </UserControl>

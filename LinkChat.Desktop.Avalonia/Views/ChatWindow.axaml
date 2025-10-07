@@ -11,7 +11,7 @@
     
     <Grid Background="{DynamicResource TitanWhite}" ColumnDefinitions="650, *">
         <Border Padding="20" Background="White" Grid.Column="0">
-            <StackPanel Spacing="40">
+            <StackPanel Spacing="40" x:Name="AvailableUsersContainer">
                 <!-- More Options Button -->
                 <Button Classes="transparent" HorizontalAlignment="Left">
                     <Image Source="/Assets/Images/ListOptions.png" Width="40" HorizontalAlignment="Left" Classes="IconOnly"></Image>
