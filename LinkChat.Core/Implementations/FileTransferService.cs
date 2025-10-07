@@ -173,6 +173,7 @@ public class FileTransferService : IFileTransferService
     private async void OnFileChunkFrameReceived(FileChunk fileChunk)
     {
         await SendChunkConfirmation(fileChunk);
+        userService.UpdateLastSeen(fileChunk.UserName);
         if (FileChunks.ContainsKey(fileChunk.FileId))
         {
             if (!FileChunks[fileChunk.FileId].ContainsKey(fileChunk.ChunkNumber))
@@ -238,6 +239,7 @@ public class FileTransferService : IFileTransferService
             FileStarts.Add(fileStart.FileId, fileStart);
             FileChunks.Add(fileStart.FileId, []);
             Task task = SendStartConfirmation(fileStart);
+            userService.UpdateLastSeen(fileStart.UserName);
             await task;
         }
         System.Console.WriteLine($"Recibiendo {fileStart.FileId} mediante {fileStart.TotalChunks} chunks");

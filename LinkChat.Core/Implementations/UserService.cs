@@ -42,7 +42,6 @@ public class UserService : IUserService
         {
             SendHeartbeatRequest();
             PruneInactiveUsers();
-            await Task.Delay(10000);
         }
     }
 
@@ -116,5 +115,10 @@ public class UserService : IUserService
     void IUserService.UpdateUsersStatuses()
     {
         UpdateUsersStatuses();
+    }
+
+    public void UpdateLastSeen(string userName)
+    {
+        LastSeen[userName] = DateTime.Now;
     }
 }
