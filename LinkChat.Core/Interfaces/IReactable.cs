@@ -2,7 +2,7 @@ namespace LinkChat.Core.Interfaces
 {
     public interface IReactable
     {
-        Emoji Reaction { get; }
-        void SetReaction(Emoji emoji);
+        public Emoji Reaction { get; }
+        public void SetReaction(Emoji emoji);
     }
 }
