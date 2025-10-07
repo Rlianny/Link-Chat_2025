@@ -53,3 +53,5 @@ LinkChat.Infrastructure.Linux/packages/
 *.log
 *.tmp
 .DS_Store
+
+.fake
