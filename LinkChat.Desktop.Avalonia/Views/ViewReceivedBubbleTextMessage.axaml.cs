@@ -9,13 +9,13 @@ namespace LinkChat.Desktop.Avalonia.Views;
 
 public partial class ViewReceivedBubbleTextMessage : UserControl
 {
-    public static readonly StyledProperty<ReceivedBubbleTextMessageViewModel> BubbleTextMessageProperty =
+    public static readonly StyledProperty<ReceivedBubbleTextMessageViewModel> ReceivedBubbleTextMessageProperty =
         AvaloniaProperty.Register<ViewReceivedBubbleTextMessage, ReceivedBubbleTextMessageViewModel>(nameof(ReceivedBubbleTextMessageViewModel));
     
-    public ReceivedBubbleTextMessageViewModel BubbleTextMessage
+    public ReceivedBubbleTextMessageViewModel ReceivedBubbleTextMessage
     {
-        get => GetValue(BubbleTextMessageProperty);
-        set => SetValue(BubbleTextMessageProperty, value);
+        get => GetValue(ReceivedBubbleTextMessageProperty);
+        set => SetValue(ReceivedBubbleTextMessageProperty, value);
     }
     public ViewReceivedBubbleTextMessage()
     {
@@ -27,17 +27,17 @@ public partial class ViewReceivedBubbleTextMessage : UserControl
         AvaloniaXamlLoader.Load(this);
 
         // Set DataContext immediately if BubbleTextMessage is already set
-        if (BubbleTextMessage != null)
+        if (ReceivedBubbleTextMessage is not null)
         {
-            DataContext = BubbleTextMessage;
+            DataContext = ReceivedBubbleTextMessage;
         }
 
         // Listen for property changes
         this.PropertyChanged += (s, e) =>
         {
-            if (e.Property == BubbleTextMessageProperty)
+            if (e.Property == ReceivedBubbleTextMessageProperty)
             {
-                DataContext = BubbleTextMessage;
+                DataContext = ReceivedBubbleTextMessage;
             }
         };
     }

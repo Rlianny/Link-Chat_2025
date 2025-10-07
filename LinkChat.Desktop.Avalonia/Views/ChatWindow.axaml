@@ -11,7 +11,7 @@
     
     <Grid Background="{DynamicResource TitanWhite}" ColumnDefinitions="650, *">
         <Border Padding="20" Background="White" Grid.Column="0">
-            <StackPanel Spacing="40">
+            <StackPanel Spacing="40" x:Name="AvailableUsersContainer">
                 <!-- More Options Button -->
                 <Button Classes="transparent" HorizontalAlignment="Left">
                     <Image Source="/Assets/Images/ListOptions.png" Width="40" HorizontalAlignment="Left" Classes="IconOnly"></Image>
@@ -125,158 +125,13 @@
                     <Border Padding="10">
                         <Grid>
                             <StackPanel>
-                                <Button Classes="ChatMessage" >
-                                    <Button.Content>
-                                        <Grid ColumnDefinitions="70, 300" RowDefinitions="Auto">
-                                            <!-- user image -->
-                                            <Border Grid.Column="0" Padding="6">
-                                                <Image Source="/Assets/Images/Character1.png" VerticalAlignment="Top" HorizontalAlignment="Center"></Image>
-                                            </Border>
-                                            <!-- message -->
-                                            <Border Grid.Column="1" Padding="6">
-                                                <Border Padding="6" 
-                                                        Background="{DynamicResource CrocusPurple}" 
-                                                        CornerRadius="10" >
-                                                    <Border.Effect>
-                                                        <DropShadowEffect BlurRadius="10" 
-                                                                          OffsetX="0" 
-                                                                          OffsetY="0" 
-                                                                          Opacity="0.5" 
-                                                                          Color="DimGray"/>
-                                                    </Border.Effect>
-                                                    <TextBlock Text="Hola Diana!"
-                                                               Foreground="White" 
-                                                               Margin="2" 
-                                                               TextWrapping="Wrap">
-                                                    </TextBlock>
-                                                </Border>
-                                            </Border>
-                                        </Grid>
-                                    </Button.Content>
-                                </Button>
-                                
-                                <Button Classes="ChatMessage" >
-                                    <Button.Content>
-                                        <Grid ColumnDefinitions="70, 300" RowDefinitions="Auto">
-                                            <!-- user image -->
-                                            <Border Grid.Column="0" Padding="6">
-                                                <Image Source="/Assets/Images/Character1.png" VerticalAlignment="Top" HorizontalAlignment="Center"></Image>
-                                            </Border>
-                                            <!-- message -->
-                                            <Border Grid.Column="1" Padding="6">
-                                                <Border Padding="6" 
-                                                        Background="{DynamicResource CrocusPurple}" 
-                                                        CornerRadius="10" >
-                                                    <Border.Effect>
-                                                        <DropShadowEffect BlurRadius="10" 
-                                                                          OffsetX="0" 
-                                                                          OffsetY="0" 
-                                                                          Opacity="0.5" 
-                                                                          Color="DimGray"/>
-                                                    </Border.Effect>
-                                                    <TextBlock Text="Todo bien?"
-                                                               Foreground="White" 
-                                                               Margin="2" 
-                                                               TextWrapping="Wrap">
-                                                    </TextBlock>
-                                                </Border>
-                                            </Border>
-                                        </Grid>
-                                    </Button.Content>
-                                </Button>
-                               
-                                <Button Classes="ChatMessage" HorizontalAlignment="Right">
-                                    <Button.Content>
-                                        <Grid ColumnDefinitions="300, 70" RowDefinitions="Auto">
-                                            <!-- user image -->
-                                            <Border Grid.Column="1" Padding="6">
-                                                <Image Source="/Assets/Images/Character6.png" VerticalAlignment="Top" HorizontalAlignment="Center"></Image>
-                                            </Border>
-                                            <!-- message -->
-                                            <Border Grid.Column="0" Padding="6">
-                                                <Border Padding="6" 
-                                                        Background="White" 
-                                                        CornerRadius="10" >
-                                                    <Border.Effect>
-                                                        <DropShadowEffect BlurRadius="10" 
-                                                                          OffsetX="0" 
-                                                                          OffsetY="0" 
-                                                                          Opacity="0.5" 
-                                                                          Color="DimGray"/>
-                                                    </Border.Effect>
-                                                    <TextBlock Text="Hey! Todo bien, y tú?"
-                                                               Foreground="{DynamicResource EbonyClay}" 
-                                                               Margin="2" 
-                                                               TextWrapping="Wrap">
-                                                    </TextBlock>
-                                                </Border>
-                                            </Border>
-                                        </Grid>
-                                    </Button.Content>
-                                </Button>
-                                
-                                <Button Classes="ChatMessage" >
-                                    <Button.Content>
-                                        <Grid ColumnDefinitions="70, 300" RowDefinitions="Auto">
-                                            <!-- user image -->
-                                            <Border Grid.Column="0" Padding="6">
-                                                <Image Source="/Assets/Images/Character1.png" VerticalAlignment="Top" HorizontalAlignment="Center"></Image>
-                                            </Border>
-                                            <!-- message -->
-                                            <Border Grid.Column="1" Padding="6">
-                                                <Border Padding="6" 
-                                                        Background="{DynamicResource CrocusPurple}" 
-                                                        CornerRadius="10" >
-                                                    <Border.Effect>
-                                                        <DropShadowEffect BlurRadius="10" 
-                                                                          OffsetX="0" 
-                                                                          OffsetY="0" 
-                                                                          Opacity="0.5" 
-                                                                          Color="DimGray"/>
-                                                    </Border.Effect>
-                                                    <TextBlock Text="Bien, te escribía para invitarte al cine esta tarde. Iremos con Alicia, te apuntas?"
-                                                               Foreground="White" 
-                                                               Margin="2" 
-                                                               TextWrapping="Wrap">
-                                                    </TextBlock>
-                                                </Border>
-                                            </Border>
-                                        </Grid>
-                                    </Button.Content>
-                                </Button>
-                                
-                                <Button Classes="ChatMessage" HorizontalAlignment="Right">
-                                    <Button.Content>
-                                        <Grid ColumnDefinitions="300, 70" RowDefinitions="Auto">
-                                            <!-- user image -->
-                                            <Border Grid.Column="1" Padding="6">
-                                                <Image Source="/Assets/Images/Character6.png" VerticalAlignment="Top" HorizontalAlignment="Center"></Image>
-                                            </Border>
-                                            <!-- message -->
-                                            <Border Grid.Column="0" Padding="6">
-                                                <Border Padding="6" 
-                                                        Background="White" 
-                                                        CornerRadius="10" >
-                                                    <Border.Effect>
-                                                        <DropShadowEffect BlurRadius="10" 
-                                                                          OffsetX="0" 
-                                                                          OffsetY="0" 
-                                                                          Opacity="0.5" 
-                                                                          Color="DimGray"/>
-                                                    </Border.Effect>
-                                                    <TextBlock Text="Por supuesto! Ahí estare"
-                                                               Foreground="{DynamicResource EbonyClay}" 
-                                                               Margin="2" 
-                                                               TextWrapping="Wrap">
-                                                    </TextBlock>
-                                                </Border>
-                                            </Border>
-                                        </Grid>
-                                    </Button.Content>
-                                </Button>
-                               
-                                <local:ViewReceivedBubbleTextMessage x:Name="BubbleTextMessageComponent" BubbleTextMessage="{Binding BubbleTextMessage}"/> <!-- This button had problem-->
-                                <local:ViewReceivedBubbleFileMessage></local:ViewReceivedBubbleFileMessage>
+                                <local:ViewReceivedBubbleTextMessage x:Name="Message1" ReceivedBubbleTextMessage="{Binding Message1}"/>
+                                <local:ViewReceivedBubbleTextMessage x:Name="Message2" ReceivedBubbleTextMessage="{Binding Message2}"/> 
+                                <local:ViewSendedBubbleTextMessage x:Name="Message3" SendedBubbleTextMessage="{Binding Message3}"/>
+                                <local:ViewReceivedBubbleTextMessage x:Name="Message4" ReceivedBubbleTextMessage="{Binding Message4}"/>
+                                <local:ViewSendedBubbleTextMessage x:Name="Message5" SendedBubbleTextMessage="{Binding Message5}"/>
+                                <local:ViewReceivedBubbleTextMessage x:Name="Message6" ReceivedBubbleTextMessage="{Binding Message6}"/>
+                                <local:ViewReceivedBubbleFileMessage x:Name="FileMessage" ReceivedBubbleFileMessage="{Binding FileMessage}"/>
                                 
                             </StackPanel>
                         </Grid>
