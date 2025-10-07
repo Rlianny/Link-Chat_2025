@@ -79,7 +79,6 @@ namespace LinkChat.Infrastructure
                 throw new Exception($"Error creating socket. System error code: {error}");
             }
         }
-
         private void GetInterfaceIndex()
         {
             var ifr = new NativeStructs.ifreq { ifr_name = this.interfaceName };
