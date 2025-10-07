@@ -42,6 +42,7 @@ public class UserService : IUserService
         {
             SendHeartbeatRequest();
             PruneInactiveUsers();
+            await Task.Delay(10000);
         }
     }
 
