@@ -11,5 +11,13 @@ namespace LinkChat.Core.Services
         public void ReactToMessage(string messageId, Emoji emoji);
         public TextMessage GetTextMessageById(string textMessageId);
         public IEnumerable<ChatMessage> GetChatHistory(string UserName);
+        public IEnumerable<File> GetFilesHistory(string userName);
+        public event Action<File>? FileTransferred;
+        public event Action<TextMessage>? TextMessageExchanged;
+        public event Action<ChatMessage>? ChatMessageConfirmed;
+        public event Action<ChatMessage>? ReactedToMessage;
+        public event Action<User>? UserPruned;
+        public event Action<User>? NewUserDetected;
+        public event Action<string>? ErrorFounded;  
     }
 }
