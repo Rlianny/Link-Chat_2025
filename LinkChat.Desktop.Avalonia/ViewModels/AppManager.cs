@@ -30,7 +30,7 @@ public class AppManager
         _messagingService.FileTransferred += OnFileTransfered;
         _messagingService.ChatMessageConfirmed += OnChatMessageConfirmed;
         _messagingService.ReactedToMessage += OnReactedToMessage;
-        _messagingService.UserPruned += OnUserPruned;
+        _messagingService.UserPruned += OnUserPruned; 
         //_messagingService.NewUserDetected += OnNewUserDetected;
     }
     
@@ -66,6 +66,10 @@ public class AppManager
     public void OnUserPruned(User user)
     {
         UserPruned?.Invoke(this, user);
+    }
+    public void OnNewUserDetected (User user)
+    {
+        NewUserDetected?.Invoke(this, user);
     }
 
     // Get Info from Backend
