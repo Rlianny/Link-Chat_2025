@@ -242,11 +242,9 @@ public class FileTransferService : IFileTransferService
             userService.UpdateLastSeen(fileStart.UserName);
             await task;
         }
-        System.Console.WriteLine($"Recibiendo {fileStart.FileId} mediante {fileStart.TotalChunks} chunks");
     }
     public async Task SendChunkConfirmation(FileChunk fileChunk)
     {
-
         FileChunkAck fileChunkAck = new FileChunkAck(fileChunk.UserName, DateTime.Now, fileChunk.FileId, fileChunk.ChunkNumber);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileChunk.UserName), fileChunkAck, false);
         await networkService.SendFrameAsync(frame);

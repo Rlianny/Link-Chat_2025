@@ -26,7 +26,6 @@ public class UserService : IUserService
     }
     private void OnHeartbeatFrameReceived(HeartbeatMessage heartbeatMessage)
     {
-        //Console.WriteLine($"Un hearbeat ha llegado de {heartbeatMessage.UserName}");
         LastSeen.AddOrUpdate(heartbeatMessage.UserName, addValue: DateTime.Now, updateValueFactory: (key, existing) => DateTime.Now);
         Users.AddOrUpdate(heartbeatMessage.UserName, addValue: new User(heartbeatMessage.UserName, Status.Online, heartbeatMessage.MacAddress), (key, existing) => new User(heartbeatMessage.UserName, Status.Online, heartbeatMessage.MacAddress));
 
@@ -41,7 +40,7 @@ public class UserService : IUserService
         while (true)
         {
             SendHeartbeatRequest();
-            PruneInactiveUsers();
+            // PruneInactiveUsers();
             await Task.Delay(10000);
         }
     }
