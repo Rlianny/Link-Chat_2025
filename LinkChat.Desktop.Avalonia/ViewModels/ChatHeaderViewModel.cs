@@ -1,7 +1,9 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+
 namespace LinkChat.Desktop.Avalonia.ViewModels;
 using LinkChat.Core.Models;
 
-public class ChatHeaderViewModel : ViewModelBase
+public partial class ChatHeaderViewModel : ViewModelBase
 {
     private string _username;
     public string Username
@@ -9,11 +11,8 @@ public class ChatHeaderViewModel : ViewModelBase
         get => _username;
     }
 
+    [ObservableProperty]
     private string _userStatus;
-    public string UserStatus
-    {
-        get => _userStatus;
-    }
 
     public ChatHeaderViewModel(User user)
     {

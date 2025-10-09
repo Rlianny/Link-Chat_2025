@@ -1,4 +1,5 @@
 using System.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
 using LinkChat.Core.Models;
 using LinkChat.Core.Services;
 
@@ -6,45 +7,64 @@ namespace LinkChat.Desktop.Avalonia.ViewModels;
 using LinkChat.Core.Implementations;
 using LinkChat.Core.Interfaces;
 
-public class AvailableUserViewModel: ViewModelBase
+public partial class AvailableUserViewModel: ViewModelBase
 {
-    private IMessagingService _messagingService;
+    private AppManager appManager;
     
-    private string _username;
-    public string Username
+    private string _userName;
+
+    public string UserName
     {
-        get { return _username; }  
+        get => _userName;
     }
     
-    public string LastMessage
+    [ObservableProperty] private string _lastMessage;
+    [ObservableProperty] private string _lastTimestamp;
+
+    public AvailableUserViewModel(string username, AppManager appManager)
     {
-        get { return GetLastMessageContent(); }
-    }
-  
-    public string LastTimestamp
-    {
-        get { return _messagingService.GetChatHistory(_username).Last().TimeStamp.ToString("HH:mm");; }
+        _userName = username;
+        _lastMessage = " ";
+        _lastTimestamp = " ";
+        this.appManager = appManager;
+
+        appManager.TextMessageExchanged += OnTextMessageExchanged;
+        appManager.UserPruned += OnUserPruned;
+
     }
 
-    public AvailableUserViewModel(string username, IMessagingService  messagingService)
+    public void OnTextMessageExchanged(object sender, ChatMessage chatMessage)
     {
-        _username = username;
-        _messagingService = messagingService;
+        if(chatMessage.UserName == _userName || chatMessage.UserName == appManager.GetCurrentSelfUser().UserName)
+        Update();
     }
 
-    private string GetLastMessageContent()
+    private void Update()
     {
-        string lastMessageToReturn = "";
-        ChatMessage chatMessage = _messagingService.GetChatHistory(_username).Last();
+        ChatMessage chatMessage = appManager.GetLastMessageByUser(this._userName);
         if (chatMessage is TextMessage textMessage)
         {
-            lastMessageToReturn = textMessage.Content;
+            LastMessage = textMessage.Content;
         }
         else if (chatMessage is File file)
         {
-            lastMessageToReturn = file.Name;
+            LastMessage = file.Name;
         }
 
-        return lastMessageToReturn;
+        LastTimestamp = chatMessage.TimeStamp.ToString("HH:mm");
     }
+
+    private void OnUserPruned(object sender, User user)
+    {
+        if (user.UserName == _userName)
+            Dispose();
+    }
+
+    private void Dispose()
+    {
+        appManager.TextMessageExchanged -= OnTextMessageExchanged;
+        appManager.UserPruned -= OnUserPruned;
+    }
+
+    
 }

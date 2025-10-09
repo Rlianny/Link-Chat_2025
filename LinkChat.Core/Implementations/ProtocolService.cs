@@ -42,7 +42,7 @@ public class ProtocolService : IProtocolService
             destMacAddress = receiver.MacAddress;
 
         byte[] header = new byte[14];
-        byte[] localMacAddress = Tools.Tools.GetLocalMacAddress();
+        byte[] localMacAddress = Tools.Tools.LocalMacAddress;
 
         Buffer.BlockCopy(destMacAddress, 0, header, 0, 6); // Copy the destination MAC (first 6 bytes).
         Buffer.BlockCopy(localMacAddress, 0, header, 6, 6); // Copy our source MAC (next 6 bytes).

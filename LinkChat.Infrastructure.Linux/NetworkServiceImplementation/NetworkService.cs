@@ -94,7 +94,7 @@ namespace LinkChat.Infrastructure
 
         private void GetLocalMacAddress()
         {
-            localMacAddress = Tools.GetLocalMacAddress();
+            localMacAddress = Tools.LocalMacAddress;
         }
 
         private void BindSocketToInterface()

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text.Json.Nodes;
 using System.Text.Json;
 using System.Text;
+
 namespace LinkChat.Core.Implementations;
 
 public class FileTransferService : IFileTransferService

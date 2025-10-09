@@ -7,6 +7,7 @@ namespace LinkChat.Core.Tools
 {
     public static class Tools
     {
+        public static byte[] LocalMacAddress = [];
         public const ushort ETHER_TYPE = 0x88B5;
         public static byte[] ParseMacAddress(string macAddress)
         {
@@ -37,6 +38,7 @@ namespace LinkChat.Core.Tools
 
                 // Convert directly to byte[]
                 byte[] macBytes = direccionMac.GetAddressBytes();
+                LocalMacAddress = macBytes;
                 return macBytes;
             }
 
