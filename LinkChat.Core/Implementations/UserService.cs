@@ -40,7 +40,7 @@ public class UserService : IUserService
         while (true)
         {
             SendHeartbeatRequest();
-            // PruneInactiveUsers();
+            PruneInactiveUsers();
             await Task.Delay(10000);
         }
     }
@@ -49,7 +49,7 @@ public class UserService : IUserService
     {
         HeartbeatMessage heartbeatToSend = new HeartbeatMessage(self.UserName, DateTime.Now, self.MacAddress);
         byte[] frame = protocolService.CreateFrameToSend(null, heartbeatToSend, true);
-        networkService.SendFrameAsync(frame);
+        networkService.SendFrameAsync(frame,2);
     }
 
     public List<User> GetAvailableUsers()

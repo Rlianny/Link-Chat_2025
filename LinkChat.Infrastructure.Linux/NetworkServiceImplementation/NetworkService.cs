@@ -29,9 +29,46 @@ namespace LinkChat.Infrastructure
             GetInterfaceIndex();
             GetLocalMacAddress();
             BindSocketToInterface();
+            StartSendLoop();
         }
 
-        public Task SendFrameAsync(byte[] frame)
+        private void StartSendLoop()
+        {
+            sendTask = Task.Run(async () =>
+            {
+                while (isRunning)
+                {
+                    byte[]? frame = null;
+
+                    lock (queueLock)
+                    {
+                        if (queue.Count > 0)
+                            frame = queue.Dequeue();
+                    }
+
+                    if (frame != null)
+                    {
+                        SendFrameInternal(frame);
+                    }
+                    else
+                    {
+                        await Task.Delay(10);
+                    }
+                }
+            });
+            Console.WriteLine("Send loop started in background");
+        }
+
+        public void SendFrameAsync(byte[] frame, int priority)
+        {
+            lock (queueLock)
+            {
+                queue.Enqueue(frame, priority);
+            }
+            return Task.CompletedTask;
+        }
+
+        public Task SendFrameInternal(byte[] frame)
         {
             if (socketFd == -1)
                 throw new InvalidOperationException("The socket is not initialized.");
