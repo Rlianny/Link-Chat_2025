@@ -7,6 +7,7 @@
              x:Class="LinkChat.Desktop.Avalonia.Views.ViewSendedBubbleFileMessage"
              x:DataType="vm:SendedBubbleFileMessageViewModel">
     
+    <Border Padding="0, 0, 20, 0">
     <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Right">
         <Border Background="White" 
                 CornerRadius="20" 
@@ -96,4 +97,5 @@
             <Image Source="{Binding EmojiImage}" Width="25"></Image>
         </Border>
     </StackPanel>
+    </Border>
 </UserControl>

@@ -18,7 +18,7 @@ public partial class ReceivedBubbleTextMessageViewModel : BubbleMessageViewModel
         private set {}
     }
     
-    public ReceivedBubbleTextMessageViewModel(TextMessage textMessage) : base(textMessage)
+    public ReceivedBubbleTextMessageViewModel(TextMessage textMessage, AppManager appManager) : base(textMessage, appManager)
     {
         _textMessage = textMessage;
     }

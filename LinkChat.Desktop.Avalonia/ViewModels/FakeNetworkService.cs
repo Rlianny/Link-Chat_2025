@@ -1,0 +1,20 @@
+using System;
+using System.Threading.Tasks;
+using LinkChat.Core.Services;
+
+namespace LinkChat.Desktop.Avalonia.ViewModels;
+
+public class FakeNetworkService : INetworkService
+{
+    public Task SendFrameAsync(byte[] frame)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void StartListening()
+    {
+        throw new NotImplementedException();
+    }
+
+    public event Action<byte[]>? FrameReceived;
+}
