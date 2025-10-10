@@ -18,9 +18,6 @@ public partial class ChatWindow : Window
         _chatWindowViewModel = new ChatWindowViewModel();
         DataContext = _chatWindowViewModel;
         
-        AppManager appManager = _chatWindowViewModel.AppManager;
-
-       
         
         /*//File
         ReceivedBubbleFileMessageViewModel  bubbleFile = _chatWindowViewModel.FileMessage; 
@@ -31,8 +28,8 @@ public partial class ChatWindow : Window
         }*/
     }
 
-    private void TextBox_KeyDown(object? sender, KeyEventArgs e)
+    private async void TextBox_KeyDown(object? sender, KeyEventArgs e)
     {
-        _chatWindowViewModel.TextBox_KeyDown(sender, e);
+        await _chatWindowViewModel.TextBox_KeyDown(sender, e);
     }
 }

@@ -8,17 +8,17 @@
              x:DataType="vm:AvailableUserViewModel">
     
     <Grid>
-        <Button Classes="AvailableUser">
+        <Button Classes="AvailableUser" Command="{Binding ReloadChat}">
             <Grid ColumnDefinitions="100, 300, *">
                 <StackPanel Grid.Column="0">
                     <Image Source="/Assets/Images/Character1.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
                 </StackPanel>
                 <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-5">
-                    <TextBlock Text="Bianca García" Classes="UserName"></TextBlock>
-                    <TextBlock Text="Bianca: Ok, nos vemos!" Classes="LastMessage"></TextBlock>
+                    <TextBlock Text="{Binding UserName}" Classes="UserName"></TextBlock>
+                    <TextBlock Text="{Binding LastMessage}" Classes="LastMessage"></TextBlock>
                 </StackPanel>
                 <StackPanel Grid.Column="2">
-                    <TextBlock Text="14:05" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
+                    <TextBlock Text="{Binding LastTimestamp}" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
                 </StackPanel>
             </Grid>
         </Button>

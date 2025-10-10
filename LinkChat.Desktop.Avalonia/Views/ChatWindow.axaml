@@ -13,6 +13,32 @@
        <vm:ChatWindowViewModel></vm:ChatWindowViewModel> 
     </Window.DataContext>
     
+    <Window.Resources>
+        <!-- DataTemplates que referencian tus UserControls existentes -->
+        <DataTemplate x:Key="ReceivedFileMessage">
+            <local:ViewReceivedBubbleFileMessage />
+        </DataTemplate>
+        
+        <DataTemplate x:Key="ReceivedTextMessage">
+            <local:ViewReceivedBubbleTextMessage />
+        </DataTemplate>
+        
+        <DataTemplate x:Key="SendedFileMessage">
+            <local:ViewSendedBubbleFileMessage />
+        </DataTemplate>
+        
+        <DataTemplate x:Key="SendedTextMessage">
+            <local:ViewSendedBubbleFileMessage />
+        </DataTemplate>
+        
+        <!-- El TemplateSelector que usará las plantillas anteriores -->
+        <vm:ChatMessageTemplateSelector x:Key="ChatMessageTemplateSelector"
+                                           SendedTextMessage="{StaticResource SendedTextMessage}"
+                                           SendedFileMessage="{StaticResource SendedFileMessage}"
+                                           ReceivedTextMessage="{StaticResource ReceivedTextMessage}"
+                                           ReceivedFileMessage="{StaticResource ReceivedFileMessage}" />
+    </Window.Resources>
+    
     <Grid Background="{DynamicResource TitanWhite}" ColumnDefinitions="650, *">
         <Grid Grid.Column="0" RowDefinitions="80, *" Background="White">
             <!-- More Options Button -->
@@ -87,7 +113,7 @@
                             
                             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                                 <!-- Broadcast Button -->
-                                <Button Classes="transparent" Command="{Binding BroadacasteToggle}">
+                                <Button Classes="transparent" Command="{Binding BroadcastToggle}">
                                     <Image Source="{Binding BroadcastIcon}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="80"></Image>
                                 </Button>
                                 

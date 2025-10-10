@@ -97,6 +97,7 @@ public class FileTransferService : IFileTransferService
             {
                 byte[] frame = protocolService.CreateFrameToSend(receiverUser, start, false);
                 await networkService.SendFrameAsync(frame, 4);
+                await Task.Delay(100);
             }
         });
         await sendAndWait;

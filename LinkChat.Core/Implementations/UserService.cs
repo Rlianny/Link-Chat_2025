@@ -19,6 +19,7 @@ public class UserService : IUserService
         this.protocolService = protocolService;
         this.protocolService.HeartbeatFrameReceived += OnHeartbeatFrameReceived;
         this.networkService = networkService;
+        UpdateUsersStatuses();
     }
     public User GetSelfUser()
     {
@@ -26,30 +27,39 @@ public class UserService : IUserService
     }
     private void OnHeartbeatFrameReceived(HeartbeatMessage heartbeatMessage)
     {
+        bool isNew = false;
+        if (!Users.ContainsKey(heartbeatMessage.UserName))
+            isNew = true;
+
         LastSeen.AddOrUpdate(heartbeatMessage.UserName, addValue: DateTime.Now, updateValueFactory: (key, existing) => DateTime.Now);
         Users.AddOrUpdate(heartbeatMessage.UserName, addValue: new User(heartbeatMessage.UserName, Status.Online, heartbeatMessage.MacAddress), (key, existing) => new User(heartbeatMessage.UserName, Status.Online, heartbeatMessage.MacAddress));
 
+        if (isNew)
+            NewUserConnected?.Invoke(Users[heartbeatMessage.UserName]);
+
+        System.Console.WriteLine($"Heartbeat received from {heartbeatMessage.UserName} at {heartbeatMessage.TimeStamp}");
+
     }
-    public async Task UpdateUserStatuses()
+
+    private void UpdateUsersStatuses()
     {
-        Task task = Task.Run(UpdateUsersStatuses);
-        await task;
-    }
-    private async void UpdateUsersStatuses()
-    {
-        while (true)
+        Task task = Task.Run(async () =>
         {
-            SendHeartbeatRequest();
-            PruneInactiveUsers();
-            await Task.Delay(10000);
-        }
+            while (true)
+            {
+                SendHeartbeatRequest();
+                PruneInactiveUsers();
+                await Task.Delay(10000);
+            }
+        });
     }
 
     private void SendHeartbeatRequest()
     {
         HeartbeatMessage heartbeatToSend = new HeartbeatMessage(self.UserName, DateTime.Now, self.MacAddress);
         byte[] frame = protocolService.CreateFrameToSend(null, heartbeatToSend, true);
-        networkService.SendFrameAsync(frame,0);
+        networkService.SendFrameAsync(frame, 0);
+        System.Console.WriteLine($"Heartbeat sended from {heartbeatToSend.UserName} at {heartbeatToSend.TimeStamp}");
     }
 
     public List<User> GetAvailableUsers()
@@ -107,6 +117,7 @@ public class UserService : IUserService
                 if (Users.ContainsKey(user.Key))
                 {
                     Users.TryRemove(user.Key, out User disconnectedUser);
+                    UserDisconnected?.Invoke(disconnectedUser);
                 }
             }
         }

@@ -12,7 +12,6 @@ namespace LinkChat.Desktop.Avalonia.ViewModels;
 public class AppManager
 {
     private readonly INetworkService _networkService;
-    //private readonly IProtocolService _protocolService;
     private readonly IUserService _userService;
     private readonly IFileTransferService _fileTransferService;
     private readonly IMessagingService _messagingService;
@@ -21,7 +20,6 @@ public class AppManager
         IFileTransferService fileTransferService, IMessagingService messagingService)
     {
         _networkService = networkService;
-        //_protocolService = protocolService;
         _userService = userService;
         _fileTransferService = fileTransferService;
         _messagingService = messagingService;
@@ -30,8 +28,8 @@ public class AppManager
         _messagingService.FileTransferred += OnFileTransfered;
         _messagingService.ChatMessageConfirmed += OnChatMessageConfirmed;
         _messagingService.ReactedToMessage += OnReactedToMessage;
-        _messagingService.UserPruned += OnUserPruned; 
-        _messagingService.NewUserDetected += OnNewUserDetected;
+        _userService.UserDisconnected += OnUserPruned; 
+        _userService.NewUserConnected += OnNewUserDetected;
         //USER STATUS UPDATING PENDING
     }
     
@@ -109,27 +107,31 @@ public class AppManager
     // Send Info to Backend
     public async Task SendTextMessage(string text, string userName)
     {
-        await _messagingService.SendTextMessage(userName, text);
+        _messagingService.SendTextMessage(userName, text);
+        Console.WriteLine("Frontend: A Text Message Sent");
     }
 
     public async Task SendFileMessage(string filePath, string userName)
     { 
         _fileTransferService.SendFile(filePath, userName);
+        Console.WriteLine("Frontend: A File Message Sent");
     }
 
     public async Task SendReaction(Emoji emoji, string messageId)
     {
         _messagingService.ReactToMessage(messageId, emoji);
+        Console.WriteLine("Frontend: A Reaction Sent");
     }
 
     public async Task SendBroadcast(string message)
     {
         _messagingService.SendBroadcastTextMessage(message);
+        Console.WriteLine("Frontend: A Broadcast Sent");
     }
 
     public async Task SendUserStatusTyping()
     {
-        
+        Console.WriteLine("Frontend: Sending user status typing...");
     }
 
     public async Task SetSelfUserData(string userName, string gender)
@@ -140,12 +142,7 @@ public class AppManager
     public async Task StartListening()
     {
         _networkService.StartListening();
+        Console.WriteLine("Frontend: Listening started");
     }
-
-    public async Task StartUsersUpdate()
-    {
-        _userService.UpdateUsersStatuses();
-    }
-    
     
 }

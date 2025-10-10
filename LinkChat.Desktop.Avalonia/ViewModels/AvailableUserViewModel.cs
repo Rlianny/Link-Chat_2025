@@ -1,5 +1,6 @@
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using LinkChat.Core.Models;
 using LinkChat.Core.Services;
 
@@ -11,19 +12,24 @@ public partial class AvailableUserViewModel: ViewModelBase
 {
     private AppManager appManager;
     
-    private string _userName;
+    private User _user;
+
+    public User User
+    {
+        get => _user;
+    }
 
     public string UserName
     {
-        get => _userName;
+        get => _user.UserName;
     }
     
     [ObservableProperty] private string _lastMessage;
     [ObservableProperty] private string _lastTimestamp;
 
-    public AvailableUserViewModel(string username, AppManager appManager)
+    public AvailableUserViewModel(User user, AppManager appManager)
     {
-        _userName = username;
+        _user = user;
         _lastMessage = " ";
         _lastTimestamp = " ";
         this.appManager = appManager;
@@ -33,15 +39,15 @@ public partial class AvailableUserViewModel: ViewModelBase
 
     }
 
-    public void OnTextMessageExchanged(object sender, ChatMessage chatMessage)
+    public void OnTextMessageExchanged(object? sender, ChatMessage chatMessage)
     {
-        if(chatMessage.UserName == _userName || chatMessage.UserName == appManager.GetCurrentSelfUser().UserName)
+        if(chatMessage.UserName == _user.UserName || chatMessage.UserName == appManager.GetCurrentSelfUser().UserName)
         Update();
     }
 
     private void Update()
     {
-        ChatMessage chatMessage = appManager.GetLastMessageByUser(this._userName);
+        ChatMessage chatMessage = appManager.GetLastMessageByUser(_user.UserName);
         if (chatMessage is TextMessage textMessage)
         {
             LastMessage = textMessage.Content;
@@ -56,7 +62,7 @@ public partial class AvailableUserViewModel: ViewModelBase
 
     private void OnUserPruned(object sender, User user)
     {
-        if (user.UserName == _userName)
+        if (user.UserName == UserName)
             Dispose();
     }
 
@@ -66,5 +72,10 @@ public partial class AvailableUserViewModel: ViewModelBase
         appManager.UserPruned -= OnUserPruned;
     }
 
+    [RelayCommand]
+    public void ReloadChat()
+    {
+        GlobalSingletonHelper.ChatWindowViewModel.ReloadChat(UserName);
+    }
     
 }

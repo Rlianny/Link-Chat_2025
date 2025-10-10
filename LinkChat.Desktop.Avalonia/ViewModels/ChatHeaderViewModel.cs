@@ -16,8 +16,8 @@ public partial class ChatHeaderViewModel : ViewModelBase
 
     public ChatHeaderViewModel(User user, AppManager appManager)
     {
-        _username = user.UserName;
-        _userStatus = user.Status.ToString();
+        Username = user.UserName;
+        UserStatus = user.Status.ToString();
 
         _appManager = appManager;
         _appManager.UserStatusUpdated += OnUserStatusUpdated;
@@ -27,7 +27,7 @@ public partial class ChatHeaderViewModel : ViewModelBase
 
     private void OnUserPruned(object? sender, User user)
     {
-        if (user.UserName == _username)
+        if (user.UserName == Username)
         {
             UserStatus = "Offline";
         }
@@ -35,7 +35,7 @@ public partial class ChatHeaderViewModel : ViewModelBase
 
     private void OnNewUserDetected(object? sender, User user)
     { 
-        if (user.UserName == _username)
+        if (user.UserName == Username)
         {
             UserStatus = "Online";
         }
@@ -43,7 +43,7 @@ public partial class ChatHeaderViewModel : ViewModelBase
 
     private async void OnUserStatusUpdated(object? sender, User user)
     {
-        if (user.UserName == _username)
+        if (user.UserName == Username)
         {
             UserStatus = "Typing...";
             await Task.Delay(2000);

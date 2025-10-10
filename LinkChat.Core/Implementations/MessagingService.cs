@@ -10,7 +10,7 @@ public class MessagingService : IMessagingService
     private IFileTransferService fileTransferService;
     private INetworkService networkService;
     private IUserService userService;
-    private Dictionary<string, List<ChatMessage>> Conversation = [];
+    private Dictionary<string, List<ChatMessage>> Conversation = new();
     private Dictionary<string, ChatMessage> Messages = [];
     private Dictionary<string, Models.File> Files = [];
     private Dictionary<string, bool> Confirmations = [];
@@ -20,8 +20,8 @@ public class MessagingService : IMessagingService
     public event Action<TextMessage>? TextMessageExchanged;
     public event Action<ChatMessage>? ChatMessageConfirmed;
     public event Action<ChatMessage>? ReactedToMessage;
-    public event Action<User> UserPruned;
-    public event Action<string> ErrorFounded;
+    public event Action<User>? UserPruned;
+    public event Action<string>? ErrorFounded;
     public event Action<User>? NewUserDetected;
 
     public MessagingService(IProtocolService protocolService, IFileTransferService fileTransferService, IUserService userService, INetworkService networkService)
@@ -40,9 +40,9 @@ public class MessagingService : IMessagingService
     {
         if (Conversation.ContainsKey(userName))
         {
-            return Conversation[userName];
+            return Conversation[userName].ToList();
         }
-        return [];
+        return new List<ChatMessage>();
     }
     private void AddChatMessage(ChatMessage chatMessage)
     {
@@ -59,33 +59,53 @@ public class MessagingService : IMessagingService
 
     public TextMessage GetTextMessageById(string textMessageId)
     {
-        if (Messages.ContainsKey(textMessageId) && Messages[textMessageId] is TextMessage text)
+        if (string.IsNullOrEmpty(textMessageId))
         {
+            ErrorFounded?.Invoke("Message ID cannot be null or empty");
+            throw new ArgumentNullException(nameof(textMessageId));
+        }
 
+        if (Messages.TryGetValue(textMessageId, out var message) && message is TextMessage text)
+        {
             return text;
         }
 
-        ErrorFounded.Invoke($"Doesn't exist a message with ID {textMessageId}");
-        throw new Exception($"Doesn't exist a message with ID {textMessageId}");
+        ErrorFounded?.Invoke($"Message with ID {textMessageId} not found or is not a text message");
+        throw new KeyNotFoundException($"Message with ID {textMessageId} not found or is not a text message");
     }
 
     public async Task SendTextMessage(string receiverUserName, string content)
     {
+        Console.WriteLine("SendTestMessage has been called");
         TextMessage textMessage = new TextMessage(userService.GetSelfUser().UserName, DateTime.Now, Tools.Tools.GetNewId(userService), content);
         Confirmations.Add(textMessage.MessageId, false);
-        Task sendAndWait = Task.Run(async () =>
-        {
-            while (!Confirmations[textMessage.MessageId])
-            {
-                byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), textMessage, false);
-                await networkService.SendFrameAsync(frame, 2);
-                System.Console.WriteLine($"Message sended with ID {textMessage.MessageId}");
-                await Task.Delay(3000);
-                //TextMessageExchanged.Invoke(textMessage);
-            }
-        });
 
-        await sendAndWait;
+        try
+        {
+            byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), textMessage, false);
+            await networkService.SendFrameAsync(frame, 2);
+            System.Console.WriteLine($"Message sended with ID {textMessage.MessageId}");
+
+            AddChatMessage(textMessage);
+            TextMessageExchanged?.Invoke(textMessage);
+            System.Console.WriteLine($"A new Text Message EXchanged Event will be sended to backend: {textMessage.Content}");
+
+            Task sendAndWait = Task.Run(async () =>
+            {
+                while (!Confirmations[textMessage.MessageId])
+                {
+                    await Task.Delay(3000);
+                    frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), textMessage, false);
+                    await networkService.SendFrameAsync(frame, 2);
+                    System.Console.WriteLine($"Retrying message with ID {textMessage.MessageId}");
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            ErrorFounded?.Invoke($"Error sending message: {ex.Message}");
+            System.Console.WriteLine($"Error sending message: {ex.Message}");
+        }
     }
 
     public void SendBroadcastTextMessage(string content)
@@ -93,7 +113,8 @@ public class MessagingService : IMessagingService
         TextMessage textMessage = new TextMessage(userService.GetSelfUser().UserName, DateTime.Now, Tools.Tools.GetNewId(userService), content);
         byte[] frame = protocolService.CreateFrameToSend(null, textMessage, true);
         networkService.SendFrameAsync(frame, 2);
-        //TextMessageExchanged.Invoke(textMessage);
+        TextMessageExchanged?.Invoke(textMessage);
+        System.Console.WriteLine($"A new Text Message EXchanged Event will be sended to backend: {textMessage.Content}");
         System.Console.WriteLine($"Broadcast message sended with ID {textMessage.MessageId}");
     }
 
@@ -102,7 +123,8 @@ public class MessagingService : IMessagingService
         MessageReaction messageReaction = new MessageReaction(userService.GetSelfUser().UserName, DateTime.Now, messageId, emoji);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(GetTextMessageById(messageId).UserName), messageReaction, false);
         networkService.SendFrameAsync(frame, 3);
-        //ReactedToMessage.Invoke(GetTextMessageById(messageId));
+        ReactedToMessage?.Invoke(GetTextMessageById(messageId));
+        System.Console.WriteLine($"A new Text Reacted To Message Event will be sended to backend");
     }
 
     private async void OnChatAckFrameReceived(ChatAck chatAck)
@@ -110,7 +132,8 @@ public class MessagingService : IMessagingService
         if (Confirmations.ContainsKey(chatAck.MessageId))
         {
             Confirmations[chatAck.MessageId] = true;
-            //ChatMessageConfirmed.Invoke(Messages[chatAck.MessageId]);
+            ChatMessageConfirmed?.Invoke(GetTextMessageById(chatAck.MessageId));
+            System.Console.WriteLine($"A new Chat Message Confirmed Event will be sended to backend");
             System.Console.WriteLine($"Confirmation for message with ID {chatAck.MessageId} received");
         }
     }
@@ -119,12 +142,12 @@ public class MessagingService : IMessagingService
     {
         Console.WriteLine("received: " + textMessage.Content);
         AddChatMessage(textMessage);
-        //TextMessageExchanged.Invoke(textMessage);
+        TextMessageExchanged?.Invoke(textMessage);
+        System.Console.WriteLine($"A new Text Message EXchanged Event will be sended to backend: {textMessage.Content}");
         Console.WriteLine($"{textMessage.UserName}:{textMessage.Content}");
         try
         {
             await SendConfirmation(textMessage);
-            ChatMessageConfirmed.Invoke(textMessage);
         }
         catch (Exception e)
         {
@@ -141,7 +164,8 @@ public class MessagingService : IMessagingService
         ChatAck ack = new ChatAck(chatMessage.UserName, DateTime.Now, chatMessage.MessageId);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(chatMessage.UserName), ack, false);
         await networkService.SendFrameAsync(frame, 1);
-        //ChatMessageConfirmed.Invoke(chatMessage);
+        ChatMessageConfirmed?.Invoke(chatMessage);
+        System.Console.WriteLine($"A new Chat Message Confirmed Event will be sended to backend");
         System.Console.WriteLine($"Confirmation sended to message with ID {chatMessage.MessageId}");
     }
     private void OnFileMessageFrameReceived(Models.File file)
@@ -149,21 +173,23 @@ public class MessagingService : IMessagingService
         AddChatMessage(file);
         if (Files.ContainsKey(file.MessageId))
         {
-            ErrorFounded.Invoke($"Already exist a message with ID {file.MessageId}");
+            ErrorFounded?.Invoke($"Already exist a message with ID {file.MessageId}");
             throw new Exception($"Already exist a message with ID {file.MessageId}");
         }
         Files.Add(file.MessageId, file);
-        //FileTransferred.Invoke(file);
+        FileTransferred?.Invoke(file);
+        System.Console.WriteLine($"A new File Transferred Event will be sended to backend: {file.Name}");
     }
     private void OnMessageReactionFrameReceived(MessageReaction reaction)
     {
         if (!Messages.ContainsKey(reaction.MessageId))
         {
-            ErrorFounded.Invoke($"Message with ID {reaction.MessageId} doesn't exist");
+            ErrorFounded?.Invoke($"Message with ID {reaction.MessageId} doesn't exist");
             throw new Exception($"Message with ID {reaction.MessageId} doesn't exist");
         }
         Messages[reaction.MessageId].SetReaction(reaction.Reaction);
-        //ReactedToMessage.Invoke(Messages[reaction.MessageId]);
+        ReactedToMessage?.Invoke(Messages[reaction.MessageId]);
+        System.Console.WriteLine($"A new Text Reacted To Message Event will be sended to backend");
     }
     private void OnUserStatusFrameReceived(UserStatus status)
     {

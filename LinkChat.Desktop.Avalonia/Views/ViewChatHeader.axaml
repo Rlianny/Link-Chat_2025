@@ -10,8 +10,8 @@
        <Border Grid.Column="0" Padding="9">
            <Grid Grid.Column="0">
                <StackPanel>
-                   <TextBlock Text="Bianca García" Margin="2" FontSize="24" Foreground="{DynamicResource EbonyClay}"></TextBlock>
-                   <TextBlock Text="Online" Margin="2" FontSize="18" Foreground="{DynamicResource FontGrey}"></TextBlock>
+                   <TextBlock Text="{Binding Username}" Margin="2" FontSize="24" Foreground="{DynamicResource EbonyClay}"></TextBlock>
+                   <TextBlock Text="{Binding UserStatus}" Margin="2" FontSize="18" Foreground="{DynamicResource FontGrey}"></TextBlock>
                </StackPanel>
            </Grid>
        </Border>
