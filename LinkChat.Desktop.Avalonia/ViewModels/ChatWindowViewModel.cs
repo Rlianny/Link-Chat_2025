@@ -97,7 +97,7 @@ public partial class ChatWindowViewModel : ViewModelBase
         _broadcastIcon = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/BroadcastDisabledBold.png"));
 
         networkService.StartListening();
-        userService.UpdateUsersStatuses();
+        //userService.UpdateUsersStatuses();
 
         AppManager.NewUserDetected += OnNewUserDetected;
         AppManager.TextMessageExchanged += OnTextMessageExchanged;
