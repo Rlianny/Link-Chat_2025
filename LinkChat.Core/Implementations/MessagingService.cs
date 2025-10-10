@@ -44,19 +44,19 @@ public class MessagingService : IMessagingService
         }
         return new List<ChatMessage>();
     }
-    private void AddChatMessage(string userName, ChatMessage chatMessage)
+    private void AddChatMessage(string receiverUserName, ChatMessage chatMessage)
     {
         if (!Messages.ContainsKey(chatMessage.MessageId))
         {
             Messages.Add(chatMessage.MessageId, chatMessage);
         }
-        if (!Conversation.ContainsKey(chatMessage.UserName))
+        if (!Conversation.ContainsKey(receiverUserName))
         {
-            Conversation.Add(userName, []);
+            Conversation.Add(receiverUserName, []);
         }
-        Console.WriteLine("El mensaje sera anadido a la Conversacion");
-        Conversation[userName].Add(chatMessage);
-        Console.WriteLine("El mensaje ha sido anadido a la Conversacion");
+        
+        Conversation[receiverUserName].Add(chatMessage);
+       
     }
 
     public TextMessage GetTextMessageById(string textMessageId)
