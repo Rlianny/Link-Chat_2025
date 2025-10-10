@@ -81,7 +81,7 @@ public class MessagingService : IMessagingService
                 await networkService.SendFrameAsync(frame, 2);
                 System.Console.WriteLine($"Message sended with ID {textMessage.MessageId}");
                 await Task.Delay(3000);
-                TextMessageExchanged.Invoke(textMessage);
+                //TextMessageExchanged.Invoke(textMessage);
             }
         });
 
@@ -93,7 +93,7 @@ public class MessagingService : IMessagingService
         TextMessage textMessage = new TextMessage(userService.GetSelfUser().UserName, DateTime.Now, Tools.Tools.GetNewId(userService), content);
         byte[] frame = protocolService.CreateFrameToSend(null, textMessage, true);
         networkService.SendFrameAsync(frame, 2);
-        TextMessageExchanged.Invoke(textMessage);
+        //TextMessageExchanged.Invoke(textMessage);
         System.Console.WriteLine($"Broadcast message sended with ID {textMessage.MessageId}");
     }
 
@@ -102,7 +102,7 @@ public class MessagingService : IMessagingService
         MessageReaction messageReaction = new MessageReaction(userService.GetSelfUser().UserName, DateTime.Now, messageId, emoji);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(GetTextMessageById(messageId).UserName), messageReaction, false);
         networkService.SendFrameAsync(frame, 3);
-        ReactedToMessage.Invoke(GetTextMessageById(messageId));
+        //ReactedToMessage.Invoke(GetTextMessageById(messageId));
     }
 
     private async void OnChatAckFrameReceived(ChatAck chatAck)
@@ -110,15 +110,16 @@ public class MessagingService : IMessagingService
         if (Confirmations.ContainsKey(chatAck.MessageId))
         {
             Confirmations[chatAck.MessageId] = true;
-            ChatMessageConfirmed.Invoke(Messages[chatAck.MessageId]);
+            //ChatMessageConfirmed.Invoke(Messages[chatAck.MessageId]);
             System.Console.WriteLine($"Confirmation for message with ID {chatAck.MessageId} received");
         }
     }
 
     private async void OnTextMessageFrameReceived(TextMessage textMessage)
     {
+        Console.WriteLine("received: " + textMessage.Content);
         AddChatMessage(textMessage);
-        TextMessageExchanged.Invoke(textMessage);
+        //TextMessageExchanged.Invoke(textMessage);
         Console.WriteLine($"{textMessage.UserName}:{textMessage.Content}");
         try
         {
@@ -140,7 +141,7 @@ public class MessagingService : IMessagingService
         ChatAck ack = new ChatAck(chatMessage.UserName, DateTime.Now, chatMessage.MessageId);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(chatMessage.UserName), ack, false);
         await networkService.SendFrameAsync(frame, 1);
-        ChatMessageConfirmed.Invoke(chatMessage);
+        //ChatMessageConfirmed.Invoke(chatMessage);
         System.Console.WriteLine($"Confirmation sended to message with ID {chatMessage.MessageId}");
     }
     private void OnFileMessageFrameReceived(Models.File file)
@@ -162,7 +163,7 @@ public class MessagingService : IMessagingService
             throw new Exception($"Message with ID {reaction.MessageId} doesn't exist");
         }
         Messages[reaction.MessageId].SetReaction(reaction.Reaction);
-        ReactedToMessage.Invoke(Messages[reaction.MessageId]);
+        //ReactedToMessage.Invoke(Messages[reaction.MessageId]);
     }
     private void OnUserStatusFrameReceived(UserStatus status)
     {

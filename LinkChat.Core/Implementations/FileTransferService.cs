@@ -251,6 +251,7 @@ public class FileTransferService : IFileTransferService
 
     private async void OnFileStartFrameReceived(FileStart fileStart)
     {
+        System.Console.WriteLine($"File start received for file {fileStart.FileName} with ID {fileStart.FileId} from user {fileStart.UserName}");
         if (!FileChunks.ContainsKey(fileStart.FileId))
         {
             FileStarts.Add(fileStart.FileId, fileStart);

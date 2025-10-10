@@ -9,6 +9,10 @@
         x:DataType="vm:ChatWindowViewModel"
         Title="ChatWindow">
     
+    <Window.DataContext>
+       <vm:ChatWindowViewModel></vm:ChatWindowViewModel> 
+    </Window.DataContext>
+    
     <Grid Background="{DynamicResource TitanWhite}" ColumnDefinitions="650, *">
         <Grid Grid.Column="0" RowDefinitions="80, *" Background="White">
             <!-- More Options Button -->
@@ -17,16 +21,15 @@
             </Button> 
             
             <Border Padding="20" Background="White" Grid.Row="1">
-            
-                <StackPanel Spacing="40" x:Name="AvailableUsersViewer">
-                
-                    <!-- Available Users--> 
-                    <local:ViewAvailableUser></local:ViewAvailableUser> 
-                    <local:ViewAvailableUser></local:ViewAvailableUser>
-                    <local:ViewAvailableUser></local:ViewAvailableUser>
-                    <local:ViewAvailableUser></local:ViewAvailableUser>
-                    <local:ViewAvailableUser></local:ViewAvailableUser>
-                </StackPanel>
+                <ScrollViewer AllowAutoHide="True" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding AvailableUsers}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <local:ViewAvailableUser/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl> 
+                </ScrollViewer>
             </Border>
         </Grid>
         
@@ -48,15 +51,14 @@
                     <Border Padding="20, 10, -10, 0">
                         <Grid>
                             <ScrollViewer AllowAutoHide="True" VerticalScrollBarVisibility="Auto">
-                                <StackPanel x:Name="ChatMessageViewer">
-                                    <local:ViewReceivedBubbleTextMessage x:Name="Message1" ReceivedBubbleTextMessage="{Binding Message1}"/>
-                                    <local:ViewReceivedBubbleTextMessage x:Name="Message2" ReceivedBubbleTextMessage="{Binding Message2}"/> 
-                                    <local:ViewSendedBubbleTextMessage x:Name="Message3" SendedBubbleTextMessage="{Binding Message3}"/>
-                                    <local:ViewReceivedBubbleTextMessage x:Name="Message4" ReceivedBubbleTextMessage="{Binding Message4}"/>
-                                    <local:ViewSendedBubbleTextMessage x:Name="Message5" SendedBubbleTextMessage="{Binding Message5}"/>
-                                    <local:ViewReceivedBubbleTextMessage x:Name="Message6" ReceivedBubbleTextMessage="{Binding Message6}"/>
-                                    <local:ViewReceivedBubbleFileMessage x:Name="FileMessage" ReceivedBubbleFileMessage="{Binding FileMessage}"/>
-                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding CurrentChatHistory}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <!-- Aquí defines cómo se representa cada ChatMessage -->
+                                            <local:/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl> 
                             </ScrollViewer>
                         </Grid>
                     </Border>

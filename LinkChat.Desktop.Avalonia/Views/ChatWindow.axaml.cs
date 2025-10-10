@@ -1,6 +1,7 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 
 namespace LinkChat.Desktop.Avalonia.Views;
@@ -10,68 +11,28 @@ using LinkChat.Desktop.Avalonia.Views;
 
 public partial class ChatWindow : Window
 {
+    ChatWindowViewModel _chatWindowViewModel;
     public ChatWindow()
     {
         InitializeComponent();
-        ChatWindowViewModel chatWindowViewModel = new ChatWindowViewModel();
-        DataContext = chatWindowViewModel;
+        _chatWindowViewModel = new ChatWindowViewModel();
+        DataContext = _chatWindowViewModel;
         
-        AppManager appManager = chatWindowViewModel.AppManager;
+        AppManager appManager = _chatWindowViewModel.AppManager;
 
-        // Message 1 
-        ReceivedBubbleTextMessageViewModel bubble1 = chatWindowViewModel.Message1; 
-        var bubbleComponent = this.FindControl<ViewReceivedBubbleTextMessage>("Message1");
-        if (bubbleComponent != null)
-        {
-            bubbleComponent.ReceivedBubbleTextMessage = bubble1;
-        }
+       
         
-        // Message 2
-        ReceivedBubbleTextMessageViewModel bubble2 = chatWindowViewModel.Message2; 
-        var bubbleComponent2 = this.FindControl<ViewReceivedBubbleTextMessage>("Message2");
-        if (bubbleComponent2 != null)
-        {
-            bubbleComponent2.ReceivedBubbleTextMessage = bubble2;
-        }
-        
-        // Message 3
-        SendedBubbleTextMessageViewModel bubble3 = chatWindowViewModel.Message3; 
-        var bubbleComponent3 = this.FindControl<ViewSendedBubbleTextMessage>("Message3");
-        if (bubbleComponent3 != null)
-        {
-            bubbleComponent3.SendedBubbleTextMessage = bubble3;
-        }
-        
-        // Message 4
-        ReceivedBubbleTextMessageViewModel bubble4 = chatWindowViewModel.Message4; 
-        var bubbleComponent4 = this.FindControl<ViewReceivedBubbleTextMessage>("Message4");
-        if (bubbleComponent4 != null)
-        {
-            bubbleComponent4.ReceivedBubbleTextMessage = bubble4;
-        }
-        
-        //Message 5
-        SendedBubbleTextMessageViewModel bubble5 = chatWindowViewModel.Message5; 
-        var bubbleComponent5 = this.FindControl<ViewSendedBubbleTextMessage>("Message5");
-        if (bubbleComponent5 != null)
-        {
-            bubbleComponent5.SendedBubbleTextMessage = bubble5;
-        }
-        
-        //Message 6
-        ReceivedBubbleTextMessageViewModel bubble6 = chatWindowViewModel.Message6; 
-        var bubbleComponent6 = this.FindControl<ViewReceivedBubbleTextMessage>("Message6");
-        if (bubbleComponent6 != null)
-        {
-            bubbleComponent6.ReceivedBubbleTextMessage = bubble6;
-        }
-        
-        //File
-        ReceivedBubbleFileMessageViewModel  bubbleFile = chatWindowViewModel.FileMessage; 
+        /*//File
+        ReceivedBubbleFileMessageViewModel  bubbleFile = _chatWindowViewModel.FileMessage; 
         var bubbleComponentFile = this.FindControl<ViewReceivedBubbleFileMessage>("FileMessage");
         if (bubbleComponentFile != null)
         {
             bubbleComponentFile.ReceivedBubbleFileMessage =  bubbleFile;
-        }
+        }*/
+    }
+
+    private void TextBox_KeyDown(object? sender, KeyEventArgs e)
+    {
+        _chatWindowViewModel.TextBox_KeyDown(sender, e);
     }
 }

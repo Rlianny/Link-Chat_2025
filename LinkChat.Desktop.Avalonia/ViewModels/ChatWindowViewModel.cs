@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Reflection.Metadata;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -21,6 +22,9 @@ public partial class ChatWindowViewModel: ViewModelBase
     [ObservableProperty]
     private string _messageInPlaceHolder = string.Empty;
 
+    public ObservableCollection<ChatMessage> CurrentChatHistory { get; set; } = new();
+    public ObservableCollection<User> AvailableUsers { get; set; } = new();
+
     private ReceivedBubbleTextMessageViewModel _message1;
     private ReceivedBubbleTextMessageViewModel _message2;
     private SendedBubbleTextMessageViewModel _message3;
@@ -32,46 +36,14 @@ public partial class ChatWindowViewModel: ViewModelBase
     private bool _broadcast = false;
     [ObservableProperty] private Bitmap _broadcastIcon;
     
-    public ReceivedBubbleTextMessageViewModel Message1 
-    { 
-        get => _message1;
-        set => SetProperty(ref _message1, value);
+    public void AddNewChatMessage(ChatMessage newMessage)
+    {
+        CurrentChatHistory.Add(newMessage);
     }
 
-    public ReceivedBubbleTextMessageViewModel Message2
+    public void AddNewAvailableUser(User user)
     {
-        get => _message2;
-        set => SetProperty(ref _message2, value);
-    }
-
-    public SendedBubbleTextMessageViewModel Message3
-    {
-        get => _message3;
-        set => SetProperty(ref  _message3, value);
-    }
-    
-    public ReceivedBubbleTextMessageViewModel Message4
-    {
-        get => _message4;
-        set => SetProperty(ref _message4, value);
-    }
-    
-    public SendedBubbleTextMessageViewModel Message5
-    {
-        get => _message5;
-        set => SetProperty(ref  _message5, value);
-    }
-    
-    public ReceivedBubbleTextMessageViewModel Message6
-    {
-        get => _message6;
-        set => SetProperty(ref _message6, value);
-    }
-
-    public ReceivedBubbleFileMessageViewModel FileMessage
-    {
-        get => _receivedBubbleFileMessage;
-        set => SetProperty(ref _receivedBubbleFileMessage, value);
+        AvailableUsers.Add(user);
     }
 
     public ChatWindowViewModel()
@@ -140,12 +112,16 @@ public partial class ChatWindowViewModel: ViewModelBase
     [RelayCommand]
     public async void SendTextMessageButton()
     {
-        AppManager.SendTextMessage(MessageInPlaceHolder,  _currentRecieverUser.UserName);
+        if (_broadcast)
+            AppManager.SendBroadcast(MessageInPlaceHolder);
+        else
+            AppManager.SendTextMessage(MessageInPlaceHolder,  _currentRecieverUser.UserName);
+        
         Console.WriteLine($"The message {MessageInPlaceHolder} will be sent");
         MessageInPlaceHolder = string.Empty;
     }
 
-    private void TextBox_KeyDown(object sender, KeyEventArgs key)
+    public void TextBox_KeyDown(object sender, KeyEventArgs key)
     {
         bool isLetter = (key.Key >= Key.A && key.Key <= Key.Z);
         

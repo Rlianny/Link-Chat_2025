@@ -11,6 +11,11 @@ public class FakeNetworkService : INetworkService
         throw new NotImplementedException();
     }
 
+    public Task SendFrameAsync(byte[] frame, int priority)
+    {
+        throw new NotImplementedException();
+    }
+
     public void StartListening()
     {
         throw new NotImplementedException();
