@@ -74,6 +74,7 @@ public class FileTransferService : IFileTransferService
 
     public async void SendFile(string receiverUserName, string filePath)
     {
+        User receiverUser = userService.GetUserByName(receiverUserName);
         var chunks = SplitFile(filePath, receiverUserName, 800).ToList();
         double size = new FileInfo(filePath).Length;
         var start = new FileStart(
@@ -94,9 +95,8 @@ public class FileTransferService : IFileTransferService
             System.Console.WriteLine(!ConfirmingStarts[start.FileId]);
             while (!ConfirmingStarts[start.FileId])
             {
-                byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), start, false);
+                byte[] frame = protocolService.CreateFrameToSend(receiverUser, start, false);
                 await networkService.SendFrameAsync(frame, 4);
-                await Task.Delay(100);
             }
         });
         await sendAndWait;
@@ -106,7 +106,7 @@ public class FileTransferService : IFileTransferService
 
             for (int j = i; j < windowEnd; j++)
             {
-                byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), chunks[j], false);
+                byte[] frame = protocolService.CreateFrameToSend(receiverUser, chunks[j], false);
                 await networkService.SendFrameAsync(frame, 5);
             }
             while (true)
@@ -116,7 +116,7 @@ public class FileTransferService : IFileTransferService
                 {
                     if (!Confirmations[start.FileId].ContainsKey(j))
                     {
-                        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), chunks[j], false);
+                        byte[] frame = protocolService.CreateFrameToSend(receiverUser, chunks[j], false);
                         await networkService.SendFrameAsync(frame, 5);
                         pending++;
                     }
