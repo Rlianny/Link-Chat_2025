@@ -6,7 +6,9 @@
              mc:Ignorable="d" Background="{DynamicResource TitanWhite}" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LinkChat.Desktop.Avalonia.Views.ViewSendedBubbleTextMessage"
              x:DataType="vm:SendedBubbleTextMessageViewModel">
-    
+   
+    <Border Padding="0, 0, 20, 0">
+        
     <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Right">
         <Border Background="White" 
                 CornerRadius="20" 
@@ -84,5 +86,6 @@
             <Image Source="{Binding EmojiImage}" Width="25"></Image>
         </Border>
     </StackPanel>
+    </Border>
 </UserControl>
 

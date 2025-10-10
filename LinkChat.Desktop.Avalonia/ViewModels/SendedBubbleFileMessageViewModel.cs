@@ -19,7 +19,7 @@ public class SendedBubbleFileMessageViewModel : BubbleMessageViewModel
         private set{}
     }
 
-    public SendedBubbleFileMessageViewModel(File file) : base(file)
+    public SendedBubbleFileMessageViewModel(File file, AppManager appManager) : base(file, appManager)
     {
         _file = file;
         _fileName = file.Name;

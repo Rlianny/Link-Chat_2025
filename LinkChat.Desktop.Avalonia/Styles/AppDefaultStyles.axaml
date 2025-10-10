@@ -57,6 +57,15 @@
                     <Button Classes="transparent" HorizontalAlignment="Left">
                         <Image Source="/Assets/Images/sad.png" Width="25" HorizontalAlignment="Left" Classes="IconOnly"></Image>
                     </Button>
+                    
+                    <TextBox Grid.Column="0"  
+                             CornerRadius="6"
+                             Watermark="Escribe tu mensaje aquí...."
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             Background="Transparent"
+                             Foreground="{DynamicResource FontGrey}">
+                    </TextBox>
                 </StackPanel>
             </Grid>
         </Border>
@@ -65,6 +74,7 @@
     <!-- Add Styles Here -->
     <Style Selector="Window">
         <Setter Property="FontFamily" Value="{DynamicResource NotoSans}"></Setter>
+        <Setter Property="FontSize" Value="18"></Setter>
     </Style>
     
     <Style Selector="Button.AvailableUser">
@@ -81,21 +91,21 @@
     </Style>
     
     <Style Selector="Button TextBlock.UserName">
-        <Setter Property="FontSize" Value="21"></Setter>
+        <Setter Property="FontSize" Value="23"></Setter>
         <Setter Property="Margin" Value="2"></Setter>
         <Setter Property="Foreground" Value="{DynamicResource EbonyClay}"></Setter>
         <Setter Property="FontFamily" Value="{DynamicResource NotoSans}"></Setter>
     </Style>
    
     <Style Selector="Button TextBlock.LastMessage">
-        <Setter Property="FontSize" Value="16"></Setter>
+        <Setter Property="FontSize" Value="18"></Setter>
         <Setter Property="Margin" Value="2"></Setter>
         <Setter Property="Foreground" Value="{DynamicResource FontGrey}"></Setter>
         <Setter Property="FontFamily" Value="{DynamicResource NotoSans}"></Setter>
     </Style>
     
     <Style Selector="Button TextBlock.LastTimestamp">
-        <Setter Property="FontSize" Value="14"></Setter>
+        <Setter Property="FontSize" Value="16"></Setter>
         <Setter Property="Margin" Value="5"></Setter>
         <Setter Property="Foreground" Value="{DynamicResource FontGrey}"></Setter>
         <Setter Property="FontFamily" Value="{DynamicResource NotoSans}"></Setter>
@@ -131,5 +141,16 @@
     <Style Selector= "Button.transparent:pressed /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="Transparent"></Setter>
         <Setter Property="RenderTransform" Value="scale(1.1)"></Setter> 
+    </Style>
+    
+    <Style Selector="TextBox:focus-within /template/ Border">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+    <Style Selector="TextBox:pointerover /template/ Border">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
     </Style>
 </Styles>

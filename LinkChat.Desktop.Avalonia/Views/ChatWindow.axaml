@@ -10,134 +10,59 @@
         Title="ChatWindow">
     
     <Grid Background="{DynamicResource TitanWhite}" ColumnDefinitions="650, *">
-        <Border Padding="20" Background="White" Grid.Column="0">
-            <StackPanel Spacing="40" x:Name="AvailableUsersContainer">
-                <!-- More Options Button -->
-                <Button Classes="transparent" HorizontalAlignment="Left">
-                    <Image Source="/Assets/Images/ListOptions.png" Width="40" HorizontalAlignment="Left" Classes="IconOnly"></Image>
-                </Button>
+        <Grid Grid.Column="0" RowDefinitions="80, *" Background="White">
+            <!-- More Options Button -->
+            <Button Grid.Column="0" Classes="transparent" HorizontalAlignment="Left" Padding="30,20, 20,20 ">
+                <Image Source="/Assets/Images/ListOptions.png" Width="40" HorizontalAlignment="Left" Classes="IconOnly"></Image>
+            </Button> 
+            
+            <Border Padding="20" Background="White" Grid.Row="1">
+            
+                <StackPanel Spacing="40" x:Name="AvailableUsersViewer">
                 
-                <!-- User Bianca --> 
-                <Button Classes="AvailableUser">
-                    <Grid ColumnDefinitions="100, 300, *">
-                        <StackPanel Grid.Column="0">
-                            <Image Source="/Assets/Images/Character1.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
-                        </StackPanel>
-                        <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-5">
-                            <TextBlock Text="Bianca García" Classes="UserName"></TextBlock>
-                            <TextBlock Text="Bianca: Ok, nos vemos!" Classes="LastMessage"></TextBlock>
-                        </StackPanel>
-                        <StackPanel Grid.Column="2">
-                            <TextBlock Text="14:05" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
-                        </StackPanel>
-                    </Grid>
-                </Button>
-               
-                <!-- User Carmen --> 
-                <Button Classes="AvailableUser">
-                    <Grid ColumnDefinitions="100, 300, *">
-                        <StackPanel Grid.Column="0">
-                            <Image Source="/Assets/Images/Character2.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
-                        </StackPanel>
-                        <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-5">
-                            <TextBlock Text="Carmen Rodríguez" Classes="UserName"></TextBlock>
-                            <TextBlock Text="Tú: OK" Classes="LastMessage"></TextBlock>
-                        </StackPanel>
-                        <StackPanel Grid.Column="2">
-                            <TextBlock Text="14:00" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
-                        </StackPanel>
-                    </Grid>
-                </Button> 
-                
-                <!-- User Alejandro --> 
-                <Button Classes="AvailableUser">
-                    <Grid ColumnDefinitions="100, 300, *">
-                        <StackPanel Grid.Column="0">
-                            <Image Source="/Assets/Images/Character3.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
-                        </StackPanel>
-                        <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-5">
-                            <TextBlock Text="Alejandro Torres" Classes="UserName"></TextBlock>
-                            <TextBlock Text="Tú: Ya enviaste el reporte?" Classes="LastMessage"></TextBlock>
-                        </StackPanel>
-                        <StackPanel Grid.Column="2">
-                            <TextBlock Text="13:48" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
-                        </StackPanel>
-                    </Grid>
-                </Button>  
-                
-                <!-- User Alicia --> 
-                <Button Classes="AvailableUser">
-                    <Grid ColumnDefinitions="100, 300, *">
-                        <StackPanel Grid.Column="0">
-                            <Image Source="/Assets/Images/Character4.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
-                        </StackPanel>
-                        <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-5">
-                            <TextBlock Text="Alicia García" Classes="UserName"></TextBlock>
-                            <TextBlock Text="Alicia: Ok, le diré a Bianca que te escriba" Classes="LastMessage"></TextBlock>
-                        </StackPanel>
-                        <StackPanel Grid.Column="2">
-                            <TextBlock Text="12:25" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
-                        </StackPanel>
-                    </Grid>
-                </Button>   
-                
-                <!-- User Carlos --> 
-                <Button Classes="AvailableUser">
-                    <Grid ColumnDefinitions="100, 300, *">
-                        <StackPanel Grid.Column="0">
-                            <Image Source="/Assets/Images/Character5.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
-                        </StackPanel>
-                        <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-5">
-                            <TextBlock Text="Carlos Rivera" Classes="UserName"></TextBlock>
-                            <TextBlock Text="Tú: Hola! Ya te sientes mejor?" Classes="LastMessage"></TextBlock>
-                        </StackPanel>
-                        <StackPanel Grid.Column="2">
-                            <TextBlock Text="12:13" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
-                        </StackPanel>
-                    </Grid>
-                </Button>    
-            </StackPanel>
-        </Border>
-        
+                    <!-- Available Users--> 
+                    <local:ViewAvailableUser></local:ViewAvailableUser> 
+                    <local:ViewAvailableUser></local:ViewAvailableUser>
+                    <local:ViewAvailableUser></local:ViewAvailableUser>
+                    <local:ViewAvailableUser></local:ViewAvailableUser>
+                    <local:ViewAvailableUser></local:ViewAvailableUser>
+                </StackPanel>
+            </Border>
+        </Grid>
         
         <Border Grid.Column="1" Padding="20">
-            <Grid RowDefinitions="80, 580, *">
+            <Grid RowDefinitions="80, 680, *">
                 <Grid Grid.Row="0" ColumnDefinitions="600, *">
-                    <StackPanel Grid.Column="1">
-                        <!-- Downloads Button --> 
-                        <Button Classes="transparent" HorizontalAlignment="Right">
-                            <Image Source="/Assets/Images/Downloads.png" Width="40" HorizontalAlignment="Right" Classes="IconOnly"></Image>
-                        </Button>
-                    </StackPanel>
                     
-                    <!-- MyUser Name and Status --> 
-                    <Border Grid.Column="0" Padding="9">
-                        <Grid Grid.Column="0">
-                            <StackPanel>
-                                <TextBlock Text="Bianca García" Margin="2" FontSize="24" Foreground="{DynamicResource EbonyClay}"></TextBlock>
-                                <TextBlock Text="Online" Margin="2" FontSize="18" Foreground="{DynamicResource FontGrey}"></TextBlock>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
+                    <!-- Downloads Button --> 
+                    <Button Classes="transparent" HorizontalAlignment="Right" Grid.Column="1">
+                        <Image Source="/Assets/Images/Downloads.png" Width="40" HorizontalAlignment="Right" Classes="IconOnly"></Image>
+                    </Button>
+                  
+                    <!-- ChatHeader -->
+                    <local:ViewChatHeader Grid.Column="0"></local:ViewChatHeader>
                 </Grid>
                 
+                <!-- ChatMessages -->
                 <Grid Grid.Row="1">
-                    <Border Padding="10">
+                    <Border Padding="20, 10, -10, 0">
                         <Grid>
-                            <StackPanel>
-                                <local:ViewReceivedBubbleTextMessage x:Name="Message1" ReceivedBubbleTextMessage="{Binding Message1}"/>
-                                <local:ViewReceivedBubbleTextMessage x:Name="Message2" ReceivedBubbleTextMessage="{Binding Message2}"/> 
-                                <local:ViewSendedBubbleTextMessage x:Name="Message3" SendedBubbleTextMessage="{Binding Message3}"/>
-                                <local:ViewReceivedBubbleTextMessage x:Name="Message4" ReceivedBubbleTextMessage="{Binding Message4}"/>
-                                <local:ViewSendedBubbleTextMessage x:Name="Message5" SendedBubbleTextMessage="{Binding Message5}"/>
-                                <local:ViewReceivedBubbleTextMessage x:Name="Message6" ReceivedBubbleTextMessage="{Binding Message6}"/>
-                                <local:ViewReceivedBubbleFileMessage x:Name="FileMessage" ReceivedBubbleFileMessage="{Binding FileMessage}"/>
-                                
-                            </StackPanel>
+                            <ScrollViewer AllowAutoHide="True" VerticalScrollBarVisibility="Auto">
+                                <StackPanel x:Name="ChatMessageViewer">
+                                    <local:ViewReceivedBubbleTextMessage x:Name="Message1" ReceivedBubbleTextMessage="{Binding Message1}"/>
+                                    <local:ViewReceivedBubbleTextMessage x:Name="Message2" ReceivedBubbleTextMessage="{Binding Message2}"/> 
+                                    <local:ViewSendedBubbleTextMessage x:Name="Message3" SendedBubbleTextMessage="{Binding Message3}"/>
+                                    <local:ViewReceivedBubbleTextMessage x:Name="Message4" ReceivedBubbleTextMessage="{Binding Message4}"/>
+                                    <local:ViewSendedBubbleTextMessage x:Name="Message5" SendedBubbleTextMessage="{Binding Message5}"/>
+                                    <local:ViewReceivedBubbleTextMessage x:Name="Message6" ReceivedBubbleTextMessage="{Binding Message6}"/>
+                                    <local:ViewReceivedBubbleFileMessage x:Name="FileMessage" ReceivedBubbleFileMessage="{Binding FileMessage}"/>
+                                </StackPanel>
+                            </ScrollViewer>
                         </Grid>
                     </Border>
                 </Grid>
                
+                <!-- PlaceHolder-->
                 <Border Grid.Row="2" Padding="30">
                     <Border Grid.Row="2" Background="White" CornerRadius="15" Padding="12" Height="70" VerticalAlignment="Bottom">
                         <Grid ColumnDefinitions="800, *">
@@ -147,21 +72,33 @@
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
                                      Background="Transparent"
-                                     Foreground="{DynamicResource FontGrey}">
+                                     Foreground="{DynamicResource EbonyClay}"
+                                     BorderBrush="Transparent"
+                                     FontSize="18"
+                                     CaretBrush="{DynamicResource EbonyClay}"
+                                     KeyDown="TextBox_KeyDown"
+                                     Text="{Binding MessageInPlaceHolder, Mode=TwoWay}">
+                                <TextBox.KeyBindings>
+                                    <KeyBinding Gesture="Enter" Command="{Binding SendTextMessageButton}"/>
+                                </TextBox.KeyBindings>
                             </TextBox>
-                        
+                            
                             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Border>
-                                    <Button Classes="transparent">
-                                        <Image Source="/Assets/Images/AddFile.png" VerticalAlignment="Center" HorizontalAlignment="Center" Width="60"></Image>
-                                    </Button>
-                                </Border>
-                        
-                                <Border>
-                                    <Button Classes="transparent">
-                                        <Image Source="/Assets/Images/SendMessage.png" VerticalAlignment="Center" HorizontalAlignment="Center" Width="60"></Image>
-                                    </Button>
-                                </Border>
+                                <!-- Broadcast Button -->
+                                <Button Classes="transparent" Command="{Binding BroadacasteToggle}">
+                                    <Image Source="{Binding BroadcastIcon}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="80"></Image>
+                                </Button>
+                                
+                                <!-- SendFile Button -->
+                                <Button Classes="transparent" Command="{Binding SendFileButton}">
+                                    <Image Source="/Assets/Images/AddFile.png" VerticalAlignment="Center" HorizontalAlignment="Center" Width="80"></Image>
+                                </Button>
+                                
+                                <!-- SendText Button -->
+                                <Button Classes="transparent" Command="{Binding SendTextMessageButton}">
+                                    <Image Source="/Assets/Images/SendMessage.png" VerticalAlignment="Center" HorizontalAlignment="Center" Width="80"></Image>
+                                </Button>
+                             
                             </StackPanel>
                         </Grid>
                     </Border>

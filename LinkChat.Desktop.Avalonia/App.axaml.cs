@@ -3,6 +3,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using LinkChat.Desktop.Avalonia.ViewModels;
 using LinkChat.Desktop.Avalonia.Views;
@@ -27,6 +28,9 @@ public partial class App : Application
             {
                 DataContext = new ChatWindowViewModel(),
             };
+            
+            var topLevel = TopLevel.GetTopLevel(desktop.MainWindow);
+            GlobalSingletonHelper.StorageProvider = topLevel.StorageProvider;
         }
 
         base.OnFrameworkInitializationCompleted();

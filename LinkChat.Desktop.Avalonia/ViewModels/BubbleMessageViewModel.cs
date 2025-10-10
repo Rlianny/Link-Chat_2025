@@ -16,6 +16,7 @@ namespace LinkChat.Desktop.Avalonia.ViewModels;
 
 public abstract partial class BubbleMessageViewModel : ViewModelBase
 {
+    private AppManager _appManager;
     private ChatMessage _message;
     
     [ObservableProperty] private bool _isReactionMenuVisible = false;
@@ -24,7 +25,9 @@ public abstract partial class BubbleMessageViewModel : ViewModelBase
     
     [ObservableProperty] private string _date;
 
-    [ObservableProperty] private Bitmap _emojiImage; 
+    [ObservableProperty] private Bitmap _emojiImage;
+    
+    [ObservableProperty] private Bitmap _confirmationSignal;
     
     private readonly Dictionary<string, string> reactionDictionary = new Dictionary<string, string>()
     {
@@ -35,18 +38,40 @@ public abstract partial class BubbleMessageViewModel : ViewModelBase
         { "sad", "/Assets/Images/sad.png" },
         { "heart", "/Assets/Images/heart.png" },
     };
-    public BubbleMessageViewModel(ChatMessage chatMessage)
+    public BubbleMessageViewModel(ChatMessage chatMessage, AppManager appManager)
     {
+        _appManager = appManager;
         _message = chatMessage;
         _date = DateTime.Now.ToString("HH:mm");
         _emojiImage = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/happy.png"));
+        _confirmationSignal = ImageHelper.LoadFromResource(new  Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/AcceptFontGrey.png"));
         
         if (_message.Reaction != Emoji.None)
         {
             ReactionSet();
         }
+
+        appManager.ChatMessageConfirmed += OnChatMessageConfirmed;
+        appManager.ReactedToMessage += OnReactedToMessage;
     }
-    
+
+    private void OnReactedToMessage(object? sender, ChatMessage message)
+    {
+        if (message.MessageId == _message.MessageId)
+        {
+            ReactionSet();    
+        }
+            
+    }
+
+    private void OnChatMessageConfirmed(object? sender, ChatMessage message)
+    {
+        if (message.MessageId == _message.MessageId)
+        {
+            ConfirmationSignal = ImageHelper.LoadFromResource(new  Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/Accept.png"));
+        }
+    }
+
     private void ReactionSet()
     {
         Console.WriteLine("Se notificó correctamente");
@@ -78,27 +103,25 @@ public abstract partial class BubbleMessageViewModel : ViewModelBase
         switch (emoji)
         {
            case "happy":
-               _message.SetReaction(Emoji.HappyFace);
+               _appManager.SendReaction(Emoji.HappyFace, _message.MessageId);
                break;
            case "like":
-               _message.SetReaction(Emoji.Like);
+               _appManager.SendReaction(Emoji.Like, _message.MessageId);
                break;
            case "dislike":
-               _message.SetReaction(Emoji.Dislike);
+               _appManager.SendReaction(Emoji.Dislike, _message.MessageId);
                break;
            case "angry":
-               _message.SetReaction(Emoji.AngryFace);
+               _appManager.SendReaction(Emoji.AngryFace, _message.MessageId);
                break;
            case "sad":
-               _message.SetReaction(Emoji.SadFace);
+               _appManager.SendReaction(Emoji.SadFace, _message.MessageId);
                break;
            case  "heart":
-               _message.SetReaction(Emoji.Heart);
+               _appManager.SendReaction(Emoji.Heart, _message.MessageId);
                break;
         }
-        ;
         ReactionSet();
         IsReactionMenuVisible = !IsReactionMenuVisible;
     }
-    
 }
