@@ -55,7 +55,7 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <!-- Aquí defines cómo se representa cada ChatMessage -->
-                                            <local:/>
+                                            
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl> 

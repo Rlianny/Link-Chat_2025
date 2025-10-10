@@ -17,10 +17,18 @@ public class ChatMessageTemplateSelector : IDataTemplate
         {
             switch (message)
             {
-                case
+                case TextMessage textMessage:
+                    if (textMessage.UserName == GlobalSingletonHelper.MyUserName)
+                        return SendedFileMessage?.Build(param); 
+                    return ReceivedTextMessage?.Build(param);
+                case File fileMessage:
+                    if (fileMessage.UserName == GlobalSingletonHelper.MyUserName)
+                        return SendedFileMessage?.Build(param);
+                    return ReceivedFileMessage?.Build(param);
+                default: return new TextBlock { Text = $"Not handled type: {message.GetType().Name}" };
             } 
         }
-        return new TextBlock { Text = "Objeto no válido" };
+        return new TextBlock { Text = "Not valid object" };
     }
 
     public bool Match(object? data)
