@@ -49,7 +49,7 @@ public class UserService : IUserService
     {
         HeartbeatMessage heartbeatToSend = new HeartbeatMessage(self.UserName, DateTime.Now, self.MacAddress);
         byte[] frame = protocolService.CreateFrameToSend(null, heartbeatToSend, true);
-        networkService.SendFrameAsync(frame,2);
+        networkService.SendFrameAsync(frame,0);
     }
 
     public List<User> GetAvailableUsers()
