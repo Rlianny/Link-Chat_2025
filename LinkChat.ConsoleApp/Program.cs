@@ -26,7 +26,7 @@ public class Program
         IMessagingService messagingService = new MessagingService(protocolService, fileTransferService, userService, networkService);
 
         networkService.StartListening();
-        userService.UpdateUsersStatuses();
+        //userService.UpdateUsersStatuses();
 
         while (true)
         {
