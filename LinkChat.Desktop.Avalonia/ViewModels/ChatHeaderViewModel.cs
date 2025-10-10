@@ -14,10 +14,14 @@ public partial class ChatHeaderViewModel : ViewModelBase
     [ObservableProperty]
     private string _userStatus;
 
+    [ObservableProperty]
+    private User? _currentReceiverUser;
+
     public ChatHeaderViewModel(User user, AppManager appManager)
     {
-        Username = user.UserName;
-        UserStatus = user.Status.ToString();
+        CurrentReceiverUser = user;
+        Username = CurrentReceiverUser.UserName;
+        UserStatus = CurrentReceiverUser.Status.ToString();
 
         _appManager = appManager;
         _appManager.UserStatusUpdated += OnUserStatusUpdated;
@@ -48,5 +52,12 @@ public partial class ChatHeaderViewModel : ViewModelBase
             UserStatus = "Typing...";
             await Task.Delay(2000);
         }
+    }
+
+    public void UpdateUser(User user)
+    {
+        CurrentReceiverUser = user;
+        Username = CurrentReceiverUser.UserName;
+        UserStatus = CurrentReceiverUser.Status.ToString(); 
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -41,20 +42,33 @@ public partial class AvailableUserViewModel: ViewModelBase
 
     public void OnTextMessageExchanged(object? sender, ChatMessage chatMessage)
     {
-        if(chatMessage.UserName == _user.UserName || chatMessage.UserName == appManager.GetCurrentSelfUser().UserName)
-        Update();
+        Console.WriteLine($"Message received in AvailableUserViewModel for user {User.UserName}");
+        if(chatMessage.UserName == User.UserName || chatMessage.UserName == appManager.GetCurrentSelfUser().UserName)
+            Update();
     }
 
     private void Update()
     {
-        ChatMessage chatMessage = appManager.GetLastMessageByUser(_user.UserName);
+        ChatMessage chatMessage = appManager.GetLastMessageByUser(User.UserName);
+        Console.WriteLine("Avaliable User will be updated");
         if (chatMessage is TextMessage textMessage)
         {
-            LastMessage = textMessage.Content;
+            Console.WriteLine($"The last message was: {textMessage.Content}");
+            string sender = String.Empty;
+            if(textMessage.UserName == User.UserName)
+                sender = User.UserName;
+            else sender = appManager.GetCurrentSelfUser().UserName;
+            
+            LastMessage = $"{sender}: {textMessage.Content}";
         }
         else if (chatMessage is File file)
         {
-            LastMessage = file.Name;
+            string sender = String.Empty;
+            if(file.UserName == User.UserName)
+                sender = User.UserName;
+            else sender = appManager.GetCurrentSelfUser().UserName;
+            
+            LastMessage = $"{sender}: {file.Name}";
         }
 
         LastTimestamp = chatMessage.TimeStamp.ToString("HH:mm");
