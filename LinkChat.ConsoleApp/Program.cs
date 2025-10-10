@@ -46,6 +46,11 @@ public class Program
 
             fileTransferService.SendFile(receiver, filePath);
 
+            System.Console.WriteLine("Escriba el nombre del mensaje a enviar a ese usuario");
+            string message = Console.ReadLine();
+
+            messagingService.SendTextMessage(receiver, message);
+
         }
     }
 }

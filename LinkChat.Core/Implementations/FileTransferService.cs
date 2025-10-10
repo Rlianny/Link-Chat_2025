@@ -11,6 +11,7 @@ namespace LinkChat.Core.Implementations;
 
 public class FileTransferService : IFileTransferService
 {
+    private const int WINDOW_SIZE = 32;
     Dictionary<string, Models.File> Files = [];
     Dictionary<string, Dictionary<int, FileChunk>> FileChunks = [];
     Dictionary<string, FileStart> FileStarts = [];
@@ -94,22 +95,38 @@ public class FileTransferService : IFileTransferService
             while (!ConfirmingStarts[start.FileId])
             {
                 byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), start, false);
-                await networkService.SendFrameAsync(frame);
+                await networkService.SendFrameAsync(frame, 4);
+                await Task.Delay(100);
             }
         });
         await sendAndWait;
-        bool changed = true;
-        while (changed)
+        for (int i = 0; i < chunks.Count; i += WINDOW_SIZE)
         {
-            changed = false;
-            foreach (var chunk in chunks)
+            int windowEnd = Math.Min(i + WINDOW_SIZE, chunks.Count);
+
+            for (int j = i; j < windowEnd; j++)
             {
-                if (!Confirmations[start.FileId][chunk.ChunkNumber])
+                byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), chunks[j], false);
+                await networkService.SendFrameAsync(frame, 5);
+            }
+            while (true)
+            {
+                int pending = 0;
+                for (int j = i; j < windowEnd; j++)
                 {
-                    changed = true;
-                    byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), chunk, false);
-                    await networkService.SendFrameAsync(frame);
+                    if (!Confirmations[start.FileId].ContainsKey(j))
+                    {
+                        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), chunks[j], false);
+                        await networkService.SendFrameAsync(frame, 5);
+                        pending++;
+                    }
                 }
+
+                if (pending == 0)
+                    break;
+
+                int delay = pending > 10 ? 50 : 20;
+                await Task.Delay(50);
             }
         }
     }
@@ -125,7 +142,6 @@ public class FileTransferService : IFileTransferService
             Confirmations[fileAck.FileID][fileAck.ChunkNumber] = true;
         }
     }
-
 
     private string GetUserDownloadsPath()
     {
@@ -174,6 +190,7 @@ public class FileTransferService : IFileTransferService
     private async void OnFileChunkFrameReceived(FileChunk fileChunk)
     {
         await SendChunkConfirmation(fileChunk);
+        userService.UpdateLastSeen(fileChunk.UserName);
         if (FileChunks.ContainsKey(fileChunk.FileId))
         {
             if (!FileChunks[fileChunk.FileId].ContainsKey(fileChunk.ChunkNumber))
@@ -239,22 +256,21 @@ public class FileTransferService : IFileTransferService
             FileStarts.Add(fileStart.FileId, fileStart);
             FileChunks.Add(fileStart.FileId, []);
             Task task = SendStartConfirmation(fileStart);
+            userService.UpdateLastSeen(fileStart.UserName);
             await task;
         }
-        System.Console.WriteLine($"Recibiendo {fileStart.FileId} mediante {fileStart.TotalChunks} chunks");
     }
     public async Task SendChunkConfirmation(FileChunk fileChunk)
     {
-
         FileChunkAck fileChunkAck = new FileChunkAck(fileChunk.UserName, DateTime.Now, fileChunk.FileId, fileChunk.ChunkNumber);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileChunk.UserName), fileChunkAck, false);
-        await networkService.SendFrameAsync(frame);
+        await networkService.SendFrameAsync(frame, 1);
     }
     public async Task SendStartConfirmation(FileStart fileStart)
     {
         FileStartAck fileStartAck = new FileStartAck(fileStart.UserName, DateTime.Now, fileStart.FileId);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileStart.UserName), fileStartAck, false);
-        await networkService.SendFrameAsync(frame);
+        await networkService.SendFrameAsync(frame, 1);
     }
 
     public Models.File GetFileById(string messageId)

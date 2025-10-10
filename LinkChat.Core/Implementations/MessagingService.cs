@@ -78,7 +78,7 @@ public class MessagingService : IMessagingService
             while (!Confirmations[textMessage.MessageId])
             {
                 byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), textMessage, false);
-                await networkService.SendFrameAsync(frame);
+                await networkService.SendFrameAsync(frame, 2);
                 System.Console.WriteLine($"Message sended with ID {textMessage.MessageId}");
                 await Task.Delay(3000);
                 TextMessageExchanged.Invoke(textMessage);
@@ -92,22 +92,20 @@ public class MessagingService : IMessagingService
     {
         TextMessage textMessage = new TextMessage(userService.GetSelfUser().UserName, DateTime.Now, Tools.Tools.GetNewId(userService), content);
         byte[] frame = protocolService.CreateFrameToSend(null, textMessage, true);
-        networkService.SendFrameAsync(frame);
+        networkService.SendFrameAsync(frame, 2);
         TextMessageExchanged.Invoke(textMessage);
         System.Console.WriteLine($"Broadcast message sended with ID {textMessage.MessageId}");
-
-        //pending to decide acks or not
     }
 
     public void ReactToMessage(string messageId, Emoji emoji)
     {
         MessageReaction messageReaction = new MessageReaction(userService.GetSelfUser().UserName, DateTime.Now, messageId, emoji);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(GetTextMessageById(messageId).UserName), messageReaction, false);
-        networkService.SendFrameAsync(frame);
+        networkService.SendFrameAsync(frame, 3);
         ReactedToMessage.Invoke(GetTextMessageById(messageId));
     }
 
-    private void OnChatAckFrameReceived(ChatAck chatAck)
+    private async void OnChatAckFrameReceived(ChatAck chatAck)
     {
         if (Confirmations.ContainsKey(chatAck.MessageId))
         {
@@ -141,7 +139,7 @@ public class MessagingService : IMessagingService
     {
         ChatAck ack = new ChatAck(chatMessage.UserName, DateTime.Now, chatMessage.MessageId);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(chatMessage.UserName), ack, false);
-        await networkService.SendFrameAsync(frame);
+        await networkService.SendFrameAsync(frame, 1);
         ChatMessageConfirmed.Invoke(chatMessage);
         System.Console.WriteLine($"Confirmation sended to message with ID {chatMessage.MessageId}");
     }
