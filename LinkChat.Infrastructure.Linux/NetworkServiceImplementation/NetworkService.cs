@@ -1,9 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using LinkChat.Core.Models;
 using LinkChat.Core.Services;
 using LinkChat.Infrastructure.Linux.Native.Methods;
 using LinkChat.Infrastructure.Linux.Native.Structs;
 using LinkChat.Infrastructure.Linux.Native.Constants;
-using System.Runtime.InteropServices;
 using LinkChat.Core.Tools;
 
 namespace LinkChat.Infrastructure
@@ -17,8 +20,10 @@ namespace LinkChat.Infrastructure
         private readonly string interfaceName;
         private int socketFd = -1; // Socket File Descriptor, -1 means it is not initialized
         private int interfaceIndex;
-        private byte[] localMacAddress = new byte[6];
         private readonly object sendLock = new object();
+        private bool isRunning = false;
+        private readonly object queueLock = new object();
+        private readonly PriorityQueue<byte[], int> queue = new PriorityQueue<byte[], int>();
 
         public event Action<byte[]>? FrameReceived;
 
@@ -27,35 +32,35 @@ namespace LinkChat.Infrastructure
             this.interfaceName = interfaceName;
             CreateSocket();
             GetInterfaceIndex();
-            GetLocalMacAddress();
             BindSocketToInterface();
+            isRunning = true;
             StartSendLoop();
         }
 
         private void StartSendLoop()
         {
-            sendTask = Task.Run(async () =>
-            {
-                while (isRunning)
-                {
-                    byte[]? frame = null;
+            Task sendTask = Task.Run(async () =>
+              {
+                  while (isRunning)
+                  {
+                      byte[]? frame = null;
 
-                    lock (queueLock)
-                    {
-                        if (queue.Count > 0)
-                            frame = queue.Dequeue();
-                    }
+                      lock (queueLock)
+                      {
+                          if (queue.Count > 0)
+                              frame = queue.Dequeue();
+                      }
 
-                    if (frame != null)
-                    {
-                        SendFrameInternal(frame);
-                    }
-                    else
-                    {
-                        await Task.Delay(10);
-                    }
-                }
-            });
+                      if (frame != null)
+                      {
+                          await SendFrameInternal(frame);
+                      }
+                      else
+                      {
+                          await Task.Delay(10);
+                      }
+                  }
+              });
             Console.WriteLine("Send loop started in background");
         }
 
@@ -129,10 +134,7 @@ namespace LinkChat.Infrastructure
             this.interfaceIndex = ifr.ifr_ifindex;
         }
 
-        private void GetLocalMacAddress()
-        {
-            localMacAddress = Tools.LocalMacAddress;
-        }
+
 
         private void BindSocketToInterface()
         {
