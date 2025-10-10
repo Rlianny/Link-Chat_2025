@@ -56,7 +56,6 @@ public class MessagingService : IMessagingService
         }
         
         Conversation[receiverUserName].Add(chatMessage);
-       
     }
 
     public TextMessage GetTextMessageById(string textMessageId)
@@ -78,19 +77,18 @@ public class MessagingService : IMessagingService
 
     public async Task SendTextMessage(string receiverUserName, string content)
     {
-        Console.WriteLine("SendTestMessage has been called");
         TextMessage textMessage = new TextMessage(userService.GetSelfUser().UserName, DateTime.Now, Tools.Tools.GetNewId(userService), content);
         Confirmations.Add(textMessage.MessageId, false);
 
-        //try
-        //{
+        try
+        {
             byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), textMessage, false);
             await networkService.SendFrameAsync(frame, 2);
             System.Console.WriteLine($"Message sended with ID {textMessage.MessageId}");
 
             AddChatMessage(receiverUserName, textMessage);
             TextMessageExchanged?.Invoke(textMessage);
-            System.Console.WriteLine($"A new Text Message EXchanged Event will be sended to backend: {textMessage.Content}");
+            
 
             Task sendAndWait = Task.Run(async () =>
             {
@@ -102,12 +100,12 @@ public class MessagingService : IMessagingService
                     System.Console.WriteLine($"Retrying message with ID {textMessage.MessageId}");
                 }
             });
-        //}
-        //catch (Exception ex)
-        //{
-            //ErrorFounded?.Invoke($"Error sending message: {ex.Message}");
-            //System.Console.WriteLine($"Error sending message: {ex.Message}");
-        //}
+        }
+        catch (Exception ex)
+        {
+            ErrorFounded?.Invoke($"Error sending message: {ex.Message}");
+            System.Console.WriteLine($"Error sending message: {ex.Message}");
+        }
     }
 
     public void SendBroadcastTextMessage(string content)
