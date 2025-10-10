@@ -59,7 +59,7 @@ namespace LinkChat.Infrastructure
             Console.WriteLine("Send loop started in background");
         }
 
-        public void SendFrameAsync(byte[] frame, int priority)
+        public Task SendFrameAsync(byte[] frame, int priority)
         {
             lock (queueLock)
             {
