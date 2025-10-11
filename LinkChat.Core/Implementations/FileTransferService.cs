@@ -125,11 +125,9 @@ public class FileTransferService : IFileTransferService
                 await networkService.SendFrameAsync(frame, 5);
                 Console.WriteLine($"[SendFile] Sent chunk {j}/{chunks.Count} - fileId={start.FileId} bytes={chunks[j].Data.Length}");
             }
-<<<<<<< HEAD
-            Task.Delay(50);
-=======
+
             await Task.Delay(50);
->>>>>>> 89fa7a90b03743d91e3d312e9f996c3899a3dd1e
+
             while (true)
             {
                 int pending = 0;
