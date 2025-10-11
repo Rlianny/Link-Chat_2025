@@ -41,7 +41,7 @@ public class MessagingService : IMessagingService
 
     private void OnFileSended(Models.File file)
     {
-        AddChatMessage(file);
+        AddChatMessage(userService.GetSelfUser().UserName, file);
         FileTransferred?.Invoke(file);
     }
 
@@ -53,17 +53,18 @@ public class MessagingService : IMessagingService
         }
         return new List<ChatMessage>();
     }
-    private void AddChatMessage(ChatMessage chatMessage)
+    private void AddChatMessage(string userSender, ChatMessage chatMessage)
     {
         if (!Messages.ContainsKey(chatMessage.MessageId))
         {
             Messages.Add(chatMessage.MessageId, chatMessage);
         }
-        if (!Conversation.ContainsKey(chatMessage.UserName))
+        if (!Conversation.ContainsKey(userSender))
         {
-            Conversation.Add(chatMessage.UserName, []);
+            Conversation.Add(userSender, []);
         }
-        Conversation[chatMessage.UserName].Add(chatMessage);
+
+        Conversation[userSender].Add(chatMessage);
     }
 
     public TextMessage GetTextMessageById(string textMessageId)
@@ -85,7 +86,6 @@ public class MessagingService : IMessagingService
 
     public async Task SendTextMessage(string receiverUserName, string content)
     {
-        Console.WriteLine("SendTestMessage has been called");
         TextMessage textMessage = new TextMessage(userService.GetSelfUser().UserName, DateTime.Now, Tools.Tools.GetNewId(userService), content);
         Confirmations.Add(textMessage.MessageId, false);
 
@@ -95,8 +95,9 @@ public class MessagingService : IMessagingService
             await networkService.SendFrameAsync(frame, 2);
             System.Console.WriteLine($"Message sended with ID {textMessage.MessageId}");
 
-            AddChatMessage(textMessage);
+            AddChatMessage(receiverUserName, textMessage);
             TextMessageExchanged?.Invoke(textMessage);
+
             System.Console.WriteLine($"A new Text Message EXchanged Event will be sended to backend: {textMessage.Content}");
             await Task.Delay(3000);
             Task sendAndWait = Task.Run(async () =>
@@ -150,7 +151,7 @@ public class MessagingService : IMessagingService
     private async void OnTextMessageFrameReceived(TextMessage textMessage)
     {
         Console.WriteLine("received: " + textMessage.Content);
-        AddChatMessage(textMessage);
+        AddChatMessage(textMessage.UserName, textMessage);
         TextMessageExchanged?.Invoke(textMessage);
         System.Console.WriteLine($"A new Text Message EXchanged Event will be sended to backend: {textMessage.Content}");
         Console.WriteLine($"{textMessage.UserName}:{textMessage.Content}");
@@ -179,7 +180,7 @@ public class MessagingService : IMessagingService
     }
     private void OnFileMessageFrameReceived(Models.File file)
     {
-        AddChatMessage(file);
+        AddChatMessage(file.UserName, file);
         if (Files.ContainsKey(file.MessageId))
         {
             ErrorFounded?.Invoke($"Already exist a message with ID {file.MessageId}");

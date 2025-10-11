@@ -23,7 +23,6 @@ using System;
 public partial class ChatWindowViewModel : ViewModelBase
 {
     public AppManager AppManager { get; }
-    private User? _currentRecieverUser;
 
     private bool _broadcast = false;
     [ObservableProperty]
@@ -31,12 +30,19 @@ public partial class ChatWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private IStorageProvider? _storageProvider;
-
-    public ChatWindowViewModel(AppManager appManager)
+    
+    [ObservableProperty]
+    private User? _currentReceiverUser;
+    
+    public ChatHeaderViewModel HeaderViewModel { get; set; }
+    
+    partial void OnCurrentReceiverUserChanged(User? value)
     {
-        AppManager = appManager;
-        AppManager.NewUserDetected += OnNewUserDetected;
-        AppManager.UserPruned += OnUserPruned;
+        if (value != null)
+        {
+            Console.WriteLine($"Updating header with user: {value.UserName}"); // Debug log
+            HeaderViewModel.CurrentReceiverUser = value;
+        }
     }
 
     private void OnNewUserDetected(object? sender, User newUser)
@@ -96,18 +102,19 @@ public partial class ChatWindowViewModel : ViewModelBase
         AppManager = new AppManager(networkService, protocolService, userService, fileTransferService, messagingService);
         _broadcastIcon = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/BroadcastDisabledBold.png"));
 
+        HeaderViewModel = new ChatHeaderViewModel(AppManager.GetCurrentSelfUser(), AppManager);
+        
         networkService.StartListening();
         //userService.UpdateUsersStatuses();
 
         AppManager.NewUserDetected += OnNewUserDetected;
         AppManager.TextMessageExchanged += OnTextMessageExchanged;
-
     }
 
     private void OnTextMessageExchanged(object? sender, ChatMessage e)
     {
         Console.WriteLine("Se ha detectado un nuevo mensaje en el frontend");
-        if (e.UserName == _currentRecieverUser.UserName || e.UserName == AppManager.GetCurrentSelfUser().UserName)
+        if (e.UserName == CurrentReceiverUser.UserName || e.UserName == AppManager.GetCurrentSelfUser().UserName)
         {
             AddNewChatMessage(e);
         }
@@ -133,9 +140,9 @@ public partial class ChatWindowViewModel : ViewModelBase
         });
 
         IStorageFile? selectedFile = fileResults.FirstOrDefault();
-        if (selectedFile != null && _currentRecieverUser != null)
+        if (selectedFile != null && CurrentReceiverUser != null)
         {
-            await AppManager.SendFileMessage(selectedFile.Path.AbsolutePath.ToString(), _currentRecieverUser.UserName);
+            await AppManager.SendFileMessage(selectedFile.Path.AbsolutePath.ToString(), CurrentReceiverUser.UserName);
         }
     }
 
@@ -147,9 +154,9 @@ public partial class ChatWindowViewModel : ViewModelBase
         {
             AppManager.SendBroadcast(MessageInPlaceHolder);
         }
-        else if (_currentRecieverUser != null)
+        else if (CurrentReceiverUser != null)
         {
-            AppManager.SendTextMessage(MessageInPlaceHolder, _currentRecieverUser.UserName);
+            AppManager.SendTextMessage(MessageInPlaceHolder, CurrentReceiverUser.UserName);
             
         }
         MessageInPlaceHolder =  string.Empty;
@@ -158,12 +165,29 @@ public partial class ChatWindowViewModel : ViewModelBase
 
     public void ReloadChat(string newReceiverName)
     {
-        _currentRecieverUser = AppManager.GetUserByName(newReceiverName);
-        if (_currentRecieverUser != null)
+        if (string.IsNullOrEmpty(newReceiverName))
+            return;
+        
+        try 
         {
-            List<ChatMessage> chatMessages = AppManager.GetChatHistory(_currentRecieverUser.UserName);
-            foreach (var chatMessage in chatMessages)
-                AddNewChatMessage(chatMessage);
+            var user = AppManager.GetUserByName(newReceiverName);
+            if (user != null)
+            {
+                Console.WriteLine($"Reloading chat for user: {user.UserName}"); // Debug log
+                CurrentReceiverUser = user;
+               
+                HeaderViewModel.UpdateUser(CurrentReceiverUser);
+                if (CurrentReceiverUser != null)
+                {
+                    List<ChatMessage> chatMessages = AppManager.GetChatHistory(CurrentReceiverUser.UserName);
+                    foreach (var chatMessage in chatMessages)
+                        AddNewChatMessage(chatMessage);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading chat: {ex.Message}");
         }
     }
 
