@@ -80,7 +80,7 @@
                                                Foreground="{DynamicResource FontGrey}"
                                                FontSize="12">
                                     </TextBlock>
-                                    <Image Source="/Assets/Images/Accept.png"></Image>
+                                    <Image Source="{Binding ConfirmationSignal}"></Image>
                                 </StackPanel>
                             </Grid>
                         </Border>

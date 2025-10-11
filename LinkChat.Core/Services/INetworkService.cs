@@ -6,6 +6,7 @@ namespace LinkChat.Core.Services
     public interface INetworkService
     {
         public Task SendFrameAsync(byte[] frame, int priority);
+        public Task SendFrameInternal(byte[] frame);
         public void StartListening();
         public event Action<byte[]>? FrameReceived;
     }

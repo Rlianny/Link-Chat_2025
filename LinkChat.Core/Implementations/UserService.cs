@@ -60,13 +60,9 @@ public class UserService : IUserService
     private void SendHeartbeatRequest()
     {
         var timestamp = DateTime.Now;
-       // Console.WriteLine($"[{timestamp:HH:mm:ss.fff}] SENDING Heartbeat from {self.UserName}");
-        
         HeartbeatMessage heartbeatToSend = new HeartbeatMessage(self.UserName, timestamp, self.MacAddress);
         byte[] frame = protocolService.CreateFrameToSend(null, heartbeatToSend, true);
-        networkService.SendFrameAsync(frame, 0);
-        
-       // Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Heartbeat enqueued");
+        networkService.SendFrameInternal(frame);
     }
 
     public List<User> GetAvailableUsers()

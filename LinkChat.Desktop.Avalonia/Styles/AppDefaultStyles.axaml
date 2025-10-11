@@ -77,31 +77,102 @@
         <Setter Property="FontSize" Value="18"></Setter>
     </Style>
     
-    <Style Selector="ScrollBar">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Width" Value="8"/>
-    </Style>
-    
-    <Style Selector="ScrollBar /template/ Thumb#thumb">
+   <Style Selector="ScrollBar:vertical">
+        <Setter Property="Width" Value="12"/> 
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Template">
             <ControlTemplate>
-                <Border CornerRadius="4"
-                        Background="#f2f2f2"/>
+                <Border Background="Transparent" 
+                        Padding="0">
+                    <Grid RowDefinitions="*">
+                        <Border Name="PART_TrackBackground" 
+                               Background="Transparent"/>
+                        
+                        <Track Name="PART_Track" 
+                               IsDirectionReversed="False">
+                            <Track.DecreaseButton>
+                                <RepeatButton Name="PART_PageDecButton" 
+                                              Background="Transparent" 
+                                              Opacity="0"/> 
+                            </Track.DecreaseButton>
+                            <Track.IncreaseButton>
+                                <RepeatButton Name="PART_PageIncButton" 
+                                              Background="Transparent" 
+                                              Opacity="0"/> 
+                            </Track.IncreaseButton>
+                            <Thumb Name="PART_Thumb" 
+                                   Background="#f2f2f2" 
+                                   BorderThickness="0" 
+                                   CornerRadius="6" 
+                                   MinHeight="50"
+                                   Width="10"/> 
+                        </Track>
+                    </Grid>
+                </Border>
             </ControlTemplate>
         </Setter>
+    </Style>
+    
+    <Style Selector="ScrollBar:horizontal">
+        <Setter Property="Height" Value="12"/> 
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Background="Transparent" 
+                        Padding="0">
+                    
+                    <Grid ColumnDefinitions="*">
+                        <Border Name="PART_TrackBackground" 
+                               Background="Transparent"/>
+                        <Track Name="PART_Track" 
+                               IsDirectionReversed="False"
+                               Orientation="Horizontal">
+                            <Track.DecreaseButton>
+                                <RepeatButton Name="PART_PageDecButton" 
+                                              Background="Transparent" 
+                                              Opacity="0"/>
+                            </Track.DecreaseButton>
+                            <Track.IncreaseButton>
+                                <RepeatButton Name="PART_PageIncButton" 
+                                              Background="Transparent" 
+                                              Opacity="0"/> 
+                            </Track.IncreaseButton>
+                            <Thumb Name="PART_Thumb" 
+                                   Background="#f2f2f2" 
+                                   BorderThickness="0" 
+                                   CornerRadius="6" 
+                                   MinWidth="50"
+                                   Height="10"/> 
+                        </Track>
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    
+    <Style Selector="ScrollBar /template/ Thumb#PART_Thumb:pointerover">
+        <Setter Property="Background" Value="#f2f2f2"/>
+    </Style>
+    
+    <Style Selector="ScrollBar /template/ Thumb#PART_Thumb:pressed">
+        <Setter Property="Background" Value="#f2f2f2"/>
+    </Style>
+    
+    <Style Selector="ScrollBar /template/ RepeatButton.LineButton">
+        <Setter Property="Opacity" Value="0"/>
     </Style>
     
     <Style Selector="ScrollBar /template/ Thumb#thumb:pointerover">
         <Setter Property="Background" Value="#f2f2f2"/>
     </Style>
-    
+
     <Style Selector="ScrollBar /template/ Thumb#thumb:pressed">
         <Setter Property="Background" Value="#f2f2f2"/>
     </Style>
-    
-    <Style Selector="ScrollBar /template/ RepeatButton">
-        <Setter Property="IsVisible" Value="False"/>
+
+    <Style Selector="ScrollBar:horizontal">
+        <Setter Property="Height" Value="8"/>
+        <Setter Property="MinHeight" Value="8"/>
     </Style>
     
     <Style Selector="Button.AvailableUser">
