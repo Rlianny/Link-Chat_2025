@@ -91,13 +91,13 @@ public partial class ChatWindowViewModel : ViewModelBase
     public ChatWindowViewModel()
     {
         GlobalSingletonHelper.ChatWindowViewModel = this;
-        GlobalSingletonHelper.SetUserName("Lianny");
+        GlobalSingletonHelper.SetUserName("Kevin");
         
         string interfaceName = NetworkInterfaceSelector.GetBestNetworkInterfaceName();
         INetworkService networkService = new LinuxNetworkService(interfaceName);
         //INetworkService networkService = new FakeNetworkService();
         IProtocolService protocolService = new ProtocolService(networkService);
-        IUserService userService = new UserService(protocolService, networkService, "Lianny");
+        IUserService userService = new UserService(protocolService, networkService, "Kevin");
         IFileTransferService fileTransferService = new FileTransferService(protocolService, networkService, userService);
         IMessagingService messagingService = new MessagingService(protocolService, fileTransferService, userService, networkService);
         AppManager = new AppManager(networkService, protocolService, userService, fileTransferService, messagingService);

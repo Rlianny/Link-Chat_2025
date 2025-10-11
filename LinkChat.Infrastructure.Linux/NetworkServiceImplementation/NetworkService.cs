@@ -46,14 +46,27 @@ namespace LinkChat.Infrastructure
                   {
                       byte[]? frame = null;
 
-
-                      if (queue.Count > 0)
-                          frame = queue.Dequeue();
-
+                      lock (queueLock)
+                      {
+                          if (queue.Count > 0)
+                          {
+                              frame = queue.Dequeue();
+                              Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Frame DEQUEUED, remaining={queue.Count}");
+                          }
+                      }
 
                       if (frame != null)
                       {
-                          await SendFrameInternal(frame);
+                          try
+                          {
+                              Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Sending frame to network...");
+                              await SendFrameInternal(frame);
+                              Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Frame SENT successfully");
+                          }
+                          catch (Exception ex)
+                          {
+                              Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Error sending frame: {ex.Message}");
+                          }
                       }
                       else
                       {
@@ -66,9 +79,11 @@ namespace LinkChat.Infrastructure
 
         public Task SendFrameAsync(byte[] frame, int priority)
         {
+            var timestamp = DateTime.Now;
             lock (queueLock)
             {
                 queue.Enqueue(frame, priority);
+                Console.WriteLine($"[{timestamp:HH:mm:ss.fff}] Frame ENQUEUED priority={priority}, queue size={queue.Count}");
             }
             return Task.CompletedTask;
         }
