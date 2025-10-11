@@ -184,6 +184,7 @@ public partial class ChatWindowViewModel : ViewModelBase
                 CurrentReceiverUser = user;
                
                 HeaderViewModel.UpdateUser(CurrentReceiverUser);
+                CurrentChatHistory.Clear();
                 if (CurrentReceiverUser != null)
                 {
                     List<ChatMessage> chatMessages = AppManager.GetChatHistory(CurrentReceiverUser.UserName);
