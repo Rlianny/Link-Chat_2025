@@ -58,7 +58,7 @@ namespace LinkChat.Infrastructure
                       }
                       else
                       {
-                          await Task.Delay(10);
+                          await Task.Delay(1);
                       }
                   }
               });
@@ -180,7 +180,17 @@ namespace LinkChat.Infrastructure
                         byte[] frameData = new byte[receivedBytes];
                         Array.Copy(buffer, 0, frameData, 0, receivedBytes);
 
-                        FrameReceived?.Invoke(frameData);
+                        Task.Run(() =>
+                        {
+                            try
+                            {
+                                FrameReceived?.Invoke(frameData);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Error processing received frame: {ex.Message}");
+                            }
+                        });
                     }
                 }
                 catch (Exception ex)
