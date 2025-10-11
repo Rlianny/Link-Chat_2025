@@ -31,7 +31,6 @@ public class AppManager
         _messagingService.UserIsTyping += OnUserIsTyping;
         _userService.UserDisconnected += OnUserPruned; 
         _userService.NewUserConnected += OnNewUserDetected;
-        _messagingService.UserIsTyping += OnUserIsTyping;
     }
 
     public EventHandler<ChatMessage> TextMessageExchanged;
@@ -130,9 +129,9 @@ public class AppManager
         Console.WriteLine("Frontend: A Broadcast Sent");
     }
 
-    public async Task SendUserStatusTyping()
+    public async Task SendUserStatusTyping(string receiverUserName)
     {
-        Console.WriteLine("Frontend: Sending user status typing...");
+        _messagingService.SendUserStatusTyping(receiverUserName); 
     }
 
     public async Task SetSelfUserData(string userName, string gender)

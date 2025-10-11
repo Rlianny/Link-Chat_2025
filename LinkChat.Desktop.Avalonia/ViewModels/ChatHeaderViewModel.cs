@@ -51,12 +51,12 @@ public partial class ChatHeaderViewModel : ViewModelBase
 
     private async void OnUserStatusUpdated(object? sender, User user)
     {
-        Console.WriteLine("");
         if (user.UserName == Username)
         {
             // Cancel any existing typing timer
             _typingCancellationTokenSource?.Cancel();
             _typingCancellationTokenSource = new CancellationTokenSource();
+            var token = _typingCancellationTokenSource.Token;
 
             // Store the current status
             var originalStatus = CurrentReceiverUser?.Status.ToString() ?? "Online";
@@ -66,23 +66,27 @@ public partial class ChatHeaderViewModel : ViewModelBase
 
             try
             {
-                Task.Run(async () =>
+                // Wait for 2 seconds then revert to original status
+                await Task.Delay(TimeSpan.FromSeconds(2), token);
+
+                // Only update if we haven't been canceled by a new typing notification
+                if (!token.IsCancellationRequested)
                 {
-                    try
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(2), _typingCancellationTokenSource.Token);
-                    }
-                    catch (TaskCanceledException)
-                    {
-                        // Task was cancelled, ignore
-                    }
-                });
+                    UserStatus = originalStatus;
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                // Task was cancelled, ignore
             }
             finally
             {
-                _typingCancellationTokenSource?.Dispose();
-                _typingCancellationTokenSource = null;
-            } 
+                if (_typingCancellationTokenSource?.Token == token)
+                {
+                    _typingCancellationTokenSource?.Dispose();
+                    _typingCancellationTokenSource = null;
+                }
+            }
         }
     }
 

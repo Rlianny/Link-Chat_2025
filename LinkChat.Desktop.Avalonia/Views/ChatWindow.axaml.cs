@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Specialized;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 
 namespace LinkChat.Desktop.Avalonia.Views;
 using LinkChat.Core.Models;
@@ -18,16 +20,16 @@ public partial class ChatWindow : Window
         _chatWindowViewModel = GlobalSingletonHelper.ChatWindowViewModel;
         DataContext = _chatWindowViewModel;
         
-        
-        /*//File
-        ReceivedBubbleFileMessageViewModel  bubbleFile = _chatWindowViewModel.FileMessage; 
-        var bubbleComponentFile = this.FindControl<ViewReceivedBubbleFileMessage>("FileMessage");
-        if (bubbleComponentFile != null)
-        {
-            bubbleComponentFile.ReceivedBubbleFileMessage =  bubbleFile;
-        }*/
+        _chatWindowViewModel.CurrentChatHistory.CollectionChanged += CurrentChatHistory_CollectionChanged;
     }
-
+    
+    private void CurrentChatHistory_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            MessagesScrollViewer.ScrollToEnd();
+        });
+    }
     private async void TextBox_KeyDown(object? sender, KeyEventArgs e)
     {
         await _chatWindowViewModel.TextBox_KeyDown(sender, e);
