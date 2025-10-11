@@ -49,7 +49,7 @@ public partial class ChatHeaderViewModel : ViewModelBase
     {
         if (user.UserName == Username)
         {
-            await ShowTyping();
+            ShowTyping();
             UserStatus = "Online";
         }
     }

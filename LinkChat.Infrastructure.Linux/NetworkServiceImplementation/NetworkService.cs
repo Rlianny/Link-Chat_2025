@@ -57,7 +57,7 @@ namespace LinkChat.Infrastructure
                       }
                       else
                       {
-                          await Task.Delay(10);
+                          await Task.Delay(1);
                       }
                   }
               });
@@ -178,8 +178,7 @@ namespace LinkChat.Infrastructure
                     {
                         byte[] frameData = new byte[receivedBytes];
                         Array.Copy(buffer, 0, frameData, 0, receivedBytes);
-
-                        FrameReceived?.Invoke(frameData);
+                        Task task = Task.Run(() => FrameReceived?.Invoke(frameData));
                     }
                 }
                 catch (Exception ex)
