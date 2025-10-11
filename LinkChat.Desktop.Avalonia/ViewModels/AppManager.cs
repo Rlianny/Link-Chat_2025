@@ -113,7 +113,7 @@ public class AppManager
 
     public async Task SendFileMessage(string filePath, string userName)
     { 
-        _fileTransferService.SendFile(filePath, userName);
+        _fileTransferService.SendFile(userName, filePath);
         Console.WriteLine("Frontend: A File Message Sent");
     }
 

@@ -15,7 +15,7 @@ public partial class ChatWindow : Window
     public ChatWindow()
     {
         InitializeComponent();
-        _chatWindowViewModel = new ChatWindowViewModel();
+        _chatWindowViewModel = GlobalSingletonHelper.ChatWindowViewModel;
         DataContext = _chatWindowViewModel;
         
         

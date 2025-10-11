@@ -33,6 +33,8 @@ public class FileTransferService : IFileTransferService
         protocolService.FileChunkFrameReceived += OnFileChunkFrameReceived;
         protocolService.FileChunkAckFrameReceived += OnFileChunkAckFrameReceived;
         protocolService.FileStartAckFrameReceived += OnFileStartAckFrameReceived;
+
+        Console.WriteLine("The file transfer service is created");
     }
     public List<FileChunk> SplitFile(
         string filePath,

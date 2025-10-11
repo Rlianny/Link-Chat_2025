@@ -18,7 +18,7 @@ public class FakeNetworkService : INetworkService
 
     public void StartListening()
     {
-        throw new NotImplementedException();
+       
     }
 
     public event Action<byte[]>? FrameReceived;

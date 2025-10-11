@@ -26,6 +26,7 @@ public class MessagingService : IMessagingService
 
     public MessagingService(IProtocolService protocolService, IFileTransferService fileTransferService, IUserService userService, INetworkService networkService)
     {
+        Console.WriteLine("The messaging service is created");
         this.protocolService = protocolService;
         this.networkService = networkService;
         this.fileTransferService = fileTransferService;
@@ -67,21 +68,21 @@ public class MessagingService : IMessagingService
         Conversation[userSender].Add(chatMessage);
     }
 
-    public TextMessage GetTextMessageById(string textMessageId)
+    public ChatMessage GetMessageById(string messageId)
     {
-        if (string.IsNullOrEmpty(textMessageId))
+        if (string.IsNullOrEmpty(messageId))
         {
             ErrorFounded?.Invoke("Message ID cannot be null or empty");
-            throw new ArgumentNullException(nameof(textMessageId));
+            throw new ArgumentNullException(nameof(messageId));
         }
 
-        if (Messages.TryGetValue(textMessageId, out var message) && message is TextMessage text)
+        if (Messages.TryGetValue(messageId, out var message))
         {
-            return text;
+            return message;
         }
 
-        ErrorFounded?.Invoke($"Message with ID {textMessageId} not found or is not a text message");
-        throw new KeyNotFoundException($"Message with ID {textMessageId} not found or is not a text message");
+        ErrorFounded?.Invoke($"Message with ID {messageId} not found or is not a text message");
+        throw new KeyNotFoundException($"Message with ID {messageId} not found or is not a text message");
     }
 
     public async Task SendTextMessage(string receiverUserName, string content)
@@ -130,10 +131,12 @@ public class MessagingService : IMessagingService
 
     public void ReactToMessage(string messageId, Emoji emoji)
     {
+        ChatMessage chatMessage = GetMessageById(messageId);
+        chatMessage.SetReaction(emoji);
         MessageReaction messageReaction = new MessageReaction(userService.GetSelfUser().UserName, DateTime.Now, messageId, emoji);
-        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(GetTextMessageById(messageId).UserName), messageReaction, false);
+        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(GetMessageById(messageId).UserName), messageReaction, false);
         networkService.SendFrameAsync(frame, 3);
-        ReactedToMessage?.Invoke(GetTextMessageById(messageId));
+        ReactedToMessage?.Invoke(GetMessageById(messageId));
         System.Console.WriteLine($"A new Text Reacted To Message Event will be sended to backend");
     }
 
@@ -142,7 +145,7 @@ public class MessagingService : IMessagingService
         if (Confirmations.ContainsKey(chatAck.MessageId))
         {
             Confirmations[chatAck.MessageId] = true;
-            ChatMessageConfirmed?.Invoke(GetTextMessageById(chatAck.MessageId));
+            ChatMessageConfirmed?.Invoke(GetMessageById(chatAck.MessageId));
             System.Console.WriteLine($"A new Chat Message Confirmed Event will be sended to backend");
             System.Console.WriteLine($"Confirmation for message with ID {chatAck.MessageId} received");
         }

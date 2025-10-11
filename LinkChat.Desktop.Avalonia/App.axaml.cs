@@ -19,6 +19,9 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        ChatWindowViewModel chatWindowViewModel = new ChatWindowViewModel();
+        GlobalSingletonHelper.ChatWindowViewModel =  chatWindowViewModel;
+        
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
@@ -26,7 +29,7 @@ public partial class App : Application
             DisableAvaloniaDataAnnotationValidation();
             desktop.MainWindow = new ChatWindow()
             {
-                DataContext = new ChatWindowViewModel(),
+                DataContext = chatWindowViewModel
             };
             
             var topLevel = TopLevel.GetTopLevel(desktop.MainWindow);

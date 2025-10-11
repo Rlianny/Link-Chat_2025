@@ -15,6 +15,7 @@ public class UserService : IUserService
     private INetworkService networkService;
     public UserService(IProtocolService protocolService, INetworkService networkService, string selfUserName)
     {
+        Console.WriteLine("The user service is created");
         self = new User(selfUserName, Status.Online, Tools.Tools.GetLocalMacAddress());
         this.protocolService = protocolService;
         this.protocolService.HeartbeatFrameReceived += OnHeartbeatFrameReceived;
