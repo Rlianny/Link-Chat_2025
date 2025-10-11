@@ -49,9 +49,15 @@ public partial class ChatHeaderViewModel : ViewModelBase
     {
         if (user.UserName == Username)
         {
-            UserStatus = "Typing...";
-            await Task.Delay(2000);
+            await ShowTyping();
+            UserStatus = "Online";
         }
+    }
+
+    private async Task ShowTyping()
+    {
+        UserStatus = "Typing...";
+        await Task.Delay(2000);
     }
 
     public void UpdateUser(User user)

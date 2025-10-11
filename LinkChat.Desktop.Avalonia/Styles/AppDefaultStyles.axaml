@@ -77,6 +77,33 @@
         <Setter Property="FontSize" Value="18"></Setter>
     </Style>
     
+    <Style Selector="ScrollBar">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Width" Value="8"/>
+    </Style>
+    
+    <Style Selector="ScrollBar /template/ Thumb#thumb">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border CornerRadius="4"
+                        Background="#f2f2f2"/>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    
+    <Style Selector="ScrollBar /template/ Thumb#thumb:pointerover">
+        <Setter Property="Background" Value="#f2f2f2"/>
+    </Style>
+    
+    <Style Selector="ScrollBar /template/ Thumb#thumb:pressed">
+        <Setter Property="Background" Value="#f2f2f2"/>
+    </Style>
+    
+    <Style Selector="ScrollBar /template/ RepeatButton">
+        <Setter Property="IsVisible" Value="False"/>
+    </Style>
+    
     <Style Selector="Button.AvailableUser">
         <Setter Property="Background" Value="White"></Setter>
         <Setter Property="Height" Value="80"></Setter>
