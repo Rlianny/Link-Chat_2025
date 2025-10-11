@@ -119,7 +119,8 @@ public class UserService : IUserService
         foreach (var user in LastSeen)
         {
             int SecondsPassed = (int)(DateTime.Now - user.Value).TotalSeconds;
-            if (SecondsPassed > 30)
+            // Aumentado a 60 segundos para tolerar delays de red/hardware
+            if (SecondsPassed > 60)
             {
                 if (Users.ContainsKey(user.Key))
                 {
