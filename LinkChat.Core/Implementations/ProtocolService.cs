@@ -112,7 +112,6 @@ public class ProtocolService : IProtocolService
                 FileStartAckFrameReceived?.Invoke(fileStartAck);
                 break;
 
-
             case FileChunk fileChunk:
                 FileChunkFrameReceived?.Invoke(fileChunk);
                 break;

@@ -28,7 +28,7 @@ public class UserService : IUserService
     }
     private void OnHeartbeatFrameReceived(HeartbeatMessage heartbeatMessage)
     {
-        Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] RECEIVED Heartbeat from {heartbeatMessage.UserName}, sent at {heartbeatMessage.TimeStamp:HH:mm:ss.fff}");
+        //Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] RECEIVED Heartbeat from {heartbeatMessage.UserName}, sent at {heartbeatMessage.TimeStamp:HH:mm:ss.fff}");
         
         bool isNew = false;
         if (!Users.ContainsKey(heartbeatMessage.UserName))
@@ -40,7 +40,7 @@ public class UserService : IUserService
         if (isNew)
             NewUserConnected?.Invoke(Users[heartbeatMessage.UserName]);
 
-        System.Console.WriteLine($"Heartbeat received from {heartbeatMessage.UserName} at {heartbeatMessage.TimeStamp}");
+        //System.Console.WriteLine($"Heartbeat received from {heartbeatMessage.UserName} at {heartbeatMessage.TimeStamp}");
 
     }
 
@@ -60,13 +60,13 @@ public class UserService : IUserService
     private void SendHeartbeatRequest()
     {
         var timestamp = DateTime.Now;
-        Console.WriteLine($"[{timestamp:HH:mm:ss.fff}] SENDING Heartbeat from {self.UserName}");
+       // Console.WriteLine($"[{timestamp:HH:mm:ss.fff}] SENDING Heartbeat from {self.UserName}");
         
         HeartbeatMessage heartbeatToSend = new HeartbeatMessage(self.UserName, timestamp, self.MacAddress);
         byte[] frame = protocolService.CreateFrameToSend(null, heartbeatToSend, true);
         networkService.SendFrameAsync(frame, 0);
         
-        Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Heartbeat enqueued");
+       // Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Heartbeat enqueued");
     }
 
     public List<User> GetAvailableUsers()

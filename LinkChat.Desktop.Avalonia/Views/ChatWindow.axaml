@@ -119,57 +119,63 @@
                 <!-- PlaceHolder-->
                 <Border Grid.Row="2" Padding="30">
                     <Border Grid.Row="2" Background="White" CornerRadius="15" Padding="12" Height="70" VerticalAlignment="Bottom">
-                        <Grid ColumnDefinitions="*, Auto">
-                            <TextBox Grid.Column="0"  
-                                     CornerRadius="6"
-                                     Watermark="Escribe tu mensaje aquí...."
-                                     AcceptsReturn="True"
-                                     TextWrapping="Wrap"
-                                     Background="Transparent"
-                                     Foreground="{DynamicResource EbonyClay}"
-                                     BorderBrush="Transparent"
-                                     FontSize="18"
-                                     CaretBrush="{DynamicResource EbonyClay}"
-                                     KeyDown="TextBox_KeyDown"
-                                     Text="{Binding MessageInPlaceHolder, Mode=TwoWay}">
-                                <TextBox.KeyBindings>
-                                    <KeyBinding Gesture="Enter" Command="{Binding SendTextMessageButton}"/>
-                                </TextBox.KeyBindings>
-                            </TextBox>
+                        <Panel>
+                            <Border Background="Transparent" 
+                                    BoxShadow="inset 0 6 5 #0F000000"
+                                    CornerRadius="15"
+                                    Margin="-11"/>
+                            <Grid ColumnDefinitions="*, Auto">
+                                <TextBox Grid.Column="0"  
+                                         CornerRadius="6"
+                                         Watermark="Escribe tu mensaje aquí...."
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"
+                                         Background="Transparent"
+                                         Foreground="{DynamicResource EbonyClay}"
+                                         BorderBrush="Transparent"
+                                         FontSize="18"
+                                         CaretBrush="{DynamicResource EbonyClay}"
+                                         KeyDown="TextBox_KeyDown"
+                                         Text="{Binding MessageInPlaceHolder, Mode=TwoWay}">
+                                    <TextBox.KeyBindings>
+                                        <KeyBinding Gesture="Enter" Command="{Binding SendTextMessageButton}"/>
+                                    </TextBox.KeyBindings>
+                                </TextBox>
                             
-                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="20">
-                                <!-- Broadcast Button -->
-                                <Button Classes="transparent" 
-                                        Command="{Binding BroadcastToggle}" 
-                                        Width="{Binding $parent[Button].Height}"
-                                        MaxWidth="40"
-                                        VerticalAlignment="Center" 
-                                        HorizontalAlignment="Center">
-                                    <Image Source="{Binding BroadcastIcon}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="80"></Image>
-                                </Button>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="20">
+                                    <!-- Broadcast Button -->
+                                    <Button Classes="transparent" 
+                                            Command="{Binding BroadcastToggle}" 
+                                            Width="{Binding $parent[Button].Height}"
+                                            MaxWidth="40"
+                                            VerticalAlignment="Center" 
+                                            HorizontalAlignment="Center">
+                                        <Image Source="{Binding BroadcastIcon}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="80"></Image>
+                                    </Button>
                                 
-                                <!-- SendFile Button -->
-                                <Button Classes="transparent" 
-                                        Command="{Binding SendFileButton}"
-                                        Width="{Binding $parent[Button].Height}"
-                                        MaxWidth="40"
-                                        VerticalAlignment="Center" 
-                                        HorizontalAlignment="Center">
-                                    <Image Source="/Assets/Images/AddFile.png" VerticalAlignment="Center" HorizontalAlignment="Center" Width="80"></Image>
-                                </Button>
+                                    <!-- SendFile Button -->
+                                    <Button Classes="transparent" 
+                                            Command="{Binding SendFileButton}"
+                                            Width="{Binding $parent[Button].Height}"
+                                            MaxWidth="40"
+                                            VerticalAlignment="Center" 
+                                            HorizontalAlignment="Center">
+                                        <Image Source="/Assets/Images/AddFile.png" VerticalAlignment="Center" HorizontalAlignment="Center" Width="80"></Image>
+                                    </Button>
                                 
-                                <!-- SendText Button -->
-                                <Button Classes="transparent" 
-                                        Command="{Binding SendTextMessageButton}"
-                                        Width="{Binding $parent[Button].Height}"
-                                        MaxWidth="40"
-                                        VerticalAlignment="Center" 
-                                        HorizontalAlignment="Center">
-                                    <Image Source="/Assets/Images/SendMessage.png" VerticalAlignment="Center" HorizontalAlignment="Center" Width="80"></Image>
-                                </Button>
+                                    <!-- SendText Button -->
+                                    <Button Classes="transparent" 
+                                            Command="{Binding SendTextMessageButton}"
+                                            Width="{Binding $parent[Button].Height}"
+                                            MaxWidth="40"
+                                            VerticalAlignment="Center" 
+                                            HorizontalAlignment="Center">
+                                        <Image Source="/Assets/Images/SendMessage.png" VerticalAlignment="Center" HorizontalAlignment="Center" Width="80"></Image>
+                                    </Button>
                              
-                            </StackPanel>
-                        </Grid>
+                                </StackPanel>
+                            </Grid>
+                        </Panel>
                     </Border>
                 </Border>
             </Grid>

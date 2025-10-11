@@ -104,6 +104,7 @@ public abstract partial class BubbleMessageViewModel : ViewModelBase
         {
            case "happy":
                _appManager.SendReaction(Emoji.HappyFace, _message.MessageId);
+               Console.WriteLine("Se ha reacted");
                break;
            case "like":
                _appManager.SendReaction(Emoji.Like, _message.MessageId);
