@@ -30,12 +30,12 @@ public partial class ChatWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private IStorageProvider? _storageProvider;
-    
+
     [ObservableProperty]
     private User? _currentReceiverUser;
-    
+
     public ChatHeaderViewModel HeaderViewModel { get; set; }
-    
+
     partial void OnCurrentReceiverUserChanged(User? value)
     {
         if (value != null)
@@ -91,20 +91,20 @@ public partial class ChatWindowViewModel : ViewModelBase
     public ChatWindowViewModel()
     {
         GlobalSingletonHelper.ChatWindowViewModel = this;
-        GlobalSingletonHelper.SetUserName("Lianny");
-        
+        GlobalSingletonHelper.SetUserName("Kevin");
+
         string interfaceName = NetworkInterfaceSelector.GetBestNetworkInterfaceName();
         INetworkService networkService = new LinuxNetworkService(interfaceName);
         //INetworkService networkService = new FakeNetworkService();
         IProtocolService protocolService = new ProtocolService(networkService);
-        IUserService userService = new UserService(protocolService, networkService, "Lianny");
+        IUserService userService = new UserService(protocolService, networkService, "Kevin");
         IFileTransferService fileTransferService = new FileTransferService(protocolService, networkService, userService);
         IMessagingService messagingService = new MessagingService(protocolService, fileTransferService, userService, networkService);
         AppManager = new AppManager(networkService, protocolService, userService, fileTransferService, messagingService);
         _broadcastIcon = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/BroadcastDisabledBold.png"));
 
         HeaderViewModel = new ChatHeaderViewModel(AppManager.GetCurrentSelfUser(), AppManager);
-        
+
         networkService.StartListening();
         //userService.UpdateUsersStatuses();
 
@@ -135,14 +135,14 @@ public partial class ChatWindowViewModel : ViewModelBase
     public async Task SendFileButton()
     {
         var storageProvider = GlobalSingletonHelper.StorageProvider;
-        
+
         var fileResults = await storageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
             Title = "Selecciona un archivo para enviar",
             AllowMultiple = false,
-            FileTypeFilter = null 
+            FileTypeFilter = null
         });
-        
+
         if (fileResults != null && fileResults.Count > 0)
         {
             var selectedFile = fileResults[0];
@@ -164,9 +164,9 @@ public partial class ChatWindowViewModel : ViewModelBase
         else if (CurrentReceiverUser != null)
         {
             AppManager.SendTextMessage(MessageInPlaceHolder, CurrentReceiverUser.UserName);
-            
+
         }
-        MessageInPlaceHolder =  string.Empty;
+        MessageInPlaceHolder = string.Empty;
     }
 
 
@@ -174,15 +174,15 @@ public partial class ChatWindowViewModel : ViewModelBase
     {
         if (string.IsNullOrEmpty(newReceiverName))
             return;
-        
-        try 
+
+        try
         {
             var user = AppManager.GetUserByName(newReceiverName);
             if (user != null)
             {
                 Console.WriteLine($"Reloading chat for user: {user.UserName}"); // Debug log
                 CurrentReceiverUser = user;
-               
+
                 HeaderViewModel.UpdateUser(CurrentReceiverUser);
                 CurrentChatHistory.Clear();
                 if (CurrentReceiverUser != null)
