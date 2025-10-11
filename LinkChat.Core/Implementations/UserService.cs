@@ -62,7 +62,8 @@ public class UserService : IUserService
         var timestamp = DateTime.Now;
         HeartbeatMessage heartbeatToSend = new HeartbeatMessage(self.UserName, timestamp, self.MacAddress);
         byte[] frame = protocolService.CreateFrameToSend(null, heartbeatToSend, true);
-        networkService.SendFrameInternal(frame);
+        //networkService.SendFrameInternal(frame);
+        networkService.SendFrameAsync(frame, 0);
     }
 
     public List<User> GetAvailableUsers()

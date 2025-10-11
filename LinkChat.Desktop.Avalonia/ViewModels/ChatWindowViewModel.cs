@@ -208,9 +208,9 @@ public partial class ChatWindowViewModel : ViewModelBase
 
         bool isSpace = key.Key == Key.Space;
 
-        if (!_broadcast || isLetter || isNumber || isSpace)
+        if (CurrentReceiverUser is not null || !_broadcast || isLetter || isNumber || isSpace)
         {
-            AppManager.SendUserStatusTyping();
+            AppManager.SendUserStatusTyping(CurrentReceiverUser.UserName);
         }
     }
 }
