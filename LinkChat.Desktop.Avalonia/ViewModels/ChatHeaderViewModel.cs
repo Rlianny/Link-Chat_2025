@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -7,6 +9,8 @@ using LinkChat.Core.Models;
 public partial class ChatHeaderViewModel : ViewModelBase
 {
     private AppManager _appManager;
+    
+    private CancellationTokenSource? _typingCancellationTokenSource;
     
     [ObservableProperty]
     private string _username;
@@ -47,17 +51,39 @@ public partial class ChatHeaderViewModel : ViewModelBase
 
     private async void OnUserStatusUpdated(object? sender, User user)
     {
+        Console.WriteLine("");
         if (user.UserName == Username)
         {
-            ShowTyping();
-            UserStatus = "Online";
-        }
-    }
+            // Cancel any existing typing timer
+            _typingCancellationTokenSource?.Cancel();
+            _typingCancellationTokenSource = new CancellationTokenSource();
 
-    private async Task ShowTyping()
-    {
-        UserStatus = "Typing...";
-        await Task.Delay(2000);
+            // Store the current status
+            var originalStatus = CurrentReceiverUser?.Status.ToString() ?? "Online";
+
+            // Show typing status
+            UserStatus = "Typing...";
+
+            try
+            {
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(2), _typingCancellationTokenSource.Token);
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        // Task was cancelled, ignore
+                    }
+                });
+            }
+            finally
+            {
+                _typingCancellationTokenSource?.Dispose();
+                _typingCancellationTokenSource = null;
+            } 
+        }
     }
 
     public void UpdateUser(User user)

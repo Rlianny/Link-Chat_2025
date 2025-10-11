@@ -302,7 +302,10 @@ public class FileTransferService : IFileTransferService
         Console.WriteLine($"[OnFileStartReceived] fileId={fileStart.FileId} fileName={fileStart.FileName} from={fileStart.UserName} totalChunks={fileStart.TotalChunks} size={fileStart.FileSize}");
         if (!FileChunks.ContainsKey(fileStart.FileId))
         {
-            FileStarts.Add(fileStart.FileId, fileStart);
+            if (!FileStarts.ContainsKey(fileStart.FileId))
+            {
+                FileStarts.Add(fileStart.FileId, fileStart);
+            }
             FileChunks.Add(fileStart.FileId, []);
             Console.WriteLine($"[OnFileStartReceived] Registered fileId={fileStart.FileId} - sending ACK");
             Task task = SendStartConfirmation(fileStart);
