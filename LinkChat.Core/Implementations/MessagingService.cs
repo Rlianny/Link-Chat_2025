@@ -35,7 +35,16 @@ public class MessagingService : IMessagingService
         protocolService.MessageReactionFrameReceived += OnMessageReactionFrameReceived;
         protocolService.UserStatusFrameReceived += OnUserStatusFrameReceived;
         fileTransferService.FileFrameReceived += OnFileMessageFrameReceived;
+        fileTransferService.FileSended += OnFileSended;
+
     }
+
+    private void OnFileSended(Models.File file)
+    {
+        AddChatMessage(file);
+        FileTransferred?.Invoke(file);
+    }
+
     public IEnumerable<ChatMessage> GetChatHistory(string userName)
     {
         if (Conversation.ContainsKey(userName))
@@ -89,15 +98,15 @@ public class MessagingService : IMessagingService
             AddChatMessage(textMessage);
             TextMessageExchanged?.Invoke(textMessage);
             System.Console.WriteLine($"A new Text Message EXchanged Event will be sended to backend: {textMessage.Content}");
-
+            await Task.Delay(3000);
             Task sendAndWait = Task.Run(async () =>
             {
                 while (!Confirmations[textMessage.MessageId])
                 {
-                    await Task.Delay(3000);
                     frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), textMessage, false);
                     await networkService.SendFrameAsync(frame, 2);
                     System.Console.WriteLine($"Retrying message with ID {textMessage.MessageId}");
+                    await Task.Delay(3000);
                 }
             });
         }

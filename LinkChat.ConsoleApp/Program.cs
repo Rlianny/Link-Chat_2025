@@ -24,8 +24,10 @@ public class Program
         IUserService userService = new UserService(protocolService, networkService, myUserName);
         IFileTransferService fileTransferService = new FileTransferService(protocolService, networkService, userService);
         IMessagingService messagingService = new MessagingService(protocolService, fileTransferService, userService, networkService);
-
         networkService.StartListening();
+        Console.WriteLine("Escriba el nombre del receptor del mensaje");
+        string receiver = Console.ReadLine();
+
         //userService.UpdateUsersStatuses();
 
         while (true)
@@ -36,17 +38,7 @@ public class Program
             {
                 Console.WriteLine($"- {user.UserName}");
             }
-
-            Console.WriteLine("Escriba el nombre del receptor del archivo");
-            string receiver = Console.ReadLine();
-
-
-            Console.WriteLine("Escriba la ruta del archivo");
-            string filePath = Console.ReadLine();
-
-            fileTransferService.SendFile(receiver, filePath);
-
-            System.Console.WriteLine("Escriba el nombre del mensaje a enviar a ese usuario");
+            System.Console.WriteLine("Escriba el mensaje a enviar a ese usuario");
             string message = Console.ReadLine();
 
             messagingService.SendTextMessage(receiver, message);
