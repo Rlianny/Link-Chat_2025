@@ -82,8 +82,8 @@ public class FileTransferService : IFileTransferService
         User receiverUser = userService.GetUserByName(receiverUserName);
         var chunks = SplitFile(filePath, receiverUserName, 800).ToList();
         double size = new FileInfo(filePath).Length;
-        Models.File file = new Models.File(userService.GetSelfUser().UserName, DateTime.Now, chunks.First().FileId, filePath, size / (1024 * 1024), Path.GetFileName(filePath));
-        System.Console.WriteLine(file.Size);
+
+        Models.File file = new Models.File(userService.GetSelfUser().UserName, DateTime.Now, chunks.First().FileId, filePath, Math.Round(size / (1024 * 1024), 2), Path.GetFileName(filePath));
         Console.WriteLine($"[SendFile] Created File object - fileId={file.MessageId} totalChunks={chunks.Count} size={size}");
         FileSended?.Invoke(file);
         var start = new FileStart(
