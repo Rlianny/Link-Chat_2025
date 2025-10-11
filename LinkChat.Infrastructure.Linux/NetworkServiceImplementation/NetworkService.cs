@@ -136,41 +136,6 @@ namespace LinkChat.Infrastructure
                 var error = Marshal.GetLastWin32Error();
                 throw new Exception($"Error creating socket. System error code: {error}");
             }
-
-            // Aumentar el buffer de recepción del socket
-            try
-            {
-                int receiveBufferSize = 1024 * 1024; // 1 MB
-                int result = NativeMethods.setsockopt(socketFd, NativeConstants.SOL_SOCKET, NativeConstants.SO_RCVBUF, 
-                    ref receiveBufferSize, sizeof(int));
-                
-                if (result < 0)
-                {
-                    Console.WriteLine($"Warning: Could not set socket receive buffer size");
-                }
-                else
-                {
-                    Console.WriteLine($"Socket receive buffer set to {receiveBufferSize} bytes");
-                }
-
-                // Deshabilitar buffering en envío
-                int sendBufferSize = 0; // 0 = sin buffering
-                result = NativeMethods.setsockopt(socketFd, NativeConstants.SOL_SOCKET, NativeConstants.SO_SNDBUF, 
-                    ref sendBufferSize, sizeof(int));
-                
-                if (result < 0)
-                {
-                    Console.WriteLine($"Warning: Could not disable send buffer");
-                }
-                else
-                {
-                    Console.WriteLine($"Send buffering disabled for immediate transmission");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Warning: Error setting socket buffer: {ex.Message}");
-            }
         }
         private void GetInterfaceIndex()
         {
@@ -208,15 +173,8 @@ namespace LinkChat.Infrastructure
             if (socketFd == -1)
                 throw new InvalidOperationException("The socket is not initialized.");
 
-            // Start the listening loop in a new thread with higher priority
-            var listenThread = new Thread(() => ListenLoop())
-            {
-                Priority = ThreadPriority.AboveNormal,
-                IsBackground = true,
-                Name = "NetworkReceiveLoop"
-            };
-            listenThread.Start();
-            Console.WriteLine("Listen loop started with high priority");
+            // Start the listening loop in a new thread with higher priority 
+            Task.Run(() => ListenLoop());
         }
 
         private void ListenLoop()
@@ -235,25 +193,11 @@ namespace LinkChat.Infrastructure
                     if (receivedBytes > 0)
                     {
                         Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Frame RECEIVED from network, size={receivedBytes} bytes");
-                        
+
                         byte[] frameData = new byte[receivedBytes];
                         Array.Copy(buffer, 0, frameData, 0, receivedBytes);
 
-
-                        Task.Run(() =>
-                        {
-                            try
-                            {
-                                Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Processing received frame...");
-                                FrameReceived?.Invoke(frameData);
-                                Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Frame processed");
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine($"Error processing received frame: {ex.Message}");
-                            }
-                        });
-
+                        FrameReceived?.Invoke(frameData);
                     }
                 }
                 catch (Exception ex)
