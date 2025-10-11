@@ -39,10 +39,13 @@
                                            ReceivedFileMessage="{StaticResource ReceivedFileMessage}" />
     </Window.Resources>
     
-    <Grid Background="{DynamicResource TitanWhite}" ColumnDefinitions="650, *">
+    <Grid Background="{DynamicResource TitanWhite}" ColumnDefinitions="1.5*, 2*">
         <Grid Grid.Column="0" RowDefinitions="80, *" Background="White">
             <!-- More Options Button -->
-            <Button Grid.Column="0" Classes="transparent" HorizontalAlignment="Left" Padding="30,20, 20,20 ">
+            <Button Grid.Column="0" 
+                    Classes="transparent" 
+                    HorizontalAlignment="Left" 
+                    Padding="30,20, 20,20 ">
                 <Image Source="/Assets/Images/ListOptions.png" Width="40" HorizontalAlignment="Left" Classes="IconOnly"></Image>
             </Button> 
             
@@ -60,18 +63,25 @@
         </Grid>
         
         <Border Grid.Column="1" Padding="20">
-            <Grid RowDefinitions="80, 680, *">
+            <Grid RowDefinitions="Auto, *, Auto">
                 <Grid Grid.Row="0" ColumnDefinitions="600, *">
                     
                     <!-- Downloads Button --> 
-                    <Button Classes="transparent" HorizontalAlignment="Right" Grid.Column="1">
+                    <Button Classes="transparent" 
+                            HorizontalAlignment="Right" 
+                            Grid.Column="1"
+                            Width="{Binding $parent[Grid].Height}" 
+                            Height="{Binding $parent[Grid].Height}" 
+                            MaxWidth="50" 
+                            MaxHeight="50">
                         <Image Source="/Assets/Images/Downloads.png" Width="40" HorizontalAlignment="Right" Classes="IconOnly"></Image>
                     </Button>
                   
                     <!-- ChatHeader -->
                     <local:ViewChatHeader Grid.Column="0" 
                                           DataContext="{Binding HeaderViewModel}"
-                                          IsVisible="{Binding CurrentReceiverUser, Converter={x:Static ObjectConverters.IsNotNull}}"></local:ViewChatHeader>
+                                          IsVisible="{Binding CurrentReceiverUser, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                          Height="80"></local:ViewChatHeader>
                 </Grid>
                 
                 <!-- ChatMessages -->
@@ -109,7 +119,7 @@
                 <!-- PlaceHolder-->
                 <Border Grid.Row="2" Padding="30">
                     <Border Grid.Row="2" Background="White" CornerRadius="15" Padding="12" Height="70" VerticalAlignment="Bottom">
-                        <Grid ColumnDefinitions="800, *">
+                        <Grid ColumnDefinitions="*, Auto">
                             <TextBox Grid.Column="0"  
                                      CornerRadius="6"
                                      Watermark="Escribe tu mensaje aquí...."
@@ -127,19 +137,34 @@
                                 </TextBox.KeyBindings>
                             </TextBox>
                             
-                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="20">
                                 <!-- Broadcast Button -->
-                                <Button Classes="transparent" Command="{Binding BroadcastToggle}">
+                                <Button Classes="transparent" 
+                                        Command="{Binding BroadcastToggle}" 
+                                        Width="{Binding $parent[Button].Height}"
+                                        MaxWidth="40"
+                                        VerticalAlignment="Center" 
+                                        HorizontalAlignment="Center">
                                     <Image Source="{Binding BroadcastIcon}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="80"></Image>
                                 </Button>
                                 
                                 <!-- SendFile Button -->
-                                <Button Classes="transparent" Command="{Binding SendFileButton}">
+                                <Button Classes="transparent" 
+                                        Command="{Binding SendFileButton}"
+                                        Width="{Binding $parent[Button].Height}"
+                                        MaxWidth="40"
+                                        VerticalAlignment="Center" 
+                                        HorizontalAlignment="Center">
                                     <Image Source="/Assets/Images/AddFile.png" VerticalAlignment="Center" HorizontalAlignment="Center" Width="80"></Image>
                                 </Button>
                                 
                                 <!-- SendText Button -->
-                                <Button Classes="transparent" Command="{Binding SendTextMessageButton}">
+                                <Button Classes="transparent" 
+                                        Command="{Binding SendTextMessageButton}"
+                                        Width="{Binding $parent[Button].Height}"
+                                        MaxWidth="40"
+                                        VerticalAlignment="Center" 
+                                        HorizontalAlignment="Center">
                                     <Image Source="/Assets/Images/SendMessage.png" VerticalAlignment="Center" HorizontalAlignment="Center" Width="80"></Image>
                                 </Button>
                              
