@@ -23,6 +23,7 @@ public class MessagingService : IMessagingService
     public event Action<User>? UserPruned;
     public event Action<string>? ErrorFounded;
     public event Action<User>? NewUserDetected;
+    public event Action<UserStatus> UserIsTyping;
 
     public MessagingService(IProtocolService protocolService, IFileTransferService fileTransferService, IUserService userService, INetworkService networkService)
     {
@@ -133,6 +134,7 @@ public class MessagingService : IMessagingService
     {
         ChatMessage chatMessage = GetMessageById(messageId);
         chatMessage.SetReaction(emoji);
+        ReactedToMessage?.Invoke(chatMessage);
         MessageReaction messageReaction = new MessageReaction(userService.GetSelfUser().UserName, DateTime.Now, messageId, emoji);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(GetMessageById(messageId).UserName), messageReaction, false);
         networkService.SendFrameAsync(frame, 3);
@@ -204,14 +206,21 @@ public class MessagingService : IMessagingService
         ReactedToMessage?.Invoke(Messages[reaction.MessageId]);
         System.Console.WriteLine($"A new Text Reacted To Message Event will be sended to backend");
     }
-    private void OnUserStatusFrameReceived(UserStatus status)
+    private void OnUserStatusFrameReceived(UserStatus userStatus)
     {
-        // pending implementation
+        UserIsTyping.Invoke(userStatus);
     }
 
     public IEnumerable<Models.File> GetFilesHistory(string userName)
     {
         // pending implementation
         throw new NotImplementedException();
+    }
+
+    public void SendUserStatusTyping(string receiverUserName)
+    {
+        UserStatus status = new UserStatus(userService.GetSelfUser().UserName, DateTime.Now);
+        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), status, false);
+        networkService.SendFrameAsync(frame, 3);
     }
 }

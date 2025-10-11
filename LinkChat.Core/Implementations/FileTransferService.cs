@@ -84,7 +84,7 @@ public class FileTransferService : IFileTransferService
         var start = new FileStart(
             file.UserName,
             DateTime.Now,
-            file.Path,
+            file.Name,
             size,
             file.MessageId,
             chunks.Count);
@@ -114,12 +114,13 @@ public class FileTransferService : IFileTransferService
                 byte[] frame = protocolService.CreateFrameToSend(receiverUser, chunks[j], false);
                 await networkService.SendFrameAsync(frame, 5);
             }
+            Task.Delay(50);
             while (true)
             {
                 int pending = 0;
                 for (int j = i; j < windowEnd; j++)
                 {
-                    if (!Confirmations[start.FileId].ContainsKey(j))
+                    if (!Confirmations[start.FileId][j])
                     {
                         byte[] frame = protocolService.CreateFrameToSend(receiverUser, chunks[j], false);
                         await networkService.SendFrameAsync(frame, 5);
@@ -131,7 +132,7 @@ public class FileTransferService : IFileTransferService
                     break;
 
                 int delay = pending > 10 ? 50 : 20;
-                await Task.Delay(50);
+                await Task.Delay(delay);
             }
         }
     }

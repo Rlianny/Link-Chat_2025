@@ -209,7 +209,7 @@ public partial class ChatWindowViewModel : ViewModelBase
 
         if (isLetter || isNumber || isSpace)
         {
-            await AppManager.SendUserStatusTyping();
+            AppManager.SendUserStatusTyping();
         }
     }
 }

@@ -28,11 +28,12 @@ public class AppManager
         _messagingService.FileTransferred += OnFileTransfered;
         _messagingService.ChatMessageConfirmed += OnChatMessageConfirmed;
         _messagingService.ReactedToMessage += OnReactedToMessage;
+        _messagingService.UserIsTyping += OnUserIsTyping;
         _userService.UserDisconnected += OnUserPruned; 
         _userService.NewUserConnected += OnNewUserDetected;
         //USER STATUS UPDATING PENDING
     }
-    
+
     public EventHandler<ChatMessage> TextMessageExchanged;
     public EventHandler<ChatMessage> FileTransferred;
     public EventHandler<ChatMessage> ChatMessageConfirmed;
@@ -75,6 +76,11 @@ public class AppManager
     private void OnUserStatusUpdated(User user)
     {
         UserStatusUpdated.Invoke(this, user);
+    }
+    
+    private void OnUserIsTyping(UserStatus obj)
+    {
+        UserStatusUpdated.Invoke(this, _userService.GetUserByName(obj.UserName));
     }
 
     // Get Info from Backend

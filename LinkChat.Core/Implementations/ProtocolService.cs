@@ -27,8 +27,7 @@ public class ProtocolService : IProtocolService
     };
 
     public ProtocolService(INetworkService networkService)
-    {
-        Console.WriteLine("The protocol service is created");
+    {        
         this.networkService = networkService;
         this.networkService.FrameReceived += OnFrameReceived;
     }
