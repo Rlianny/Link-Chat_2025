@@ -10,6 +10,10 @@ public class FakeNetworkService : INetworkService
     {
         throw new NotImplementedException();
     }
+    public Task SendFrameInternal(byte[] frame)
+    {
+        throw new Exception();
+    }
 
     public Task SendFrameAsync(byte[] frame, int priority)
     {
@@ -23,7 +27,7 @@ public class FakeNetworkService : INetworkService
 
     public void StartListening()
     {
-       
+
     }
 
     public event Action<byte[]>? FrameReceived;

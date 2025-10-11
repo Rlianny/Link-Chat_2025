@@ -28,6 +28,7 @@ public class UserService : IUserService
     }
     private void OnHeartbeatFrameReceived(HeartbeatMessage heartbeatMessage)
     {
+
         //Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] RECEIVED Heartbeat from {heartbeatMessage.UserName}, sent at {heartbeatMessage.TimeStamp:HH:mm:ss.fff}");
         
         bool isNew = false;
@@ -60,10 +61,20 @@ public class UserService : IUserService
     private void SendHeartbeatRequest()
     {
         var timestamp = DateTime.Now;
+<<<<<<< HEAD
+        Console.WriteLine($"[{timestamp:HH:mm:ss.fff}] SENDING Heartbeat from {self.UserName}");
+
+=======
+>>>>>>> 15ef85dc1315de3c43440b711630b8227a4728ed
         HeartbeatMessage heartbeatToSend = new HeartbeatMessage(self.UserName, timestamp, self.MacAddress);
         byte[] frame = protocolService.CreateFrameToSend(null, heartbeatToSend, true);
         //networkService.SendFrameInternal(frame);
         networkService.SendFrameAsync(frame, 0);
+<<<<<<< HEAD
+
+        Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Heartbeat enqueued");
+=======
+>>>>>>> 15ef85dc1315de3c43440b711630b8227a4728ed
     }
 
     public List<User> GetAvailableUsers()

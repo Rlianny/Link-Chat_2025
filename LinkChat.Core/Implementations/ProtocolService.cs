@@ -27,7 +27,7 @@ public class ProtocolService : IProtocolService
     };
 
     public ProtocolService(INetworkService networkService)
-    {        
+    {
         this.networkService = networkService;
         this.networkService.FrameReceived += OnFrameReceived;
     }
@@ -122,6 +122,7 @@ public class ProtocolService : IProtocolService
 
             case HeartbeatMessage heartbeatMessage:
                 HeartbeatFrameReceived?.Invoke(heartbeatMessage);
+                System.Console.WriteLine($"Heartbeat received at {DateTime.Now} and sended at {heartbeatMessage.TimeStamp}");
                 break;
 
             case MessageReaction messageReaction:

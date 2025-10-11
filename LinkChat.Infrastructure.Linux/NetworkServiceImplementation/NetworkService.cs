@@ -51,7 +51,7 @@ namespace LinkChat.Infrastructure
                           if (queue.Count > 0)
                           {
                               frame = queue.Dequeue();
-                              Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Frame DEQUEUED, remaining={queue.Count}");
+                             // Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Frame DEQUEUED, remaining={queue.Count}");
                           }
                       }
 
@@ -59,13 +59,13 @@ namespace LinkChat.Infrastructure
                       {
                           try
                           {
-                              Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Sending frame to network...");
+                             // Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Sending frame to network...");
                               await SendFrameInternal(frame);
-                              Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Frame SENT successfully");
+                             // Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Frame SENT successfully");
                           }
                           catch (Exception ex)
                           {
-                              Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Error sending frame: {ex.Message}");
+                            //  Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Error sending frame: {ex.Message}");
                           }
                       }
                       else
@@ -74,7 +74,7 @@ namespace LinkChat.Infrastructure
                       }
                   }
               });
-            Console.WriteLine("Send loop started in background");
+         //   Console.WriteLine("Send loop started in background");
         }
 
         public Task SendFrameAsync(byte[] frame, int priority)
@@ -83,7 +83,7 @@ namespace LinkChat.Infrastructure
             lock (queueLock)
             {
                 queue.Enqueue(frame, priority);
-                Console.WriteLine($"[{timestamp:HH:mm:ss.fff}] Frame ENQUEUED priority={priority}, queue size={queue.Count}");
+               // Console.WriteLine($"[{timestamp:HH:mm:ss.fff}] Frame ENQUEUED priority={priority}, queue size={queue.Count}");
             }
             return Task.CompletedTask;
         }
@@ -192,7 +192,7 @@ namespace LinkChat.Infrastructure
 
                     if (receivedBytes > 0)
                     {
-                        Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Frame RECEIVED from network, size={receivedBytes} bytes");
+                      //  Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Frame RECEIVED from network, size={receivedBytes} bytes");
 
                         byte[] frameData = new byte[receivedBytes];
                         Array.Copy(buffer, 0, frameData, 0, receivedBytes);
