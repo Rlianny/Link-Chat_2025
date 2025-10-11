@@ -69,5 +69,11 @@ namespace LinkChat.Infrastructure.Linux.Native.Methods
         /// <returns>0 for success, -1 for failure.</returns>
         [DllImport("libc", SetLastError = true)]
         public static extern int close(int fd);
+
+        /// <summary>
+        /// Set options on sockets
+        /// </summary>
+        [DllImport("libc", SetLastError = true)]
+        public static extern int setsockopt(int sockfd, int level, int optname, ref int optval, int optlen);
     }
 }

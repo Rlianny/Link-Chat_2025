@@ -10,5 +10,13 @@ namespace LinkChat.Infrastructure.Linux.Native.Constants
 
         //const for ioctl()
         public const int SIOCGIFINDEX = 0x8933; //It is the operation code that stands for "Get Interface Index"
+
+        //const for setsockopt()
+        public const int SOL_SOCKET = 1; // Socket level options
+        public const int SO_RCVBUF = 8; // Receive buffer size
+        public const int SO_SNDBUF = 7; // Send buffer size
+
+        //const for sendto() flags
+        public const int MSG_DONTWAIT = 0x40; // Non-blocking operation, send immediately
     }
 }
