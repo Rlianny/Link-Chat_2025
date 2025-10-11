@@ -145,7 +145,7 @@ public class MessagingService : IMessagingService
         ReactedToMessage?.Invoke(chatMessage);
         // Console.WriteLine($"A new Text Reacted To Message Event will be sended from backend");
         MessageReaction messageReaction = new MessageReaction(userService.GetSelfUser().UserName, DateTime.Now, messageId, emoji);
-        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(GetMessageById(messageId).UserName), messageReaction, false);
+        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(GetMessageById(messageId).UserName), messageReaction, true);
         networkService.SendFrameAsync(frame, 1);
     }
 
