@@ -135,11 +135,10 @@ public class MessagingService : IMessagingService
         ChatMessage chatMessage = GetMessageById(messageId);
         chatMessage.SetReaction(emoji);
         ReactedToMessage?.Invoke(chatMessage);
+        Console.WriteLine($"A new Text Reacted To Message Event will be sended from backend");
         MessageReaction messageReaction = new MessageReaction(userService.GetSelfUser().UserName, DateTime.Now, messageId, emoji);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(GetMessageById(messageId).UserName), messageReaction, false);
         networkService.SendFrameAsync(frame, 3);
-        ReactedToMessage?.Invoke(GetMessageById(messageId));
-        System.Console.WriteLine($"A new Text Reacted To Message Event will be sended to backend");
     }
 
     private async void OnChatAckFrameReceived(ChatAck chatAck)
@@ -204,7 +203,7 @@ public class MessagingService : IMessagingService
         }
         Messages[reaction.MessageId].SetReaction(reaction.Reaction);
         ReactedToMessage?.Invoke(Messages[reaction.MessageId]);
-        System.Console.WriteLine($"A new Text Reacted To Message Event will be sended to backend");
+        Console.WriteLine($"A new Text Reacted To Message Event will be sended from backend RECEIVED");
     }
     private void OnUserStatusFrameReceived(UserStatus userStatus)
     {
