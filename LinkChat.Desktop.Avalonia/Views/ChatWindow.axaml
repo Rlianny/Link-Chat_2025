@@ -9,10 +9,6 @@
         x:DataType="vm:ChatWindowViewModel"
         Title="ChatWindow">
     
-    <Window.DataContext>
-       <vm:ChatWindowViewModel></vm:ChatWindowViewModel> 
-    </Window.DataContext>
-    
     <Window.Resources>
         <!-- DataTemplates que referencian tus UserControls existentes -->
         <DataTemplate x:Key="ReceivedFileMessage">
@@ -82,8 +78,22 @@
                                 <ItemsControl ItemsSource="{Binding CurrentChatHistory}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <!-- Aquí defines cómo se representa cada ChatMessage -->
-                                            
+                                            <ContentControl Content="{Binding}">
+                                                <ContentControl.DataTemplates>
+                                                    <DataTemplate DataType="{x:Type vm:SendedBubbleTextMessageViewModel}">
+                                                        <local:ViewSendedBubbleTextMessage />
+                                                    </DataTemplate>
+                                                    <DataTemplate DataType="{x:Type vm:ReceivedBubbleTextMessageViewModel}">
+                                                        <local:ViewReceivedBubbleTextMessage />
+                                                    </DataTemplate>
+                                                    <DataTemplate DataType="{x:Type vm:SendedBubbleFileMessageViewModel}">
+                                                        <local:ViewSendedBubbleFileMessage />
+                                                    </DataTemplate>
+                                                    <DataTemplate DataType="{x:Type vm:ReceivedBubbleFileMessageViewModel}">
+                                                        <local:ViewReceivedBubbleFileMessage />
+                                                    </DataTemplate>
+                                                </ContentControl.DataTemplates>
+                                            </ContentControl>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl> 

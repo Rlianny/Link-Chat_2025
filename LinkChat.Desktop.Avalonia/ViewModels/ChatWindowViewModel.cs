@@ -67,6 +67,7 @@ public partial class ChatWindowViewModel : ViewModelBase
 
     public void AddNewChatMessage(ChatMessage newMessage)
     {
+        Console.WriteLine($"Adding new message to chat: {newMessage.GetType().Name}");
         if (newMessage is TextMessage textMessage)
         {
             if (textMessage.UserName == AppManager.GetCurrentSelfUser().UserName)
@@ -109,11 +110,12 @@ public partial class ChatWindowViewModel : ViewModelBase
 
         AppManager.NewUserDetected += OnNewUserDetected;
         AppManager.TextMessageExchanged += OnTextMessageExchanged;
+        AppManager.FileTransferred += OnTextMessageExchanged;
     }
 
     private void OnTextMessageExchanged(object? sender, ChatMessage e)
     {
-        Console.WriteLine("Se ha detectado un nuevo mensaje en el frontend");
+        Console.WriteLine($"Message received in ChatWindowViewModel");
         if (e.UserName == CurrentReceiverUser.UserName || e.UserName == AppManager.GetCurrentSelfUser().UserName)
         {
             AddNewChatMessage(e);
@@ -132,17 +134,22 @@ public partial class ChatWindowViewModel : ViewModelBase
     [RelayCommand]
     public async Task SendFileButton()
     {
-        if (StorageProvider == null) return;
-        var storageProvider = StorageProvider;
+        var storageProvider = GlobalSingletonHelper.StorageProvider;
+        
         var fileResults = await storageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Select a file"
+            Title = "Selecciona un archivo para enviar",
+            AllowMultiple = false,
+            FileTypeFilter = null 
         });
-
-        IStorageFile? selectedFile = fileResults.FirstOrDefault();
-        if (selectedFile != null && CurrentReceiverUser != null)
+        
+        if (fileResults != null && fileResults.Count > 0)
         {
-            await AppManager.SendFileMessage(selectedFile.Path.AbsolutePath.ToString(), CurrentReceiverUser.UserName);
+            var selectedFile = fileResults[0];
+            string decodedPath = Uri.UnescapeDataString(selectedFile.Path.AbsolutePath);
+            Console.WriteLine($"Attempting to send file: {decodedPath}");
+            //Console.WriteLine(selectedFile.Path.AbsolutePath.ToString());
+            await AppManager.SendFileMessage(decodedPath, CurrentReceiverUser.UserName);
         }
     }
 
@@ -202,7 +209,6 @@ public partial class ChatWindowViewModel : ViewModelBase
 
         if (isLetter || isNumber || isSpace)
         {
-            Console.WriteLine($"The key {key.Key} will be sent");
             await AppManager.SendUserStatusTyping();
         }
     }

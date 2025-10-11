@@ -29,6 +29,7 @@ namespace LinkChat.Infrastructure
 
         public LinuxNetworkService(string interfaceName)
         {
+            Console.WriteLine("The network service is created");
             this.interfaceName = interfaceName;
             CreateSocket();
             GetInterfaceIndex();

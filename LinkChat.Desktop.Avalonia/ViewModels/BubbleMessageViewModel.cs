@@ -121,7 +121,6 @@ public abstract partial class BubbleMessageViewModel : ViewModelBase
                _appManager.SendReaction(Emoji.Heart, _message.MessageId);
                break;
         }
-        ReactionSet();
         IsReactionMenuVisible = !IsReactionMenuVisible;
     }
 }

@@ -9,7 +9,7 @@ namespace LinkChat.Core.Services
         public Task SendTextMessage(string receiverUserName, string content);
         public void SendBroadcastTextMessage(string content);
         public void ReactToMessage(string messageId, Emoji emoji);
-        public TextMessage GetTextMessageById(string textMessageId);
+        public ChatMessage GetMessageById(string textMessageId);
         public IEnumerable<ChatMessage> GetChatHistory(string UserName);
         public IEnumerable<File> GetFilesHistory(string userName);
         public event Action<File>? FileTransferred;
