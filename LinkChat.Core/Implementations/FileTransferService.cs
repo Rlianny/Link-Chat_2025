@@ -22,7 +22,7 @@ public class FileTransferService : IFileTransferService
     private IUserService userService;
 
     public event Action<Models.File> FileFrameReceived;
-
+    public event Action<Models.File> FileSended;
 
     public FileTransferService(IProtocolService protocolService, INetworkService networkService, IUserService userService)
     {
@@ -79,12 +79,14 @@ public class FileTransferService : IFileTransferService
         User receiverUser = userService.GetUserByName(receiverUserName);
         var chunks = SplitFile(filePath, receiverUserName, 800).ToList();
         double size = new FileInfo(filePath).Length;
+        Models.File file = new Models.File(userService.GetSelfUser().UserName, DateTime.Now, chunks.First().FileId, filePath, size, Path.GetFileName(filePath));
+        FileSended?.Invoke(file);
         var start = new FileStart(
-            userService.GetSelfUser().UserName,
+            file.UserName,
             DateTime.Now,
-            Path.GetFileName(filePath),
+            file.Path,
             size,
-            chunks.First().FileId,
+            file.MessageId,
             chunks.Count);
         Confirmations.Add(start.FileId, []);
         foreach (var chunk in chunks)

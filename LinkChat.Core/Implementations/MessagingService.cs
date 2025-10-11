@@ -36,7 +36,16 @@ public class MessagingService : IMessagingService
         protocolService.MessageReactionFrameReceived += OnMessageReactionFrameReceived;
         protocolService.UserStatusFrameReceived += OnUserStatusFrameReceived;
         fileTransferService.FileFrameReceived += OnFileMessageFrameReceived;
+        fileTransferService.FileSended += OnFileSended;
+
     }
+
+    private void OnFileSended(Models.File file)
+    {
+        AddChatMessage(userService.GetSelfUser().UserName, file);
+        FileTransferred?.Invoke(file);
+    }
+
     public IEnumerable<ChatMessage> GetChatHistory(string userName)
     {
         if (Conversation.ContainsKey(userName))
@@ -45,18 +54,18 @@ public class MessagingService : IMessagingService
         }
         return new List<ChatMessage>();
     }
-    private void AddChatMessage(string receiverUserName, ChatMessage chatMessage)
+    private void AddChatMessage(string userSender, ChatMessage chatMessage)
     {
         if (!Messages.ContainsKey(chatMessage.MessageId))
         {
             Messages.Add(chatMessage.MessageId, chatMessage);
         }
-        if (!Conversation.ContainsKey(receiverUserName))
+        if (!Conversation.ContainsKey(userSender))
         {
-            Conversation.Add(receiverUserName, []);
+            Conversation.Add(userSender, []);
         }
-        
-        Conversation[receiverUserName].Add(chatMessage);
+
+        Conversation[userSender].Add(chatMessage);
     }
 
     public ChatMessage GetMessageById(string messageId)
@@ -89,8 +98,9 @@ public class MessagingService : IMessagingService
 
             AddChatMessage(receiverUserName, textMessage);
             TextMessageExchanged?.Invoke(textMessage);
-            await Task.Delay(3000);
 
+            System.Console.WriteLine($"A new Text Message EXchanged Event will be sended to backend: {textMessage.Content}");
+            await Task.Delay(3000);
             Task sendAndWait = Task.Run(async () =>
             {
                 while (!Confirmations[textMessage.MessageId])
