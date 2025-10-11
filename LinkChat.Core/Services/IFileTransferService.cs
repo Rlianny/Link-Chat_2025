@@ -7,6 +7,6 @@ namespace LinkChat.Core.Services
         public void SendFile(string receiverUserName, string filePath);
         public File GetFileById(string messageId);
         public event Action<File> FileFrameReceived;
-        public event Action<File> FileSended;
+        public event Action<File, string> FileSended;
     }
 }
