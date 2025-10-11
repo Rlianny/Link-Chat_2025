@@ -239,6 +239,7 @@ namespace LinkChat.Infrastructure
                         byte[] frameData = new byte[receivedBytes];
                         Array.Copy(buffer, 0, frameData, 0, receivedBytes);
 
+
                         Task.Run(() =>
                         {
                             try
@@ -252,6 +253,7 @@ namespace LinkChat.Infrastructure
                                 Console.WriteLine($"Error processing received frame: {ex.Message}");
                             }
                         });
+
                     }
                 }
                 catch (Exception ex)
