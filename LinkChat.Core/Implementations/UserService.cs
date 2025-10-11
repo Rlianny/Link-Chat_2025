@@ -117,7 +117,9 @@ public class UserService : IUserService
             {
                 if (Users.ContainsKey(user.Key))
                 {
-                    Users.TryRemove(user.Key, out User disconnectedUser);
+                    //Users.TryRemove(user.Key, out User disconnectedUser);
+                    User disconnectedUser = Users[user.Key];
+                    disconnectedUser.SetStatus(Status.Offline);
                     UserDisconnected?.Invoke(disconnectedUser);
                 }
             }

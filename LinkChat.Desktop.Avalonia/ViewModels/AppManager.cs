@@ -31,7 +31,7 @@ public class AppManager
         _messagingService.UserIsTyping += OnUserIsTyping;
         _userService.UserDisconnected += OnUserPruned; 
         _userService.NewUserConnected += OnNewUserDetected;
-        //USER STATUS UPDATING PENDING
+        _messagingService.UserIsTyping += OnUserIsTyping;
     }
 
     public EventHandler<ChatMessage> TextMessageExchanged;
@@ -71,11 +71,6 @@ public class AppManager
     private void OnNewUserDetected (User user)
     {
         NewUserDetected?.Invoke(this, user);
-    }
-
-    private void OnUserStatusUpdated(User user)
-    {
-        UserStatusUpdated.Invoke(this, user);
     }
     
     private void OnUserIsTyping(UserStatus obj)

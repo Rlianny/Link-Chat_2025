@@ -46,11 +46,10 @@ namespace LinkChat.Infrastructure
                   {
                       byte[]? frame = null;
 
-                      lock (queueLock)
-                      {
-                          if (queue.Count > 0)
-                              frame = queue.Dequeue();
-                      }
+
+                      if (queue.Count > 0)
+                          frame = queue.Dequeue();
+
 
                       if (frame != null)
                       {
