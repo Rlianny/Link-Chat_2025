@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text.Json.Nodes;
 using System.Text.Json;
 using System.Text;
+using System.Diagnostics;
 
 namespace LinkChat.Core.Implementations;
 
@@ -216,7 +217,22 @@ public class FileTransferService : IFileTransferService
         return Path.Combine(downloadsFolder, "LinkChatDownloads");
     }
 
-
+    public void ChangePermissions(string path)
+    {
+        var realUser = Environment.GetEnvironmentVariable("SUDO_USER");
+        try
+        {
+            var psi = new ProcessStartInfo("chown", $"-R {realUser}:{realUser} \"{path}\"")
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false
+            };
+            using var proc = Process.Start(psi);
+            proc?.WaitForExit(3000);
+        }
+        catch { }
+    }
 
 
     private async void OnFileChunkFrameReceived(FileChunk fileChunk)
@@ -248,6 +264,7 @@ public class FileTransferService : IFileTransferService
                 // System.Console.WriteLine($"Final download path: {downloadPath}");
 
                 Directory.CreateDirectory(downloadPath);
+                ChangePermissions(downloadPath);
 
                 string fileName = FileStarts[fileChunk.FileId].FileName;
                 System.Console.WriteLine(fileName);
@@ -276,6 +293,8 @@ public class FileTransferService : IFileTransferService
                     }
                     //     Console.WriteLine($"[OnFileChunkReceived] File written - path={filePath} totalBytes={totalBytesWritten}");
                 }
+
+                ChangePermissions(filePath);
 
                 var fileStart = FileStarts[fileChunk.FileId];
                 System.Console.WriteLine(filePath);
