@@ -38,12 +38,12 @@ public class MessagingService : IMessagingService
         protocolService.UserStatusFrameReceived += OnUserStatusFrameReceived;
         fileTransferService.FileFrameReceived += OnFileMessageFrameReceived;
         fileTransferService.FileSended += OnFileSended;
-
     }
 
     private void OnFileSended(Models.File file, string receiverName)
     {
         AddChatMessage(userService.GetSelfUser().UserName, file);
+        Confirmations.Add(file.MessageId, false);
         if (Files.ContainsKey(receiverName))
         {
             Files[receiverName].Add(file);
@@ -190,7 +190,7 @@ public class MessagingService : IMessagingService
         //  System.Console.WriteLine($"A new Chat Message Confirmed Event will be sended to backend");
         // System.Console.WriteLine($"Confirmation sended to message with ID {chatMessage.MessageId}");
     }
-    private void OnFileMessageFrameReceived(Models.File file)
+    private async void OnFileMessageFrameReceived(Models.File file)
     {
         AddChatMessage(file.UserName, file);
         if (Files.ContainsKey(file.MessageId))
@@ -205,6 +205,19 @@ public class MessagingService : IMessagingService
         else
         {
             Files.Add(file.UserName, [file]);
+        }
+        try
+        {
+            await SendConfirmation(file);
+        }
+        catch (Exception e)
+        {
+            try
+            {
+                await Task.Delay(11000);
+                await SendConfirmation(file);
+            }
+            catch { }
         }
         FileTransferred?.Invoke(file);
         //  System.Console.WriteLine($"A new File Transferred Event will be sended to backend: {file.Name}");
