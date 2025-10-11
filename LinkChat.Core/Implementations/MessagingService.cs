@@ -138,14 +138,14 @@ public class MessagingService : IMessagingService
         //  System.Console.WriteLine($"Broadcast message sended with ID {textMessage.MessageId}");
     }
 
-    public void ReactToMessage(string messageId, Emoji emoji)
+    public void ReactToMessage(string receiverUserName, string messageId, Emoji emoji)
     {
         ChatMessage chatMessage = GetMessageById(messageId);
         chatMessage.SetReaction(emoji);
         ReactedToMessage?.Invoke(chatMessage);
         // Console.WriteLine($"A new Text Reacted To Message Event will be sended from backend");
         MessageReaction messageReaction = new MessageReaction(userService.GetSelfUser().UserName, DateTime.Now, messageId, emoji);
-        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(GetMessageById(messageId).UserName), messageReaction, true);
+        byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), messageReaction, false);
         networkService.SendFrameAsync(frame, 1);
     }
 

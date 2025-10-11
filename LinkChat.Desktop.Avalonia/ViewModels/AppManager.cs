@@ -119,7 +119,7 @@ public class AppManager
 
     public async Task SendReaction(Emoji emoji, string messageId)
     {
-        _messagingService.ReactToMessage(messageId, emoji);
+        _messagingService.ReactToMessage(GlobalSingletonHelper.ChatWindowViewModel.CurrentReceiverUser.UserName, messageId, emoji);
         Console.WriteLine("Frontend: A Reaction Sent");
     }
 
