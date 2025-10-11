@@ -58,9 +58,10 @@ public partial class ChatHeaderViewModel : ViewModelBase
             _typingCancellationTokenSource = new CancellationTokenSource();
             var token = _typingCancellationTokenSource.Token;
 
-            // Store the current status
-            var originalStatus = CurrentReceiverUser?.Status.ToString() ?? "Online";
-
+            // Save the original status before changing to "Typing..."
+            // Don't use current status as it might already be "Typing..."
+            string originalStatus = CurrentReceiverUser?.Status == Status.Online ? "Online" : "Offline";
+        
             // Show typing status
             UserStatus = "Typing...";
 
@@ -68,7 +69,7 @@ public partial class ChatHeaderViewModel : ViewModelBase
             {
                 // Wait for 2 seconds then revert to original status
                 await Task.Delay(TimeSpan.FromSeconds(2), token);
-
+            
                 // Only update if we haven't been canceled by a new typing notification
                 if (!token.IsCancellationRequested)
                 {

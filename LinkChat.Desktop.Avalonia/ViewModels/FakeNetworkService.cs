@@ -19,12 +19,7 @@ public class FakeNetworkService : INetworkService
     {
         throw new NotImplementedException();
     }
-
-    public Task SendFrameInternal(byte[] frame)
-    {
-        throw new NotImplementedException();
-    }
-
+    
     public void StartListening()
     {
 
