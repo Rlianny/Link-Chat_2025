@@ -80,7 +80,7 @@ public class UserService : IUserService
         {
             return Users[userName].MacAddress;
         }
-        throw new Exception($"User {userName} is not reachable by you");
+        throw new Exception($"User {userName} is not reachable by you MAC");
     }
 
     public byte[] GetMacAddress(User user)
@@ -94,7 +94,7 @@ public class UserService : IUserService
         {
             return Users[userName];
         }
-        throw new Exception($"User {userName} is not reachable by you");
+        throw new Exception($"User {userName} is not reachable by you NAME");
     }
 
     public Status GetUserStatusByName(string userName)
@@ -103,7 +103,7 @@ public class UserService : IUserService
         {
             return Users[userName].Status;
         }
-        throw new Exception($"User {userName} is not reachable by you");
+        throw new Exception($"User {userName} is not reachable by you STATUS");
     }
 
     public void PruneInactiveUsers()

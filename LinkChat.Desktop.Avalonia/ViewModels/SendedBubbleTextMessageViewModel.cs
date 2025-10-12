@@ -20,7 +20,7 @@ public partial class SendedBubbleTextMessageViewModel : BubbleMessageViewModel
     public SendedBubbleTextMessageViewModel(TextMessage textMessage, AppManager appManager) : base(textMessage, appManager)
     {
         _textMessage = textMessage;
-        if (appManager.GetUserByName(_textMessage.UserName).Gender == Gender.female)
+        if (appManager.GetCurrentSelfUser().Gender == Gender.female)
             Character = GlobalSingletonHelper.FemaleCharacterYou;
         else
             Character = GlobalSingletonHelper.MaleCharacterYou;

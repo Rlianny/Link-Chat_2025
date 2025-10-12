@@ -33,7 +33,7 @@ public partial class SendedBubbleFileMessageViewModel : BubbleMessageViewModel
         _fileName = file.Name;
         _fileSize = Tools.FormatFileSize((long)file.Size);
 
-        if (appManager.GetUserByName(_file.UserName).Gender == Gender.female)
+        if (appManager.GetCurrentSelfUser().Gender == Gender.female)
             Character = GlobalSingletonHelper.FemaleCharacterYou;
         else
             Character = GlobalSingletonHelper.MaleCharacterYou;
