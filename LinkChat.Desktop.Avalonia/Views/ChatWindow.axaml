@@ -127,7 +127,7 @@
                             <Grid ColumnDefinitions="*, Auto">
                                 <TextBox Grid.Column="0"  
                                          CornerRadius="6"
-                                         Watermark="Escribe tu mensaje aquí...."
+                                         Watermark="Type your message here...."
                                          AcceptsReturn="True"
                                          TextWrapping="Wrap"
                                          Background="Transparent"

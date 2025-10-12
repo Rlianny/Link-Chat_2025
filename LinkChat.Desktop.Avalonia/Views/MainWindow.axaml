@@ -176,7 +176,8 @@
                                         BorderBrush="Transparent"
                                         FontSize="16"
                                         CaretBrush="{DynamicResource EbonyClay}"
-                                        MaxLength="15">
+                                        MaxLength="15"
+                                        Text="{Binding Username}">
                                         <TextBox.Styles>
                                             <Style Selector="TextBox:empty /template/ TextBlock#PART_Watermark">
                                                 <Setter Property="Foreground" Value="Gray"/>
@@ -196,7 +197,7 @@
                     <CheckBox x:Name="Male" 
                               Foreground="{DynamicResource EbonyClay}"
                               Content="Male" 
-                              IsChecked="False">
+                              IsChecked="{Binding IsMaleSelected}">
                         <CheckBox.Template>
                             <ControlTemplate TargetType="CheckBox">
                                 <Grid ColumnDefinitions="Auto,*">
@@ -249,7 +250,7 @@
                     <CheckBox x:Name="Female" 
                               Foreground="{DynamicResource EbonyClay}"
                               Content="Female" 
-                              IsChecked="False">
+                              IsChecked="{Binding IsFemaleSelected}">
                         <CheckBox.Template>
                             <ControlTemplate TargetType="CheckBox">
                                 <Grid ColumnDefinitions="Auto,*">
@@ -306,7 +307,8 @@
                 <Button CornerRadius="15" 
                         Background="{DynamicResource CrocusPurple}"
                         Height="60" Width="200"
-                        IsEnabled="True">
+                        IsEnabled="{Binding IsSignInEnabled}"
+                        Command="{Binding SignInCommand}">
                     <TextBlock Text="Sign In" 
                                Foreground="White" 
                                FontFamily="{DynamicResource NotoSansBold}"

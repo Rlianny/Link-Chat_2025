@@ -26,6 +26,8 @@ public partial class ChatHeaderViewModel : ViewModelBase
         CurrentReceiverUser = user;
         Username = CurrentReceiverUser.UserName;
         UserStatus = CurrentReceiverUser.Status.ToString();
+        if (Username == " ")
+            UserStatus = " ";
 
         _appManager = appManager;
         _appManager.UserStatusUpdated += OnUserStatusUpdated;

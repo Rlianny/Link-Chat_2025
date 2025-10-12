@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LinkChat.Core.Models;
 using LinkChat.Core.Services;
+using LinkChat.Core.Tools;
 
 namespace LinkChat.Desktop.Avalonia.ViewModels;
 
@@ -137,14 +138,8 @@ public class AppManager
         _messagingService.SendUserStatusTyping(receiverUserName); 
     }
 
-    public async Task SetSelfUserData(string userName, string gender)
+    public async Task SetSelfUserData(string userName, Gender gender)
     {
-        // pending implementation;
+       _userService.SetSelfUser(userName, gender); 
     }
-
-    public async Task StartListening()
-    {
-        _networkService.StartListening();
-    }
-    
 }

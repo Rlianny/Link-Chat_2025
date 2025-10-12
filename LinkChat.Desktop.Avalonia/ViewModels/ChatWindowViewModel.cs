@@ -90,13 +90,15 @@ public partial class ChatWindowViewModel : ViewModelBase
     {
         GlobalSingletonHelper.ChatWindowViewModel = this;
         string interfaceName = NetworkInterfaceSelector.GetBestNetworkInterfaceName();
-        //INetworkService networkService = new LinuxNetworkService(interfaceName);
-        INetworkService networkService = new FakeNetworkService();
+        INetworkService networkService = new LinuxNetworkService(interfaceName);
+        //INetworkService networkService = new FakeNetworkService();
         IProtocolService protocolService = new ProtocolService(networkService);
         IUserService userService = new UserService(protocolService, networkService);
         IFileTransferService fileTransferService = new FileTransferService(protocolService, networkService, userService);
         IMessagingService messagingService = new MessagingService(protocolService, fileTransferService, userService, networkService);
         AppManager = new AppManager(networkService, protocolService, userService, fileTransferService, messagingService);
+        GlobalSingletonHelper.AppManager = AppManager;
+
         _broadcastIcon = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/BroadcastDisabledBold.png"));
 
         HeaderViewModel = new ChatHeaderViewModel(AppManager.GetCurrentSelfUser(), AppManager);
