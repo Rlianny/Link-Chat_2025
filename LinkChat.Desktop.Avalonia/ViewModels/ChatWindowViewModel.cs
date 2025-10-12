@@ -116,7 +116,7 @@ public partial class ChatWindowViewModel : ViewModelBase
     private void OnTextMessageExchanged(object? sender, ChatMessage e)
     {
         Console.WriteLine($"Message received in ChatWindowViewModel");
-        if (e.UserName == CurrentReceiverUser.UserName || e.UserName == AppManager.GetCurrentSelfUser().UserName)
+        if (CurrentReceiverUser is not null && (e.UserName == CurrentReceiverUser.UserName || e.UserName == AppManager.GetCurrentSelfUser().UserName))
         {
             AddNewChatMessage(e);
         }
@@ -143,13 +143,14 @@ public partial class ChatWindowViewModel : ViewModelBase
             FileTypeFilter = null
         });
 
-        if (fileResults != null && fileResults.Count > 0)
+        if (fileResults.Count > 0)
         {
             var selectedFile = fileResults[0];
             string decodedPath = Uri.UnescapeDataString(selectedFile.Path.AbsolutePath);
             Console.WriteLine($"Attempting to send file: {decodedPath}");
             //Console.WriteLine(selectedFile.Path.AbsolutePath.ToString());
-            await AppManager.SendFileMessage(decodedPath, CurrentReceiverUser.UserName);
+            if(CurrentReceiverUser is not null)
+                await AppManager.SendFileMessage(decodedPath, CurrentReceiverUser.UserName);
         }
     }
 
