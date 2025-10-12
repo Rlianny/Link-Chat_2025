@@ -47,7 +47,6 @@ public partial class AvailableUserViewModel: ViewModelBase
         appManager.TextMessageExchanged += OnTextMessageExchanged;
         appManager.UserPruned += OnUserPruned;
         appManager.FileTransferred += OnTextMessageExchanged;
-
     }
 
     public void OnTextMessageExchanged(object? sender, ChatMessage chatMessage)

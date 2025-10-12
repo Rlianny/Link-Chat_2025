@@ -135,7 +135,7 @@ public partial class ChatWindowViewModel : ViewModelBase
 
         var fileResults = await storageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Selecciona un archivo para enviar",
+            Title = "Select a file to send",
             AllowMultiple = false,
             FileTypeFilter = null
         });

@@ -33,5 +33,6 @@ public class User
     public User(string name, Gender gender, Status status, byte[] macAddress)
     {
         (userName, this.status, this.macAddress) = (name, status, macAddress);
+        this.gender = gender;
     }
 }

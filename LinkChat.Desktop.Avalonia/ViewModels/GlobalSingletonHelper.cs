@@ -7,10 +7,10 @@ namespace LinkChat.Desktop.Avalonia.ViewModels;
 
 public static class GlobalSingletonHelper
 {
-    public static Bitmap? FemaleCharacterOther = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/FemaleCharacterOther.png"));
-    public static  Bitmap? FemaleCharacterYou = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/FemaleCharacterYou.png"));
-    public static Bitmap? MaleCharacterOther = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/MaleCharacterOther.png"));
-    public static Bitmap? MaleCharacterYou = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/MaleCharacterYou.png"));
+    public static readonly Bitmap? FemaleCharacterOther = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/FemaleCharacterOther.png"));
+    public static readonly Bitmap? FemaleCharacterYou = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/FemaleCharacterYou.png"));
+    public static readonly Bitmap? MaleCharacterOther = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/MaleCharacterOther.png"));
+    public static readonly Bitmap? MaleCharacterYou = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/MaleCharacterYou.png"));
     private static AppManager? _instance;
     public static AppManager AppManager 
     { 

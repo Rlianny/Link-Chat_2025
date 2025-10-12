@@ -63,12 +63,15 @@ public partial class MainWindowViewModel : ViewModelBase
 
         // Determine the selected gender
         Gender gender = IsMaleSelected ? Gender.male : Gender.female;
+        
+        Console.WriteLine($"{gender} MainWindowViewModel");
 
         ChatWindowViewModel chatWindowViewModel = GlobalSingletonHelper.ChatWindowViewModel;
 
         // Create the user
         GlobalSingletonHelper.AppManager.SetSelfUserData(Username, gender);
-        User user = GlobalSingletonHelper.AppManager.GetCurrentSelfUser();
+        GlobalSingletonHelper.SetMyUser(GlobalSingletonHelper.AppManager.GetCurrentSelfUser());
+        User user = GlobalSingletonHelper.MyUser;
 
         // Set user in GlobalSingletonHelper
         GlobalSingletonHelper.SetMyUser(user);

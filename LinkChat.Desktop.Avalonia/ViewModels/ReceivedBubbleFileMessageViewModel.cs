@@ -1,3 +1,4 @@
+using System;
 using LinkChat.Core.Tools;
 
 namespace LinkChat.Desktop.Avalonia.ViewModels;
