@@ -41,7 +41,6 @@ public partial class ChatWindowViewModel : ViewModelBase
     {
         if (value != null)
         {
-            Console.WriteLine($"Updating header with user: {value.UserName}"); // Debug log
             HeaderViewModel.CurrentReceiverUser = value;
         }
     }
@@ -68,7 +67,6 @@ public partial class ChatWindowViewModel : ViewModelBase
 
     public void AddNewChatMessage(ChatMessage newMessage)
     {
-        Console.WriteLine($"Adding new message to chat: {newMessage.GetType().Name}");
         if (newMessage is TextMessage textMessage)
         {
             if (textMessage.UserName == AppManager.GetCurrentSelfUser().UserName)
@@ -91,13 +89,11 @@ public partial class ChatWindowViewModel : ViewModelBase
     public ChatWindowViewModel()
     {
         GlobalSingletonHelper.ChatWindowViewModel = this;
-        GlobalSingletonHelper.SetUserName("Kevin");
-
         string interfaceName = NetworkInterfaceSelector.GetBestNetworkInterfaceName();
-        INetworkService networkService = new LinuxNetworkService(interfaceName);
-        //INetworkService networkService = new FakeNetworkService();
+        //INetworkService networkService = new LinuxNetworkService(interfaceName);
+        INetworkService networkService = new FakeNetworkService();
         IProtocolService protocolService = new ProtocolService(networkService);
-        IUserService userService = new UserService(protocolService, networkService, "Kevin");
+        IUserService userService = new UserService(protocolService, networkService);
         IFileTransferService fileTransferService = new FileTransferService(protocolService, networkService, userService);
         IMessagingService messagingService = new MessagingService(protocolService, fileTransferService, userService, networkService);
         AppManager = new AppManager(networkService, protocolService, userService, fileTransferService, messagingService);
@@ -115,7 +111,6 @@ public partial class ChatWindowViewModel : ViewModelBase
 
     private void OnTextMessageExchanged(object? sender, ChatMessage e)
     {
-        Console.WriteLine($"Message received in ChatWindowViewModel");
         if (CurrentReceiverUser is not null && (e.UserName == CurrentReceiverUser.UserName || e.UserName == AppManager.GetCurrentSelfUser().UserName))
         {
             AddNewChatMessage(e);
@@ -147,8 +142,6 @@ public partial class ChatWindowViewModel : ViewModelBase
         {
             var selectedFile = fileResults[0];
             string decodedPath = Uri.UnescapeDataString(selectedFile.Path.AbsolutePath);
-            Console.WriteLine($"Attempting to send file: {decodedPath}");
-            //Console.WriteLine(selectedFile.Path.AbsolutePath.ToString());
             if(CurrentReceiverUser is not null)
                 await AppManager.SendFileMessage(decodedPath, CurrentReceiverUser.UserName);
         }
@@ -181,7 +174,6 @@ public partial class ChatWindowViewModel : ViewModelBase
             var user = AppManager.GetUserByName(newReceiverName);
             if (user != null)
             {
-                Console.WriteLine($"Reloading chat for user: {user.UserName}"); // Debug log
                 CurrentReceiverUser = user;
 
                 HeaderViewModel.UpdateUser(CurrentReceiverUser);

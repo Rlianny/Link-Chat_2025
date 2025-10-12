@@ -74,7 +74,6 @@ public abstract partial class BubbleMessageViewModel : ViewModelBase
 
     private void ReactionSet()
     {
-        Console.WriteLine("Se notificó correctamente");
         string emoji = "";
         switch (_message.Reaction)
         {
@@ -99,12 +98,10 @@ public abstract partial class BubbleMessageViewModel : ViewModelBase
     [RelayCommand]
     private void React(string emoji)
     {
-        Console.WriteLine($"You reacted with {emoji} to a message");
         switch (emoji)
         {
            case "happy":
                _appManager.SendReaction(Emoji.HappyFace, _message.MessageId);
-               Console.WriteLine("Se ha reacted");
                break;
            case "like":
                _appManager.SendReaction(Emoji.Like, _message.MessageId);

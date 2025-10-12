@@ -22,7 +22,7 @@ public partial class App : Application
         ChatWindowViewModel chatWindowViewModel = new ChatWindowViewModel();
         GlobalSingletonHelper.ChatWindowViewModel =  chatWindowViewModel;
         
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        /*if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
@@ -34,6 +34,15 @@ public partial class App : Application
             
             var topLevel = TopLevel.GetTopLevel(desktop.MainWindow);
             GlobalSingletonHelper.StorageProvider = topLevel.StorageProvider;
+        }*/
+        
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            DisableAvaloniaDataAnnotationValidation();
+            desktop.MainWindow = new MainWindow()
+            {
+                DataContext = chatWindowViewModel
+            };
         }
 
         base.OnFrameworkInitializationCompleted();

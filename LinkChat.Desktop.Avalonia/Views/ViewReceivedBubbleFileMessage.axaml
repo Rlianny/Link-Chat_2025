@@ -40,7 +40,7 @@
                 <Grid ColumnDefinitions="70, 300" RowDefinitions="Auto">
                     <!-- user image -->
                     <Border Grid.Column="0" Padding="6">
-                        <Image Source="/Assets/Images/Character1.png" VerticalAlignment="Top" HorizontalAlignment="Center"></Image> <!-- bind to userImage-->
+                        <Image Source="{Binding Character}" VerticalAlignment="Top" HorizontalAlignment="Center"></Image> <!-- bind to userImage-->
                     </Border>
                     <!-- message -->
                     <Border Grid.Column="1" Padding="6">

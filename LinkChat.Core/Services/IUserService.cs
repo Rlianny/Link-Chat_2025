@@ -14,6 +14,8 @@ namespace LinkChat.Core.Services
         public byte[] GetMacAddress(User user);
         public event Action<User>? UserDisconnected;
         public event Action<User>? NewUserConnected;
+        public event Action<User>? HeartbeatReceived;
         public User GetSelfUser();
+        public void SetSelfUser(string name, Gender gender);
     }
 }

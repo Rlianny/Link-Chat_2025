@@ -14,12 +14,19 @@ public partial class ReceivedBubbleTextMessageViewModel : BubbleMessageViewModel
     private TextMessage _textMessage; 
     public string Content
     {
-        get { return _textMessage.Content;}
-        private set {}
+        get { return _textMessage.Content; }
+        private set { }
     }
+    
+    [ObservableProperty]
+    private Bitmap? _character;
     
     public ReceivedBubbleTextMessageViewModel(TextMessage textMessage, AppManager appManager) : base(textMessage, appManager)
     {
         _textMessage = textMessage;
+        if (appManager.GetUserByName(_textMessage.UserName).Gender == Gender.female)
+            Character = GlobalSingletonHelper.FemaleCharacterOther;
+        else
+            Character = GlobalSingletonHelper.MaleCharacterOther;
     }
 }

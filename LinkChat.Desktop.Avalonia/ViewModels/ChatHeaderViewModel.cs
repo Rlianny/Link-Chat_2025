@@ -31,6 +31,15 @@ public partial class ChatHeaderViewModel : ViewModelBase
         _appManager.UserStatusUpdated += OnUserStatusUpdated;
         _appManager.NewUserDetected += OnNewUserDetected;
         _appManager.UserPruned += OnUserPruned;
+        _appManager.HeartbeatReceived += OnHeartbeatReceived;
+    }
+
+    private void OnHeartbeatReceived(object? sender, User e)
+    {
+        if (e.UserName == Username)
+        {
+            UserStatus = "Online";
+        }
     }
 
     private void OnUserPruned(object? sender, User user)

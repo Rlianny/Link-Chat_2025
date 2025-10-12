@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LinkChat.Core.Models;
@@ -14,6 +15,9 @@ public partial class AvailableUserViewModel: ViewModelBase
     private AppManager appManager;
     
     private User _user;
+    
+    [ObservableProperty]
+    private Bitmap? _character;
 
     public User User
     {
@@ -34,6 +38,11 @@ public partial class AvailableUserViewModel: ViewModelBase
         _lastMessage = " ";
         _lastTimestamp = " ";
         this.appManager = appManager;
+        
+        if (User.Gender == Gender.female)
+            Character = GlobalSingletonHelper.FemaleCharacterOther;
+        else
+            Character = GlobalSingletonHelper.MaleCharacterOther;
 
         appManager.TextMessageExchanged += OnTextMessageExchanged;
         appManager.UserPruned += OnUserPruned;
@@ -43,7 +52,6 @@ public partial class AvailableUserViewModel: ViewModelBase
 
     public void OnTextMessageExchanged(object? sender, ChatMessage chatMessage)
     {
-        Console.WriteLine($"Message received in AvailableUserViewModel for user {User.UserName}");
         if(chatMessage.UserName == User.UserName || chatMessage.UserName == appManager.GetCurrentSelfUser().UserName)
             Update();
     }
@@ -51,10 +59,8 @@ public partial class AvailableUserViewModel: ViewModelBase
     private void Update()
     {
         ChatMessage chatMessage = appManager.GetLastMessageByUser(User.UserName);
-        Console.WriteLine("Avaliable User will be updated");
         if (chatMessage is TextMessage textMessage)
         {
-            Console.WriteLine($"The last message was: {textMessage.Content}");
             string sender = String.Empty;
             if(textMessage.UserName == User.UserName)
                 sender = User.UserName;

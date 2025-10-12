@@ -18,11 +18,11 @@ public class ChatMessageTemplateSelector : IDataTemplate
             switch (message)
             {
                 case TextMessage textMessage:
-                    if (textMessage.UserName == GlobalSingletonHelper.MyUserName)
+                    if (textMessage.UserName == GlobalSingletonHelper.MyUser.UserName)
                         return SendedFileMessage?.Build(param); 
                     return ReceivedTextMessage?.Build(param);
                 case File fileMessage:
-                    if (fileMessage.UserName == GlobalSingletonHelper.MyUserName)
+                    if (fileMessage.UserName == GlobalSingletonHelper.MyUser.UserName)
                         return SendedFileMessage?.Build(param);
                     return ReceivedFileMessage?.Build(param);
                 default: return new TextBlock { Text = $"Not handled type: {message.GetType().Name}" };

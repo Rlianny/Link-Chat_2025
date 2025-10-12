@@ -1,9 +1,12 @@
 using LinkChat.Core.Tools;
 
 namespace LinkChat.Desktop.Avalonia.ViewModels;
+
+using CommunityToolkit.Mvvm.ComponentModel;
+using global::Avalonia.Media.Imaging;
 using LinkChat.Core.Models;
 
-public class SendedBubbleFileMessageViewModel : BubbleMessageViewModel
+public partial class SendedBubbleFileMessageViewModel : BubbleMessageViewModel
 {
     private File _file;
     private string _fileName;
@@ -12,19 +15,27 @@ public class SendedBubbleFileMessageViewModel : BubbleMessageViewModel
     public string FileName
     {
         get => _fileName;
-        private set{}
+        private set { }
     }
 
     public string FileSize
     {
         get => _fileSize;
-        private set{}
+        private set { }
     }
+
+    [ObservableProperty]
+    private Bitmap? _character;
 
     public SendedBubbleFileMessageViewModel(File file, AppManager appManager) : base(file, appManager)
     {
         _file = file;
         _fileName = file.Name;
         _fileSize = Tools.FormatFileSize((long)file.Size);
+
+        if (appManager.GetUserByName(_file.UserName).Gender == Gender.female)
+            Character = GlobalSingletonHelper.FemaleCharacterYou;
+        else
+            Character = GlobalSingletonHelper.MaleCharacterYou;
     }
 }

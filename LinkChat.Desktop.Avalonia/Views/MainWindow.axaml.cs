@@ -1,4 +1,8 @@
+using System;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
+using Avalonia.Threading;
 
 namespace LinkChat.Desktop.Avalonia.Views;
 
