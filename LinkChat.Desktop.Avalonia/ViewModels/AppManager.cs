@@ -88,7 +88,6 @@ public class AppManager
     // Get Info from Backend
     public User GetCurrentSelfUser()
     {
-        Console.WriteLine($"{_userService.GetSelfUser().Gender} AppManager GetCurrentSelfUser");
         return _userService.GetSelfUser();
     }
 
@@ -141,7 +140,6 @@ public class AppManager
 
     public async Task SetSelfUserData(string userName, Gender gender)
     {
-        Console.WriteLine($"{gender} AppManager");
        _userService.SetSelfUser(userName, gender); 
     }
 }

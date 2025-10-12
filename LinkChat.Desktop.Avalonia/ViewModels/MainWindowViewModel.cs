@@ -63,8 +63,6 @@ public partial class MainWindowViewModel : ViewModelBase
 
         // Determine the selected gender
         Gender gender = IsMaleSelected ? Gender.male : Gender.female;
-        
-        Console.WriteLine($"{gender} MainWindowViewModel");
 
         ChatWindowViewModel chatWindowViewModel = GlobalSingletonHelper.ChatWindowViewModel;
 
