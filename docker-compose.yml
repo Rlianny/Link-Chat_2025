@@ -1,0 +1,62 @@
+# docker-compose.yml
+
+# Definimos la versión de la sintaxis de Compose
+version: '3.8'
+
+# Definimos una red virtual para que los contenedores se comuniquen
+networks:
+  linkchat_net:
+    driver: bridge
+
+services:
+  # --- Contenedor 1: Kevin ---
+  kevin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kevin
+    # NO usamos network_mode: host. Dejamos que Docker cree una red virtual.
+    networks:
+      - linkchat_net
+    # Permisos necesarios para AF_PACKET
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    # Variable de entorno para este contenedor específico
+    environment:
+      - LINKCHAT_USERNAME=Kevin
+    # Para poder interactuar con él
+    stdin_open: true
+    tty: true
+
+  # --- Contenedor 2: Lianny ---
+  lianny:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lianny
+    networks:
+      - linkchat_net
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      - LINKCHAT_USERNAME=Lianny
+    stdin_open: true
+    tty: true
+    
+    # --- Contenedor 3: El Crika ---
+  crika:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crika
+    networks:
+      - linkchat_net
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      - LINKCHAT_USERNAME=El Crika
+    stdin_open: true
+    tty: true

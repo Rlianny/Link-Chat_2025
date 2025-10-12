@@ -1,0 +1,26 @@
+# Excluir carpetas de compilación y dependencias
+**/bin/
+**/obj/
+
+# Excluir carpetas de configuración de IDEs
+.idea/
+.vs/
+.vscode/
+
+# Excluir archivos de configuración de usuario
+*.user
+*.suo
+*.DotSettings.user
+
+# Excluir archivos de control de versiones
+.git/
+.gitignore
+
+# Excluir los propios archivos de Docker
+Dockerfile
+Dockerfile.*
+docker-compose.yml
+docker-compose.*.yml
+
+# Excluir logs y otros archivos temporales
+*.log

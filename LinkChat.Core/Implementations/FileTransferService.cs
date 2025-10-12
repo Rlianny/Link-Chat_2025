@@ -116,42 +116,18 @@ public class FileTransferService : IFileTransferService
         });
         await sendAndWait;
         // Console.WriteLine($"[SendFile] Starting chunk transmission - fileId={start.FileId} totalChunks={chunks.Count} windowSize={WINDOW_SIZE}");
-        for (int i = 0; i < chunks.Count; i += WINDOW_SIZE)
+        bool changed = true;
+        while (changed)
         {
-            int windowEnd = Math.Min(i + WINDOW_SIZE, chunks.Count);
-            //  Console.WriteLine($"[SendFile] Window [{i}-{windowEnd - 1}] - fileId={start.FileId}");
-
-            for (int j = i; j < windowEnd; j++)
+            changed = false;
+            foreach (var chunk in chunks)
             {
-                byte[] frame = protocolService.CreateFrameToSend(receiverUser, chunks[j], false);
-                await networkService.SendFrameAsync(frame, 5);
-                //  Console.WriteLine($"[SendFile] Sent chunk {j}/{chunks.Count} - fileId={start.FileId} bytes={chunks[j].Data.Length}");
-            }
-
-            await Task.Delay(50);
-
-            while (true)
-            {
-                int pending = 0;
-                for (int j = i; j < windowEnd; j++)
+                if (!Confirmations[file.MessageId][chunk.ChunkNumber])
                 {
-                    if (!Confirmations[start.FileId][j])
-                    {
-                        byte[] frame = protocolService.CreateFrameToSend(receiverUser, chunks[j], false);
-                        await networkService.SendFrameAsync(frame, 5);
-                        pending++;
-                        //   Console.WriteLine($"[SendFile] Resending chunk {j} (pending={pending}) - fileId={start.FileId}");
-                    }
+                    changed = true;
+                    byte[] frame = protocolService.CreateFrameToSend(receiverUser, chunk, false);
+                    await networkService.SendFrameAsync(frame, 5);
                 }
-
-                if (pending == 0)
-                {
-                    //  Console.WriteLine($"[SendFile] Window [{i}-{windowEnd - 1}] complete - fileId={start.FileId}");
-                    break;
-                }
-
-                int delay = pending > 10 ? 50 : 20;
-                await Task.Delay(delay);
             }
         }
         //   Console.WriteLine($"[SendFile] COMPLETE - fileId={start.FileId} allChunksSent={chunks.Count}");

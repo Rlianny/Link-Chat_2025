@@ -162,6 +162,7 @@ public class MessagingService : IMessagingService
 
     private async void OnTextMessageFrameReceived(TextMessage textMessage)
     {
+        System.Console.WriteLine(textMessage.Content);
         // Console.WriteLine("received: " + textMessage.Content);
         AddChatMessage(textMessage.UserName, textMessage);
         TextMessageExchanged?.Invoke(textMessage);
