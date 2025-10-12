@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LinkChat.Core.Models;
 using LinkChat.Core.Services;
+using LinkChat.Core.Tools;
 
 namespace LinkChat.Desktop.Avalonia.ViewModels;
 
@@ -29,8 +30,9 @@ public class AppManager
         _messagingService.ChatMessageConfirmed += OnChatMessageConfirmed;
         _messagingService.ReactedToMessage += OnReactedToMessage;
         _messagingService.UserIsTyping += OnUserIsTyping;
-        _userService.UserDisconnected += OnUserPruned; 
+        _userService.UserDisconnected += OnUserPruned;
         _userService.NewUserConnected += OnNewUserDetected;
+        _userService.HeartbeatReceived += OnHeartbeatReceived;
     }
 
     public EventHandler<ChatMessage> TextMessageExchanged;
@@ -40,6 +42,7 @@ public class AppManager
     public EventHandler<User> UserPruned;
     public EventHandler<User> NewUserDetected;
     public EventHandler<User> UserStatusUpdated;
+    public EventHandler<User> HeartbeatReceived;
     
     
     // Events response
@@ -71,10 +74,15 @@ public class AppManager
     {
         NewUserDetected?.Invoke(this, user);
     }
-    
+
     private void OnUserIsTyping(UserStatus obj)
     {
         UserStatusUpdated.Invoke(this, _userService.GetUserByName(obj.UserName));
+    }
+    
+    private void OnHeartbeatReceived(User user)
+    {
+        HeartbeatReceived?.Invoke(this, user);
     }
 
     // Get Info from Backend
@@ -108,25 +116,21 @@ public class AppManager
     public async Task SendTextMessage(string text, string userName)
     {
         _messagingService.SendTextMessage(userName, text);
-        Console.WriteLine("Frontend: A Text Message Sent");
     }
 
     public async Task SendFileMessage(string filePath, string userName)
     { 
         _fileTransferService.SendFile(userName, filePath);
-        Console.WriteLine("Frontend: A File Message Sent");
     }
 
     public async Task SendReaction(Emoji emoji, string messageId)
     {
         _messagingService.ReactToMessage(GlobalSingletonHelper.ChatWindowViewModel.CurrentReceiverUser.UserName, messageId, emoji);
-        Console.WriteLine("Frontend: A Reaction Sent");
     }
 
     public async Task SendBroadcast(string message)
     {
         _messagingService.SendBroadcastTextMessage(message);
-        Console.WriteLine("Frontend: A Broadcast Sent");
     }
 
     public async Task SendUserStatusTyping(string receiverUserName)
@@ -134,15 +138,8 @@ public class AppManager
         _messagingService.SendUserStatusTyping(receiverUserName); 
     }
 
-    public async Task SetSelfUserData(string userName, string gender)
+    public async Task SetSelfUserData(string userName, Gender gender)
     {
-        // pending implementation;
+       _userService.SetSelfUser(userName, gender); 
     }
-
-    public async Task StartListening()
-    {
-        _networkService.StartListening();
-        Console.WriteLine("Frontend: Listening started");
-    }
-    
 }

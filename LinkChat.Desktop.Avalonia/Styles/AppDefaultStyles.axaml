@@ -66,6 +66,12 @@
                              Background="Transparent"
                              Foreground="{DynamicResource FontGrey}">
                     </TextBox>
+                    
+                    <CheckBox x:Name="Female" 
+                              Foreground="{DynamicResource EbonyClay}"
+                              Content="Female" 
+                              IsChecked="False"> </CheckBox>
+                    
                 </StackPanel>
             </Grid>
         </Border>
@@ -251,4 +257,19 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
     </Style>
+    
+        <!-- Estilo para estado marcado -->
+        <Style Selector="CheckBox:checked /template/ Path#CheckGlyph">
+            <Setter Property="IsVisible" Value="True"/>
+        </Style>
+        <Style Selector="CheckBox:unchecked /template/ Path#CheckGlyph">
+            <Setter Property="IsVisible" Value="False"/>
+        </Style>
+        
+        <!-- Estilo para estado marcado -->
+        <Style Selector="CheckBox:checked /template/ Border#PART_Border">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource CrocusPurple}"/>
+        </Style>
+    
 </Styles>

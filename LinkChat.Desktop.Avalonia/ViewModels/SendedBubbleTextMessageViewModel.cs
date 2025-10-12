@@ -1,8 +1,10 @@
+using Avalonia.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
 using LinkChat.Core.Models;
 
 namespace LinkChat.Desktop.Avalonia.ViewModels;
 
-public class SendedBubbleTextMessageViewModel : BubbleMessageViewModel
+public partial class SendedBubbleTextMessageViewModel : BubbleMessageViewModel
 {
     private TextMessage _textMessage;
     private string _content;
@@ -11,9 +13,16 @@ public class SendedBubbleTextMessageViewModel : BubbleMessageViewModel
     {
         get => _textMessage.Content;
     }
+
+    [ObservableProperty]
+    private Bitmap? _character;
     
     public SendedBubbleTextMessageViewModel(TextMessage textMessage, AppManager appManager) : base(textMessage, appManager)
     {
         _textMessage = textMessage;
+        if (appManager.GetUserByName(_textMessage.UserName).Gender == Gender.female)
+            Character = GlobalSingletonHelper.FemaleCharacterYou;
+        else
+            Character = GlobalSingletonHelper.MaleCharacterYou;
     }
 }

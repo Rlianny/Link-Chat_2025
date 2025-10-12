@@ -35,7 +35,6 @@ public class FileTransferService : IFileTransferService
         protocolService.FileChunkAckFrameReceived += OnFileChunkAckFrameReceived;
         protocolService.FileStartAckFrameReceived += OnFileStartAckFrameReceived;
 
-        //  Console.WriteLine("The file transfer service is created");
     }
     public List<FileChunk> SplitFile(
         string filePath,
@@ -49,7 +48,6 @@ public class FileTransferService : IFileTransferService
 
         List<FileChunk> chunks = new();
         string fileId = Tools.Tools.GetNewId(userService);
-        //  Console.WriteLine($"[SplitFile] Starting - fileId={fileId} file={filePath} chunkSize={chunkSize}");
 
         byte[] buffer = new byte[chunkSize];
         using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read);
@@ -73,19 +71,16 @@ public class FileTransferService : IFileTransferService
             chunks.Add(chunk);
             chunkNumber++;
         }
-        //  Console.WriteLine($"[SplitFile] Complete - fileId={fileId} totalChunks={chunks.Count} expectedChunks={totalChunks}");
         return chunks;
     }
 
     public async void SendFile(string receiverUserName, string filePath)
     {
-        //  Console.WriteLine($"[SendFile] START - to={receiverUserName} file={filePath}");
         User receiverUser = userService.GetUserByName(receiverUserName);
         var chunks = SplitFile(filePath, receiverUserName, 800).ToList();
         long size = new FileInfo(filePath).Length;
 
         Models.File file = new Models.File(userService.GetSelfUser().UserName, DateTime.Now, chunks.First().FileId, filePath, size, Path.GetFileName(filePath));
-        // Console.WriteLine($"[SendFile] Created File object - fileId={file.MessageId} totalChunks={chunks.Count} size={size}");
         FileSended?.Invoke(file, receiverUserName);
         var start = new FileStart(
             file.UserName,
@@ -100,22 +95,19 @@ public class FileTransferService : IFileTransferService
             Confirmations[start.FileId].Add(chunk.ChunkNumber, false);
         }
         ConfirmingStarts.Add(start.FileId, false);
-        // Console.WriteLine($"[SendFile] Sending FileStart - fileId={start.FileId} fileName={start.FileName} totalChunks={start.TotalChunks}");
         Task sendAndWait = Task.Run(async () =>
         {
             int attempts = 0;
             while (!ConfirmingStarts[start.FileId])
             {
                 attempts++;
-                // Console.WriteLine($"[SendFile] FileStart attempt #{attempts} - fileId={start.FileId}");
                 byte[] frame = protocolService.CreateFrameToSend(receiverUser, start, false);
                 await networkService.SendFrameAsync(frame, 4);
                 await Task.Delay(100);
             }
-            //  Console.WriteLine($"[SendFile] FileStart ACK received after {attempts} attempts - fileId={start.FileId}");
         });
         await sendAndWait;
-        // Console.WriteLine($"[SendFile] Starting chunk transmission - fileId={start.FileId} totalChunks={chunks.Count} windowSize={WINDOW_SIZE}");
+        
         bool changed = true;
         while (changed)
         {
@@ -128,27 +120,20 @@ public class FileTransferService : IFileTransferService
                     byte[] frame = protocolService.CreateFrameToSend(receiverUser, chunk, false);
                     await networkService.SendFrameAsync(frame, 5);
                 }
+
             }
         }
-        //   Console.WriteLine($"[SendFile] COMPLETE - fileId={start.FileId} allChunksSent={chunks.Count}");
     }
     public void OnFileStartAckFrameReceived(FileStartAck fileStartAck)
     {
-        //  Console.WriteLine($"[OnFileStartAckReceived] fileId={fileStartAck.FileId} from={fileStartAck.UserName}");
         ConfirmingStarts[fileStartAck.FileId] = true;
     }
 
     private void OnFileChunkAckFrameReceived(FileChunkAck fileAck)
     {
-        //  Console.WriteLine($"[OnFileChunkAckReceived] fileId={fileAck.FileID} chunk={fileAck.ChunkNumber} from={fileAck.UserName}");
         if (Confirmations.ContainsKey(fileAck.FileID) && Confirmations[fileAck.FileID].ContainsKey(fileAck.ChunkNumber))
         {
             Confirmations[fileAck.FileID][fileAck.ChunkNumber] = true;
-            //  Console.WriteLine($"[OnFileChunkAckReceived] Confirmed chunk {fileAck.ChunkNumber} - fileId={fileAck.FileID}");
-        }
-        else
-        {
-            // Console.WriteLine($"[OnFileChunkAckReceived] ERROR: Unknown fileId or chunk - fileId={fileAck.FileID} chunk={fileAck.ChunkNumber}");
         }
     }
 
@@ -213,7 +198,6 @@ public class FileTransferService : IFileTransferService
 
     private async void OnFileChunkFrameReceived(FileChunk fileChunk)
     {
-        // Console.WriteLine($"[OnFileChunkReceived] fileId={fileChunk.FileId} chunk={fileChunk.ChunkNumber} bytes={fileChunk.Data.Length} from={fileChunk.UserName}");
         await SendChunkConfirmation(fileChunk);
         userService.UpdateLastSeen(fileChunk.UserName);
         if (FileChunks.ContainsKey(fileChunk.FileId))
@@ -221,24 +205,14 @@ public class FileTransferService : IFileTransferService
             if (!FileChunks[fileChunk.FileId].ContainsKey(fileChunk.ChunkNumber))
             {
                 FileChunks[fileChunk.FileId].Add(fileChunk.ChunkNumber, fileChunk);
-                //   Console.WriteLine($"[OnFileChunkReceived] Added chunk {fileChunk.ChunkNumber} - fileId={fileChunk.FileId} totalReceived={FileChunks[fileChunk.FileId].Count}");
                 Task task = SendChunkConfirmation(fileChunk);
                 await task;
             }
-            else
-            {
-                //     Console.WriteLine($"[OnFileChunkReceived] Duplicate chunk {fileChunk.ChunkNumber} ignored - fileId={fileChunk.FileId}");
-            }
 
             int cant = FileStarts[fileChunk.FileId].TotalChunks;
-            // Console.WriteLine($"[OnFileChunkReceived] Progress - fileId={fileChunk.FileId} received={FileChunks[fileChunk.FileId].Count}/{cant}");
             if (cant == FileChunks[fileChunk.FileId].Count)
             {
-                // Console.WriteLine($"[OnFileChunkReceived] ALL CHUNKS RECEIVED - fileId={fileChunk.FileId} starting file assembly");
-
                 string downloadPath = GetUserDownloadsPath();
-                // System.Console.WriteLine($"Final download path: {downloadPath}");
-
                 Directory.CreateDirectory(downloadPath);
                 ChangePermissions(downloadPath);
 
@@ -267,7 +241,6 @@ public class FileTransferService : IFileTransferService
                         fs.Flush();
                         totalBytesWritten += chunk.Data.Length;
                     }
-                    //     Console.WriteLine($"[OnFileChunkReceived] File written - path={filePath} totalBytes={totalBytesWritten}");
                 }
 
                 ChangePermissions(filePath);
@@ -284,7 +257,6 @@ public class FileTransferService : IFileTransferService
                     fileName
                 );
                 Files.Add(fileChunk.FileId, file);
-                // Console.WriteLine($"[OnFileChunkReceived] File COMPLETE - fileId={fileChunk.FileId} path={filePath} sizeKB={fileSize}");
                 FileFrameReceived?.Invoke(file);
                 FileChunks.Remove(fileChunk.FileId);
                 FileStarts.Remove(fileChunk.FileId);
@@ -294,7 +266,6 @@ public class FileTransferService : IFileTransferService
 
     private async void OnFileStartFrameReceived(FileStart fileStart)
     {
-        // Console.WriteLine($"[OnFileStartReceived] fileId={fileStart.FileId} fileName={fileStart.FileName} from={fileStart.UserName} totalChunks={fileStart.TotalChunks} size={fileStart.FileSize}");
         if (!FileChunks.ContainsKey(fileStart.FileId))
         {
             if (!FileStarts.ContainsKey(fileStart.FileId))
@@ -302,7 +273,7 @@ public class FileTransferService : IFileTransferService
                 FileStarts.Add(fileStart.FileId, fileStart);
             }
             FileChunks.Add(fileStart.FileId, []);
-            // Console.WriteLine($"[OnFileStartReceived] Registered fileId={fileStart.FileId} - sending ACK");
+        ;
             Task task = SendStartConfirmation(fileStart);
             userService.UpdateLastSeen(fileStart.UserName);
             await task;
@@ -314,14 +285,12 @@ public class FileTransferService : IFileTransferService
     }
     public async Task SendChunkConfirmation(FileChunk fileChunk)
     {
-        // Console.WriteLine($"[SendChunkConfirmation] Sending ACK - fileId={fileChunk.FileId} chunk={fileChunk.ChunkNumber} to={fileChunk.UserName}");
         FileChunkAck fileChunkAck = new FileChunkAck(fileChunk.UserName, DateTime.Now, fileChunk.FileId, fileChunk.ChunkNumber);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileChunk.UserName), fileChunkAck, false);
         await networkService.SendFrameAsync(frame, 1);
     }
     public async Task SendStartConfirmation(FileStart fileStart)
     {
-        // Console.WriteLine($"[SendStartConfirmation] Sending ACK - fileId={fileStart.FileId} to={fileStart.UserName}");
         FileStartAck fileStartAck = new FileStartAck(fileStart.UserName, DateTime.Now, fileStart.FileId);
         byte[] frame = protocolService.CreateFrameToSend(userService.GetUserByName(fileStart.UserName), fileStartAck, false);
         await networkService.SendFrameAsync(frame, 1);

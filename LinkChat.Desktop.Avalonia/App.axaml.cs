@@ -12,12 +12,34 @@ namespace LinkChat.Desktop.Avalonia;
 
 public partial class App : Application
 {
+    public static IClassicDesktopStyleApplicationLifetime? DesktopLifetime;
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
     }
-
+    
     public override void OnFrameworkInitializationCompleted()
+    {
+        ChatWindowViewModel chatWindowViewModel = new ChatWindowViewModel();
+        GlobalSingletonHelper.ChatWindowViewModel = chatWindowViewModel;
+    
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            DesktopLifetime = desktop; // Guardar referencia
+        
+            DisableAvaloniaDataAnnotationValidation();
+            desktop.MainWindow = new MainWindow()
+            {
+                DataContext = new MainWindowViewModel()
+            };
+
+            var topLevel = TopLevel.GetTopLevel(desktop.MainWindow);
+            GlobalSingletonHelper.StorageProvider = topLevel.StorageProvider;
+        }
+        base.OnFrameworkInitializationCompleted();
+    }
+
+    /*public override void OnFrameworkInitializationCompleted()
     {
         ChatWindowViewModel chatWindowViewModel = new ChatWindowViewModel();
         GlobalSingletonHelper.ChatWindowViewModel =  chatWindowViewModel;
@@ -35,9 +57,7 @@ public partial class App : Application
             var topLevel = TopLevel.GetTopLevel(desktop.MainWindow);
             GlobalSingletonHelper.StorageProvider = topLevel.StorageProvider;
         }
-
-        base.OnFrameworkInitializationCompleted();
-    }
+    }*/
 
     private void DisableAvaloniaDataAnnotationValidation()
     {

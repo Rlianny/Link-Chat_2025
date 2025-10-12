@@ -32,7 +32,8 @@ public class Program
 
         INetworkService networkService = new LinuxNetworkService(interfaceName);
         IProtocolService protocolService = new ProtocolService(networkService);
-        IUserService userService = new UserService(protocolService, networkService, myUserName);
+        IUserService userService = new UserService(protocolService, networkService);
+        userService.SetSelfUser(myUserName, Gender.female);
         IFileTransferService fileTransferService = new FileTransferService(protocolService, networkService, userService);
         IMessagingService messagingService = new MessagingService(protocolService, fileTransferService, userService, networkService);
         networkService.StartListening();
@@ -56,8 +57,9 @@ public class Program
             Console.Out.Flush();
             string message = Console.ReadLine();
 
-            //messagingService.SendTextMessage(receiver, message);
             messagingService.SendTextMessage(receiver, message);
+
+            //fileTransferService.SendFile(receiver, message);
 
         }
     }

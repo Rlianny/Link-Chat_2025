@@ -3,7 +3,11 @@
         xmlns:vm="using:LinkChat.Desktop.Avalonia.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="800"
+        MinWidth="800"
+        MinHeight="600"
+        Width="1024"
+        Height="768"
+        WindowStartupLocation="CenterScreen"
         x:Class="LinkChat.Desktop.Avalonia.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
@@ -15,86 +19,304 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <Grid Background="{DynamicResource TitanWhite}" ColumnDefinitions="650, *">
-        <Border Padding="20" Background="White" HorizontalAlignment="Stretch" Grid.Column="0">
-            <Grid RowDefinitions="*,Auto" Background="White">
-                <StackPanel Spacing="40">
-                    <Button Classes="transparent" HorizontalAlignment="Left">
-                        <Image Source="/Assets/Images/ListOptions.png" Width="40" HorizontalAlignment="Left" Classes="IconOnly"></Image>
-                    </Button>
-                    <Button Classes="AvailableUser">
-                        <Grid ColumnDefinitions="100, 300, *">
-                            <StackPanel Grid.Column="0">
-                                <Image Source="/Assets/Images/Character1.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
-                            </StackPanel>
-                            <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-5">
-                                <TextBlock Text="Bianca García" Classes="UserName"></TextBlock>
-                                <TextBlock Text="Bianca: Ok, nos vemos!" Classes="LastMessage"></TextBlock>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2">
-                                <TextBlock Text="14:05" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
-                            </StackPanel>
-                        </Grid>
-                    </Button>
-                    <Button Classes="AvailableUser">
-                        <Grid ColumnDefinitions="100, 300, *">
-                            <StackPanel Grid.Column="0">
-                                <Image Source="/Assets/Images/Character2.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
-                            </StackPanel>
-                            <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-5">
-                                <TextBlock Text="Carmen Rodríguez" Classes="UserName"></TextBlock>
-                                <TextBlock Text="Tú: OK" Classes="LastMessage"></TextBlock>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2">
-                                <TextBlock Text="14:00" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
-                            </StackPanel>
-                        </Grid>
-                    </Button> 
-                    <Button Classes="AvailableUser">
-                        <Grid ColumnDefinitions="100, 300, *">
-                            <StackPanel Grid.Column="0">
-                                <Image Source="/Assets/Images/Character3.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
-                            </StackPanel>
-                            <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-5">
-                                <TextBlock Text="Alejandro Torres" Classes="UserName"></TextBlock>
-                                <TextBlock Text="Tú: Ya enviaste el reporte?" Classes="LastMessage"></TextBlock>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2">
-                                <TextBlock Text="13:48" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
-                            </StackPanel>
-                        </Grid>
-                    </Button>  
-                    <Button Classes="AvailableUser">
-                        <Grid ColumnDefinitions="100, 300, *">
-                            <StackPanel Grid.Column="0">
-                                <Image Source="/Assets/Images/Character4.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
-                            </StackPanel>
-                            <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-5">
-                                <TextBlock Text="Alicia García" Classes="UserName"></TextBlock>
-                                <TextBlock Text="Alicia: Ok, le diré a Bianca que te escriba" Classes="LastMessage"></TextBlock>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2">
-                                <TextBlock Text="12:25" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
-                            </StackPanel>
-                        </Grid>
-                    </Button>   
-                    <Button Classes="AvailableUser">
-                        <Grid ColumnDefinitions="100, 300, *">
-                            <StackPanel Grid.Column="0">
-                                <Image Source="/Assets/Images/Character5.png" Width="65" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>  
-                            </StackPanel>
-                            <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="-5">
-                                <TextBlock Text="Carlos Rivera" Classes="UserName"></TextBlock>
-                                <TextBlock Text="Tú: Hola! Ya te sientes mejor?" Classes="LastMessage"></TextBlock>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2">
-                                <TextBlock Text="12:13" Classes="LastTimestamp" HorizontalAlignment="Right"></TextBlock>
-                            </StackPanel>
-                        </Grid>
-                    </Button>    
+    <Grid Background="{DynamicResource TitanWhite}" ColumnDefinitions="1.5*, 2*">
+        <Grid Grid.Column="1" RowDefinitions="*, *, *" ColumnDefinitions="*, *, *">
+            <Panel Grid.Row="2" Grid.Column="0"
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center">
+                <Image Source="/Assets/Images/LeftDownOvalBig.png"
+                       Width="600"
+                       Height="600"
+                       Margin="-100, 0, 0, -200">
+                    <Image.RenderTransform>
+                        <RotateTransform Angle="0" />
+                    </Image.RenderTransform>
+                    <Image.Styles>
+                        <Style Selector="Image">
+                            <Style.Animations>
+                                <Animation Duration="0:0:10" IterationCount="INFINITE">
+                                    <KeyFrame Cue="0%">
+                                        <Setter Property="(RotateTransform.Angle)" Value="0" />
+                                    </KeyFrame>
+                                    <KeyFrame Cue="100%">
+                                        <Setter Property="(RotateTransform.Angle)" Value="360" />
+                                    </KeyFrame>
+                                </Animation>
+                            </Style.Animations>
+                        </Style>
+                    </Image.Styles>
+                </Image> 
+            </Panel>
+            
+            <Panel Grid.Row="2" Grid.Column="0"
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center">
+                <Image Source="/Assets/Images/LeftDownOvalSmall.png"
+                       Width="450"
+                       Height="450"
+                       Margin="-100, 0, 0, -200">
+                    <Image.RenderTransform>
+                        <RotateTransform Angle="0" />
+                    </Image.RenderTransform>
+                    <Image.Styles>
+                        <Style Selector="Image">
+                            <Style.Animations>
+                                <Animation Duration="0:0:5" IterationCount="INFINITE">
+                                    <KeyFrame Cue="0%">
+                                        <Setter Property="(RotateTransform.Angle)" Value="360" />
+                                    </KeyFrame>
+                                    <KeyFrame Cue="100%">
+                                        <Setter Property="(RotateTransform.Angle)" Value="0" />
+                                    </KeyFrame>
+                                </Animation>
+                            </Style.Animations>
+                        </Style>
+                    </Image.Styles>
+                </Image> 
+            </Panel>
+           
+            <Panel Grid.Column="1" Grid.Row="1" Background="Transparent">
+                <Image Source="/Assets/Images/LinkChatLogo.png" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"></Image>
+            </Panel>
+            
+            <Panel Grid.Row="0" Grid.Column="2"
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center">
+                <Image Source="/Assets/Images/RigthTopOvalBig.png"
+                       Width="600"
+                       Height="600"
+                       Margin="0, -100, -200, 0">
+                    <Image.RenderTransform>
+                        <RotateTransform Angle="0" />
+                    </Image.RenderTransform>
+                    <Image.Styles>
+                        <Style Selector="Image">
+                            <Style.Animations>
+                                <Animation Duration="0:0:10" IterationCount="INFINITE">
+                                    <KeyFrame Cue="0%">
+                                        <Setter Property="(RotateTransform.Angle)" Value="360" />
+                                    </KeyFrame>
+                                    <KeyFrame Cue="100%">
+                                        <Setter Property="(RotateTransform.Angle)" Value="0" />
+                                    </KeyFrame>
+                                </Animation>
+                            </Style.Animations>
+                        </Style>
+                    </Image.Styles>
+                </Image> 
+            </Panel>
+           
+            
+            <Panel Grid.Row="0" Grid.Column="2"
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center">
+                <Image Source="/Assets/Images/RigthTopOvalSmall.png"
+                       Width="450"
+                       Height="450"
+                       Margin="0, -100, -200, 0">
+                    <Image.RenderTransform>
+                        <RotateTransform Angle="0" />
+                    </Image.RenderTransform>
+                    <Image.Styles>
+                        <Style Selector="Image">
+                            <Style.Animations>
+                                <Animation Duration="0:0:5" IterationCount="INFINITE">
+                                    <KeyFrame Cue="0%">
+                                        <Setter Property="(RotateTransform.Angle)" Value="0" />
+                                    </KeyFrame>
+                                    <KeyFrame Cue="100%">
+                                        <Setter Property="(RotateTransform.Angle)" Value="360" />
+                                    </KeyFrame>
+                                </Animation>
+                            </Style.Animations>
+                        </Style>
+                    </Image.Styles>
+                </Image> 
+            </Panel>
+            
+        </Grid>
+        
+        
+        <Grid Grid.Column="0" RowDefinitions="80, *, *, *" Background="White">
+            <Button Grid.Column="0" 
+                    Classes="transparent" 
+                    HorizontalAlignment="Left" 
+                    Padding="30,20, 20,20 ">
+                <Image Source="/Assets/Images/ListOptions.png" Width="40" HorizontalAlignment="Left" Classes="IconOnly"></Image>
+            </Button> 
+           
+            <Border Grid.Row="1" Padding="30">
+                <StackPanel Spacing="20">
+                    <TextBlock Text="Sign Up" FontSize="30" Foreground="{DynamicResource EbonyClay}" FontFamily="{DynamicResource NotoSansBold}"></TextBlock>
+                    <TextBlock Text="Welcome! Create a user below." Foreground="{DynamicResource FontGrey}" FontFamily="{DynamicResource NotoSans}"></TextBlock>
+                    <TextBlock Text=" " FontSize="10" Foreground="{DynamicResource FontGrey}" FontFamily="{DynamicResource NotoSans}"></TextBlock> 
+                    <TextBlock Text="Pick a name:" Foreground="{DynamicResource FontGrey}" FontFamily="{DynamicResource NotoSans}"></TextBlock>
+                    <Border Background="White" 
+                            CornerRadius="15" 
+                            Padding="12" 
+                            Height="60" 
+                            VerticalAlignment="Bottom"
+                            BorderBrush="#f2f2f2"
+                            BorderThickness="1">
+                        <Panel>
+                            <Border Background="Transparent" 
+                                BoxShadow="inset 0 2 5 #0F000000"
+                                CornerRadius="15"
+                                Margin="-11"/>
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <TextBox Grid.Column="0"  
+                                        CornerRadius="6"
+                                        Watermark="Type your name here..."
+                                        AcceptsReturn="True"
+                                        TextWrapping="Wrap"
+                                        Background="Transparent"
+                                        Foreground="{DynamicResource EbonyClay}"
+                                        BorderBrush="Transparent"
+                                        FontSize="16"
+                                        CaretBrush="{DynamicResource EbonyClay}"
+                                        MaxLength="15"
+                                        Text="{Binding Username}">
+                                        <TextBox.Styles>
+                                            <Style Selector="TextBox:empty /template/ TextBlock#PART_Watermark">
+                                                <Setter Property="Foreground" Value="Gray"/>
+                                            </Style>
+                                        </TextBox.Styles>
+                                    </TextBox>
+                            </Grid>
+                        </Panel>
+                    </Border>
                 </StackPanel>
-                
-            </Grid>
-        </Border>
+            </Border>
+            
+            <Border Grid.Row="2" Padding="30">
+                <StackPanel Spacing="20">
+                    <TextBlock Text="  "></TextBlock>
+                    <TextBlock Text="Select your gender:" Foreground="{DynamicResource FontGrey}" FontFamily="{DynamicResource NotoSans}"></TextBlock>
+                    <CheckBox x:Name="Male" 
+                              Foreground="{DynamicResource EbonyClay}"
+                              Content="Male" 
+                              IsChecked="{Binding IsMaleSelected}">
+                        <CheckBox.Template>
+                            <ControlTemplate TargetType="CheckBox">
+                                <Grid ColumnDefinitions="Auto,*">
+                                    <Border x:Name="border"
+                                            Width="20" Height="20"
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{DynamicResource CrocusPurple}"
+                                            BorderThickness="1"
+                                            CornerRadius="5">
+                                        
+                                        <Panel>
+                                            <Path x:Name="checkMark"
+                                                  Fill="{DynamicResource EbonyClay}" 
+                                                  Data="M 1.73,12.91 8.1,19.28 22.79,4.59"
+                                                  Stretch="Uniform"
+                                                  StrokeThickness="1.5"
+                                                  Stroke="{DynamicResource EbonyClay}" 
+                                                  Width="16" Height="16"
+                                                  IsVisible="False"/>
+                                            
+                                            <Rectangle x:Name="indeterminateMark"
+                                                       Fill="{DynamicResource EbonyClay}" 
+                                                       Width="10" Height="10"
+                                                       IsVisible="False"/>
+                                        </Panel>
+                                    </Border>
+                                    
+                                    <ContentPresenter Grid.Column="1"
+                                                      Content="{TemplateBinding Content}"
+                                                      Margin="8,0,0,0"
+                                                      VerticalAlignment="Center"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </CheckBox.Template>
+                        <CheckBox.Styles>
+                            <Style Selector="CheckBox:checked /template/ Path#checkMark">
+                                <Setter Property="IsVisible" Value="True"/>
+                            </Style>
+                            
+                            <Style Selector="CheckBox:indeterminate /template/ Rectangle#indeterminateMark">
+                                <Setter Property="IsVisible" Value="True"/>
+                            </Style>
+                            
+                            <Style Selector="CheckBox:checked /template/ Border#border">
+                                <Setter Property="Background" Value="{DynamicResource CrocusPurple}"/>
+                            </Style>
+                        </CheckBox.Styles>
+                    </CheckBox>
+                    
+                    <CheckBox x:Name="Female" 
+                              Foreground="{DynamicResource EbonyClay}"
+                              Content="Female" 
+                              IsChecked="{Binding IsFemaleSelected}">
+                        <CheckBox.Template>
+                            <ControlTemplate TargetType="CheckBox">
+                                <Grid ColumnDefinitions="Auto,*">
+                                    <Border x:Name="border"
+                                            Width="20" Height="20"
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{DynamicResource CrocusPurple}"
+                                            BorderThickness="1"
+                                            CornerRadius="5">
+                                        
+                                        <Panel>
+                                            <Path x:Name="checkMark"
+                                                  Fill="{DynamicResource EbonyClay}" 
+                                                  Data="M 1.73,12.91 8.1,19.28 22.79,4.59"
+                                                  Stretch="Uniform"
+                                                  StrokeThickness="1.5"
+                                                  Stroke="{DynamicResource EbonyClay}" 
+                                                  Width="16" Height="16"
+                                                  IsVisible="False"/>
+                                            
+                                            <Rectangle x:Name="indeterminateMark"
+                                                       Fill="{DynamicResource EbonyClay}" 
+                                                       Width="10" Height="10"
+                                                       IsVisible="False"/>
+                                        </Panel>
+                                    </Border>
+                                    
+                                    <ContentPresenter Grid.Column="1"
+                                                      Content="{TemplateBinding Content}"
+                                                      Margin="8,0,0,0"
+                                                      VerticalAlignment="Center"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </CheckBox.Template>
+                        <CheckBox.Styles>
+                            <Style Selector="CheckBox:checked /template/ Path#checkMark">
+                                <Setter Property="IsVisible" Value="True"/>
+                            </Style>
+                            
+                            <Style Selector="CheckBox:indeterminate /template/ Rectangle#indeterminateMark">
+                                <Setter Property="IsVisible" Value="True"/>
+                            </Style>
+                            
+                            <Style Selector="CheckBox:checked /template/ Border#border">
+                                <Setter Property="Background" Value="{DynamicResource CrocusPurple}"/>
+                            </Style>
+                        </CheckBox.Styles>
+                    </CheckBox>
+                    
+                </StackPanel>
+            </Border>
+            
+            <Border Grid.Row="3" Padding="30" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button CornerRadius="15" 
+                        Background="{DynamicResource CrocusPurple}"
+                        Height="60" Width="200"
+                        IsEnabled="{Binding IsSignInEnabled}"
+                        Command="{Binding SignInCommand}">
+                    <TextBlock Text="Sign In" 
+                               Foreground="White" 
+                               FontFamily="{DynamicResource NotoSansBold}"
+                               Padding="8"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"></TextBlock>
+                </Button>
+            </Border> 
+        </Grid>
     </Grid>
 </Window>

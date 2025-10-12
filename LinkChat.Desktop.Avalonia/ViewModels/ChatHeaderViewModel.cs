@@ -26,11 +26,22 @@ public partial class ChatHeaderViewModel : ViewModelBase
         CurrentReceiverUser = user;
         Username = CurrentReceiverUser.UserName;
         UserStatus = CurrentReceiverUser.Status.ToString();
+        if (Username == " ")
+            UserStatus = " ";
 
         _appManager = appManager;
         _appManager.UserStatusUpdated += OnUserStatusUpdated;
         _appManager.NewUserDetected += OnNewUserDetected;
         _appManager.UserPruned += OnUserPruned;
+        _appManager.HeartbeatReceived += OnHeartbeatReceived;
+    }
+
+    private void OnHeartbeatReceived(object? sender, User e)
+    {
+        if (e.UserName == Username)
+        {
+            UserStatus = "Online";
+        }
     }
 
     private void OnUserPruned(object? sender, User user)

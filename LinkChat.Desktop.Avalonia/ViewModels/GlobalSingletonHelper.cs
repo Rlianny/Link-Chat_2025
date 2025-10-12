@@ -1,10 +1,16 @@
 using System;
+using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
+using LinkChat.Core.Models;
 
 namespace LinkChat.Desktop.Avalonia.ViewModels;
 
 public static class GlobalSingletonHelper
 {
+    public static Bitmap? FemaleCharacterOther = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/FemaleCharacterOther.png"));
+    public static  Bitmap? FemaleCharacterYou = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/FemaleCharacterYou.png"));
+    public static Bitmap? MaleCharacterOther = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/MaleCharacterOther.png"));
+    public static Bitmap? MaleCharacterYou = ImageHelper.LoadFromResource(new Uri("avares://LinkChat.Desktop.Avalonia/Assets/Images/MaleCharacterYou.png"));
     private static AppManager? _instance;
     public static AppManager AppManager 
     { 
@@ -18,13 +24,11 @@ public static class GlobalSingletonHelper
         }
         set => _instance = value; 
     }
-
-    public static string? MyUserName {get; private set;}
     public static IStorageProvider? StorageProvider { get; set; }
     public static ChatWindowViewModel? ChatWindowViewModel { get; set; }
-
-    public static void SetUserName(string myUserName)
+    public static User MyUser { get; private set; }
+    public static void SetMyUser(User user)
     {
-        MyUserName = myUserName;
+        MyUser = user;
     }
 }
