@@ -1,3 +1,5 @@
+using LinkChat.Core.Tools;
+
 namespace LinkChat.Desktop.Avalonia.ViewModels;
 using LinkChat.Core.Models;
 
@@ -23,6 +25,6 @@ public class ReceivedBubbleFileMessageViewModel : BubbleMessageViewModel
     {
         _file = file;
         _fileName = file.Name;
-        _fileSize = file.Size.ToString()+" MB";
+        _fileSize = Tools.FormatFileSize((long)file.Size);
     }
 }
