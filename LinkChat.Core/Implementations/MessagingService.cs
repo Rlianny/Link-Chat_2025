@@ -42,7 +42,7 @@ public class MessagingService : IMessagingService
 
     private void OnFileSended(Models.File file, string receiverName)
     {
-        AddChatMessage(userService.GetSelfUser().UserName, file);
+        AddChatMessage(receiverName, file);
         Confirmations.Add(file.MessageId, false);
         if (Files.ContainsKey(receiverName))
         {
