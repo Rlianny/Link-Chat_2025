@@ -169,7 +169,7 @@ public class FileTransferService : IFileTransferService
             }
             catch (Exception ex)
             {
-                System.Console.WriteLine($"Error reading {userDirsPath}: {ex.Message}");
+                
             }
         }
 
@@ -217,10 +217,8 @@ public class FileTransferService : IFileTransferService
                 ChangePermissions(downloadPath);
 
                 string fileName = FileStarts[fileChunk.FileId].FileName;
-                System.Console.WriteLine(fileName);
                 string filePath = Path.Combine(downloadPath, fileName);
-                System.Console.WriteLine(filePath);
-
+               
                 int counter = 1;
                 while (System.IO.File.Exists(filePath))
                 {
@@ -229,7 +227,6 @@ public class FileTransferService : IFileTransferService
                     filePath = Path.Combine(downloadPath, $"{nameWithoutExt}({counter}){extension}");
                     counter++;
                 }
-                System.Console.WriteLine(filePath);
 
                 using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
@@ -246,7 +243,6 @@ public class FileTransferService : IFileTransferService
                 ChangePermissions(filePath);
 
                 var fileStart = FileStarts[fileChunk.FileId];
-                System.Console.WriteLine(filePath);
                 long fileSize = new FileInfo(filePath).Length;
                 var file = new Models.File(
                     fileStart.UserName,
@@ -277,10 +273,6 @@ public class FileTransferService : IFileTransferService
             Task task = SendStartConfirmation(fileStart);
             userService.UpdateLastSeen(fileStart.UserName);
             await task;
-        }
-        else
-        {
-            Console.WriteLine($"[OnFileStartReceived] ERROR: Duplicate FileStart - fileId={fileStart.FileId}");
         }
     }
     public async Task SendChunkConfirmation(FileChunk fileChunk)
