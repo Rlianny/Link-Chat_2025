@@ -34,6 +34,7 @@ namespace LinkChat.Infrastructure
             BindSocketToInterface();
             isRunning = true;
             StartSendLoop();
+            StartListening();
         }
 
         private void StartSendLoop()

@@ -67,6 +67,18 @@ public class MessagingService : IMessagingService
         if (!Messages.ContainsKey(chatMessage.MessageId))
         {
             Messages.Add(chatMessage.MessageId, chatMessage);
+            if (chatMessage is TextMessage textMessage)
+            {
+                TextMessageExchanged?.Invoke(textMessage);
+            }
+            else if (chatMessage is Models.File file)
+            {
+                FileTransferred?.Invoke(file);
+            }
+        }
+        else
+        {
+            return;
         }
         if (!Conversation.ContainsKey(userSender))
         {
@@ -153,7 +165,7 @@ public class MessagingService : IMessagingService
     {
         AddChatMessage(textMessage.UserName, textMessage);
         System.Console.WriteLine(textMessage.Content);
-        TextMessageExchanged?.Invoke(textMessage);
+
         try
         {
             await SendConfirmation(textMessage);
@@ -204,7 +216,7 @@ public class MessagingService : IMessagingService
             }
             catch { }
         }
-        FileTransferred?.Invoke(file);
+
     }
     private void OnMessageReactionFrameReceived(MessageReaction reaction)
     {
