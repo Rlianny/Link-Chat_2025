@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using LinkChat.Core.Models;
 using LinkChat.Core.Services;
+using LinkChat.Core;
 namespace LinkChat.Core.Implementations;
 
 public class UserService : IUserService
@@ -27,7 +28,7 @@ public class UserService : IUserService
         return self;
     }
     private void OnHeartbeatFrameReceived(HeartbeatMessage heartbeatMessage)
-    {   
+    {
         bool isNew = false;
         if (!Users.ContainsKey(heartbeatMessage.UserName))
             isNew = true;
@@ -81,7 +82,7 @@ public class UserService : IUserService
         {
             return Users[userName].MacAddress;
         }
-        throw new Exception($"User {userName} is not reachable by you MAC");
+        throw new Exception($"User {userName} is not reachable by you");
     }
 
     public byte[] GetMacAddress(User user)
@@ -95,7 +96,7 @@ public class UserService : IUserService
         {
             return Users[userName];
         }
-        throw new Exception($"User {userName} is not reachable by you NAME");
+        throw new Exception($"User {userName} is not reachable by you");
     }
 
     public Status GetUserStatusByName(string userName)
@@ -104,7 +105,7 @@ public class UserService : IUserService
         {
             return Users[userName].Status;
         }
-        throw new Exception($"User {userName} is not reachable by you STATUS");
+        throw new Exception($"User {userName} is not reachable by you");
     }
 
     public void PruneInactiveUsers()
