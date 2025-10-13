@@ -27,6 +27,7 @@ LinkChat is a peer-to-peer chat application that operates directly at the link l
 ##Installation
 
 ### From Source
+You can skip this step if you are running the desktop application.
 1.  **Clone the repository**
     ```sh
     git clone https://github.com/Rlianny/Link-Chat_2025.git
@@ -50,7 +51,7 @@ docker run --network host --cap-add=NET_RAW --cap-add=NET_ADMIN -e LINKCHAT_USER
 ### Avalonia
 1. Run the application with administrator privileges
 ```sh
-sudo LinkChat.Desktop.Avalonia/bin/Debug/net9.0/LinkChat.Desktop.Avalonia
+sudo ./LinkChatDesktop
 ```
 2. Enter your username and select your gender
 3. Start chatting with other users on the network
