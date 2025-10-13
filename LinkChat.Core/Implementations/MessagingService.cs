@@ -167,7 +167,6 @@ public class MessagingService : IMessagingService
     private async void OnTextMessageFrameReceived(TextMessage textMessage)
     {
         AddChatMessage(textMessage.UserName, textMessage);
-        System.Console.WriteLine(textMessage.Content);
 
         try
         {

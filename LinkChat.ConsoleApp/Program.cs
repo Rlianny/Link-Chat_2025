@@ -339,11 +339,14 @@ public class Program
                 // Agrupar mensajes por usuario
                 foreach (var message in _receivedMessages)
                 {
-                    if (!messagesByUser.ContainsKey(message.UserName))
+                    if(message.UserName != _userService.GetSelfUser().UserName)
                     {
-                        messagesByUser[message.UserName] = new List<TextMessage>();
+                        if (!messagesByUser.ContainsKey(message.UserName))
+                        {
+                            messagesByUser[message.UserName] = new List<TextMessage>();
+                        }
+                        messagesByUser[message.UserName].Add(message);
                     }
-                    messagesByUser[message.UserName].Add(message);
                 }
                 
                 // Mostrar mensajes agrupados
@@ -432,7 +435,6 @@ public class Program
         
         Console.WriteLine("1. Disponible");
         Console.WriteLine("2. Ausente");
-        Console.WriteLine("3. Ocupado");
         Console.WriteLine("0. Cancelar");
         Console.WriteLine();
         
