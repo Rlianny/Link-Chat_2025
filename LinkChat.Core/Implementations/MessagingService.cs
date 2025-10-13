@@ -67,14 +67,6 @@ public class MessagingService : IMessagingService
         if (!Messages.ContainsKey(chatMessage.MessageId))
         {
             Messages.Add(chatMessage.MessageId, chatMessage);
-            if (chatMessage is TextMessage textMessage)
-            {
-                TextMessageExchanged?.Invoke(textMessage);
-            }
-            else if (chatMessage is Models.File file)
-            {
-                FileTransferred?.Invoke(file);
-            }
         }
         else
         {
@@ -85,6 +77,14 @@ public class MessagingService : IMessagingService
             Conversation.Add(userSender, []);
         }
         Conversation[userSender].Add(chatMessage);
+        if (chatMessage is TextMessage textMessage)
+        {
+            TextMessageExchanged?.Invoke(textMessage);
+        }
+        else if (chatMessage is Models.File file)
+        {
+            FileTransferred?.Invoke(file);
+        }
     }
 
     public ChatMessage GetMessageById(string messageId)
@@ -114,7 +114,6 @@ public class MessagingService : IMessagingService
             await networkService.SendFrameAsync(frame, 2);
 
             AddChatMessage(receiverUserName, textMessage);
-            TextMessageExchanged?.Invoke(textMessage);
 
             await Task.Delay(1000);
             Task sendAndWait = Task.Run(async () =>
@@ -139,6 +138,10 @@ public class MessagingService : IMessagingService
         TextMessage textMessage = new TextMessage(userService.GetSelfUser().UserName, DateTime.Now, Tools.Tools.GetNewId(userService), content);
         byte[] frame = protocolService.CreateFrameToSend(null, textMessage, true);
         networkService.SendFrameAsync(frame, 2);
+        foreach (var conversation in Conversation.Values)
+        {
+            conversation.Add(textMessage);
+        }
         TextMessageExchanged?.Invoke(textMessage);
     }
 
