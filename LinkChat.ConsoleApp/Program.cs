@@ -8,12 +8,15 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
+using System.Threading.Tasks;
 
 public class Program
 {
     private static IMessagingService _messagingService;
     private static IUserService _userService;
     private static IFileTransferService _fileTransferService;
+    private static bool _newMessageAvailable = false;
+    private static Queue<TextMessage> _receivedMessages = new Queue<TextMessage>();
 
     public static void Main()
     {
@@ -56,6 +59,9 @@ public class Program
             _fileTransferService = new FileTransferService(protocolService, networkService, _userService);
             _messagingService = new MessagingService(protocolService, _fileTransferService, _userService, networkService);
             
+            // Suscribirse a eventos de mensajes
+            _messagingService.TextMessageExchanged += OnMessageReceived;
+            
             PrintColoredMessage("✅ Servicios inicializados correctamente", ConsoleColor.Green);
             Console.WriteLine();
         }
@@ -68,6 +74,15 @@ public class Program
         }
     }
 
+    private static void OnMessageReceived(TextMessage message)
+    {
+        lock (_receivedMessages)
+        {
+            _receivedMessages.Enqueue(message);
+            _newMessageAvailable = true;
+        }
+    }
+
     private static void RunMainMenu()
     {
         bool exit = false;
@@ -77,10 +92,18 @@ public class Program
             Console.Clear();
             PrintHeader("LINK CHAT - MENÚ PRINCIPAL");
             
+            // Mostrar notificación si hay mensajes nuevos
+            if (_newMessageAvailable)
+            {
+                PrintColoredMessage("📬 ¡Tienes mensajes nuevos!", ConsoleColor.Magenta);
+                Console.WriteLine();
+            }
+            
             Console.WriteLine("1️⃣  Ver usuarios conectados");
-            Console.WriteLine("2️⃣  Enviar mensaje de texto");
-            Console.WriteLine("3️⃣  Enviar archivo");
-            Console.WriteLine("4️⃣  Actualizar estado");
+            Console.WriteLine("2️⃣  Iniciar/continuar chat");
+            Console.WriteLine("3️⃣  Ver mensajes recibidos");
+            Console.WriteLine("4️⃣  Enviar archivo");
+            Console.WriteLine("5️⃣  Actualizar estado");
             Console.WriteLine("0️⃣  Salir");
             Console.WriteLine();
             
@@ -94,12 +117,15 @@ public class Program
                     ShowConnectedUsers();
                     break;
                 case "2":
-                    SendTextMessage();
+                    StartChatSession();
                     break;
                 case "3":
-                    SendFile();
+                    ShowReceivedMessages();
                     break;
                 case "4":
+                    SendFile();
+                    break;
+                case "5":
                     UpdateStatus();
                     break;
                 case "0":
@@ -149,28 +175,29 @@ public class Program
         Console.ReadKey();
     }
     
-    private static void SendTextMessage()
+    private static void StartChatSession()
     {
         Console.Clear();
-        PrintHeader("ENVIAR MENSAJE");
+        PrintHeader("INICIAR CHAT");
         
         List<User> users = _userService.GetAvailableUsers();
         
         if (users.Count == 0)
         {
-            PrintColoredMessage("⚠️ No hay usuarios disponibles para enviar mensajes.", ConsoleColor.Red);
+            PrintColoredMessage("⚠️ No hay usuarios disponibles para chatear.", ConsoleColor.Red);
             Console.WriteLine();
             PrintColoredMessage("Presiona cualquier tecla para volver al menú principal...", ConsoleColor.Yellow);
             Console.ReadKey();
             return;
         }
         
-        PrintColoredMessage("Usuarios disponibles:", ConsoleColor.Cyan);
+        PrintColoredMessage("Selecciona un usuario para chatear:", ConsoleColor.Cyan);
         Console.WriteLine();
         
         for (int i = 0; i < users.Count; i++)
         {
-            Console.WriteLine($"  {i + 1}. {users[i].UserName}");
+            string statusIcon = GetStatusIcon(users[i].Status);
+            Console.WriteLine($"  {i + 1}. {statusIcon} {users[i].UserName}");
         }
         
         Console.WriteLine();
@@ -191,24 +218,168 @@ public class Program
         }
         
         User selectedUser = users[selectedIndex - 1];
+        StartChat(selectedUser);
+    }
+    
+    private static void StartChat(User recipient)
+    {
+        bool chatActive = true;
+        DateTime lastCheck = DateTime.Now;
+        List<TextMessage> chatHistory = new List<TextMessage>();
         
-        PrintColoredMessage($"Escribiendo a {selectedUser.UserName}. Escribe tu mensaje (línea vacía para cancelar):", ConsoleColor.Green);
-        string message = Console.ReadLine();
+        Console.Clear();
+        PrintHeader($"CHAT CON {recipient.UserName}");
+        PrintColoredMessage("Escribe tus mensajes. Comandos disponibles:", ConsoleColor.Cyan);
+        PrintColoredMessage("  /salir - Volver al menú principal", ConsoleColor.Yellow);
+        PrintColoredMessage("  /limpiar - Limpiar historial de la conversación", ConsoleColor.Yellow);
+        Console.WriteLine();
         
-        if (string.IsNullOrEmpty(message))
+        while (chatActive)
         {
-            PrintColoredMessage("Envío cancelado.", ConsoleColor.Yellow);
-        }
-        else
-        {
-            try
+            // Comprobar si hay mensajes nuevos del usuario con el que estamos chateando
+            CheckForNewMessages(recipient.UserName, chatHistory);
+            
+            // Mostrar prompt de escritura
+            Console.Write("> ");
+            string message = Console.ReadLine();
+            
+            // Procesar comandos o enviar mensaje
+            if (string.IsNullOrWhiteSpace(message))
             {
-                _messagingService.SendTextMessage(selectedUser.UserName, message);
-                PrintColoredMessage("✅ Mensaje enviado correctamente.", ConsoleColor.Green);
+                continue;
             }
-            catch (Exception ex)
+            else if (message.Equals("/salir", StringComparison.OrdinalIgnoreCase))
             {
-                PrintColoredMessage($"❌ Error al enviar mensaje: {ex.Message}", ConsoleColor.Red);
+                chatActive = false;
+            }
+            else if (message.Equals("/limpiar", StringComparison.OrdinalIgnoreCase))
+            {
+                Console.Clear();
+                PrintHeader($"CHAT CON {recipient.UserName}");
+                chatHistory.Clear();
+                PrintColoredMessage("Historial de chat limpiado.", ConsoleColor.Yellow);
+            }
+            else
+            {
+                try
+                {
+                    _messagingService.SendTextMessage(recipient.UserName, message);
+
+                    // Añadir mensaje enviado al historial
+                    TextMessage sentMessage = new TextMessage(_userService.GetSelfUser().UserName, DateTime.Now, Tools.GetNewId(_userService), message);
+                    
+                    chatHistory.Add(sentMessage);
+                    
+                    // Mostrar mensaje enviado
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] Tú: {message}");
+                    Console.ResetColor();
+                }
+                catch (Exception ex)
+                {
+                    PrintColoredMessage($"❌ Error al enviar mensaje: {ex.Message}", ConsoleColor.Red);
+                }
+            }
+        }
+    }
+    
+    private static void CheckForNewMessages(string fromUser, List<TextMessage> chatHistory)
+    {
+        lock (_receivedMessages)
+        {
+            if (_receivedMessages.Count > 0)
+            {
+                Queue<TextMessage> remainingMessages = new Queue<TextMessage>();
+                
+                while (_receivedMessages.Count > 0)
+                {
+                    TextMessage msg = _receivedMessages.Dequeue();
+                    
+                    if (msg.UserName == fromUser)
+                    {
+                        // Mostrar y añadir al historial mensajes del usuario actual
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine($"[{msg.TimeStamp:HH:mm:ss}] {msg.UserName}: {msg.Content}");
+                        Console.ResetColor();
+                        chatHistory.Add(msg);
+                    }
+                    else
+                    {
+                        // Mantener mensajes de otros usuarios en la cola
+                        remainingMessages.Enqueue(msg);
+                    }
+                }
+                
+                // Restaurar mensajes de otros usuarios a la cola principal
+                foreach (var msg in remainingMessages)
+                {
+                    _receivedMessages.Enqueue(msg);
+                }
+                
+                _newMessageAvailable = _receivedMessages.Count > 0;
+            }
+        }
+    }
+    
+    private static void ShowReceivedMessages()
+    {
+        Console.Clear();
+        PrintHeader("MENSAJES RECIBIDOS");
+        
+        lock (_receivedMessages)
+        {
+            if (_receivedMessages.Count == 0)
+            {
+                PrintColoredMessage("No hay mensajes nuevos.", ConsoleColor.Yellow);
+            }
+            else
+            {
+                Dictionary<string, List<TextMessage>> messagesByUser = new Dictionary<string, List<TextMessage>>();
+                
+                // Agrupar mensajes por usuario
+                foreach (var message in _receivedMessages)
+                {
+                    if (!messagesByUser.ContainsKey(message.UserName))
+                    {
+                        messagesByUser[message.UserName] = new List<TextMessage>();
+                    }
+                    messagesByUser[message.UserName].Add(message);
+                }
+                
+                // Mostrar mensajes agrupados
+                foreach (var kvp in messagesByUser)
+                {
+                    PrintColoredMessage($"De {kvp.Key} ({kvp.Value.Count} mensajes):", ConsoleColor.Cyan);
+                    
+                    foreach (var message in kvp.Value)
+                    {
+                        Console.WriteLine($"  [{message.TimeStamp:HH:mm:ss}] {message.Content}");
+                    }
+                    
+                    Console.WriteLine();
+                    PrintColoredMessage($"¿Quieres chatear con {kvp.Key}? (s/n): ", ConsoleColor.Yellow);
+                    
+                    if (Console.ReadLine().Trim().ToLower() == "s")
+                    {
+                        // Buscar el usuario en la lista de usuarios disponibles
+                        User chatUser = _userService.GetAvailableUsers().FirstOrDefault(u => u.UserName == kvp.Key);
+                        
+                        if (chatUser != null)
+                        {
+                            // Eliminar los mensajes procesados
+                            RemoveProcessedMessages(kvp.Key);
+                            StartChat(chatUser);
+                            return;  // Salir después de terminar el chat
+                        }
+                        else
+                        {
+                            PrintColoredMessage($"⚠️ El usuario {kvp.Key} ya no está disponible.", ConsoleColor.Red);
+                        }
+                    }
+                }
+                
+                // Actualizar estado de notificación
+                _newMessageAvailable = _receivedMessages.Count > 0;
             }
         }
         
@@ -217,15 +388,37 @@ public class Program
         Console.ReadKey();
     }
     
+    private static void RemoveProcessedMessages(string userName)
+    {
+        lock (_receivedMessages)
+        {
+            Queue<TextMessage> remainingMessages = new Queue<TextMessage>();
+            
+            while (_receivedMessages.Count > 0)
+            {
+                TextMessage msg = _receivedMessages.Dequeue();
+                if (msg.UserName != userName)
+                {
+                    remainingMessages.Enqueue(msg);
+                }
+            }
+            
+            // Restaurar los mensajes que quedan
+            foreach (var msg in remainingMessages)
+            {
+                _receivedMessages.Enqueue(msg);
+            }
+            
+            _newMessageAvailable = _receivedMessages.Count > 0;
+        }
+    }
+    
     private static void SendFile()
     {
         Console.Clear();
         PrintHeader("ENVIAR ARCHIVO");
         
         PrintColoredMessage("⚙️ Funcionalidad en desarrollo. Disponible próximamente.", ConsoleColor.Magenta);
-        
-        // Aquí implementarías la lógica para enviar archivos
-        // Similar a SendTextMessage pero usando _fileTransferService.SendFile
         
         Console.WriteLine();
         PrintColoredMessage("Presiona cualquier tecla para volver al menú principal...", ConsoleColor.Yellow);
@@ -239,6 +432,7 @@ public class Program
         
         Console.WriteLine("1. Disponible");
         Console.WriteLine("2. Ausente");
+        Console.WriteLine("3. Ocupado");
         Console.WriteLine("0. Cancelar");
         Console.WriteLine();
         
@@ -314,7 +508,7 @@ public class Program
         return status switch
         {
             Status.Online => "🟢",
-            Status.Offline => "🟡",
+            Status.Offline => "🔴",
             _ => "⚪"
         };
     }
