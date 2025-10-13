@@ -103,9 +103,6 @@ public partial class ChatWindowViewModel : ViewModelBase
 
         HeaderViewModel = new ChatHeaderViewModel(AppManager.GetCurrentSelfUser(), AppManager);
 
-        networkService.StartListening();
-        //userService.UpdateUsersStatuses();
-
         AppManager.NewUserDetected += OnNewUserDetected;
         AppManager.TextMessageExchanged += OnTextMessageExchanged;
         AppManager.FileTransferred += OnTextMessageExchanged;
