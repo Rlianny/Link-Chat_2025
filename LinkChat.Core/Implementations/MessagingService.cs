@@ -51,7 +51,6 @@ public class MessagingService : IMessagingService
         {
             Files.Add(receiverName, [file]);
         }
-        FileTransferred?.Invoke(file);
     }
 
     public IEnumerable<ChatMessage> GetChatHistory(string userName)
@@ -129,7 +128,7 @@ public class MessagingService : IMessagingService
         catch (Exception ex)
         {
             ErrorFounded?.Invoke($"Error sending message: {ex.Message}");
-            System.Console.WriteLine($"Error sending message: {ex.Message}");
+            //System.Console.WriteLine($"Error sending message: {ex.Message}");
         }
     }
 
