@@ -24,7 +24,6 @@ public class UserService : IUserService
     }
     public User GetSelfUser()
     {
-        Console.WriteLine($"{self.Gender} {self.UserName} GetSelfUser");
         return self;
     }
     private void OnHeartbeatFrameReceived(HeartbeatMessage heartbeatMessage)
@@ -134,7 +133,6 @@ public class UserService : IUserService
     {
         if (self.UserName != " ") return;
         this.self = new User(name, gender, Status.Online, Tools.Tools.GetLocalMacAddress());
-        Console.WriteLine($"{gender} UserService SetSelfUser");
         UpdateUsersStatuses();
     }
 }
