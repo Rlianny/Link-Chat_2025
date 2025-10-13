@@ -16,7 +16,6 @@ namespace LinkChat.Infrastructure
         private const int MTU = 1500; // Ethernet standard MTU
         private const int ETHERNET_HEADER_SIZE = 14; // Size of Ethernet frame header
         private const int MAX_PAYLOAD_SIZE = MTU - ETHERNET_HEADER_SIZE - 100; // Leave some room for protocol overhead
-
         private readonly string interfaceName;
         private int socketFd = -1; // Socket File Descriptor, -1 means it is not initialized
         private int interfaceIndex;
@@ -74,7 +73,6 @@ namespace LinkChat.Infrastructure
 
         public Task SendFrameAsync(byte[] frame, int priority)
         {
-            var timestamp = DateTime.Now;
             lock (queueLock)
             {
                 queue.Enqueue(frame, priority);
@@ -96,11 +94,6 @@ namespace LinkChat.Infrastructure
             };
 
             Array.Copy(frame, 0, destAddr.sll_addr, 0, 6); // The first 6 bytes (destination MAC) are copied to the struct
-
-            if (frame.Length > MTU)
-            {
-                throw new InvalidOperationException($"Frame size ({frame.Length} bytes) exceeds MTU ({MTU} bytes). Consider reducing chunk size.");
-            }
 
             lock (sendLock)
             {
@@ -143,9 +136,6 @@ namespace LinkChat.Infrastructure
 
             this.interfaceIndex = ifr.ifr_ifindex;
         }
-
-
-
         private void BindSocketToInterface()
         {
             var addr = new NativeStructs.sockaddr_ll
@@ -161,13 +151,11 @@ namespace LinkChat.Infrastructure
                 throw new Exception($"Error binding socket to interface. Code: {error}");
             }
         }
-
         public void StartListening()
         {
             if (socketFd == -1)
                 throw new InvalidOperationException("The socket is not initialized.");
 
-            // Start the listening loop in a new thread with higher priority 
             Task.Run(() => ListenLoop());
         }
 
@@ -179,7 +167,6 @@ namespace LinkChat.Infrastructure
             {
                 try
                 {
-
                     NativeStructs.sockaddr_ll tempAddr = new NativeStructs.sockaddr_ll();
                     int tempAddrLen = 0;
                     int receivedBytes = (int)NativeMethods.recvfrom(socketFd, buffer, buffer.Length, 0, ref tempAddr, ref tempAddrLen);

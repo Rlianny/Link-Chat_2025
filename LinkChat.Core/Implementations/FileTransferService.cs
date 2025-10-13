@@ -38,7 +38,6 @@ public class FileTransferService : IFileTransferService
     }
     public List<FileChunk> SplitFile(
         string filePath,
-        string userName,
         int chunkSize = 800)
     {
         if (chunkSize > 800)
@@ -77,12 +76,12 @@ public class FileTransferService : IFileTransferService
     public async void SendFile(string receiverUserName, string filePath)
     {
         User receiverUser = userService.GetUserByName(receiverUserName);
-        var chunks = SplitFile(filePath, receiverUserName, 800).ToList();
+        List<FileChunk> chunks = SplitFile(filePath, 800).ToList();
         long size = new FileInfo(filePath).Length;
 
         Models.File file = new Models.File(userService.GetSelfUser().UserName, DateTime.Now, chunks.First().FileId, filePath, size, Path.GetFileName(filePath));
         FileSended?.Invoke(file, receiverUserName);
-        var start = new FileStart(
+        FileStart start = new FileStart(
             file.UserName,
             DateTime.Now,
             file.Name,
@@ -94,7 +93,9 @@ public class FileTransferService : IFileTransferService
         {
             Confirmations[start.FileId].Add(chunk.ChunkNumber, false);
         }
+
         ConfirmingStarts.Add(start.FileId, false);
+
         Task sendAndWait = Task.Run(async () =>
         {
             int attempts = 0;
@@ -107,7 +108,7 @@ public class FileTransferService : IFileTransferService
             }
         });
         await sendAndWait;
-        
+
         bool changed = true;
         while (changed)
         {
@@ -174,25 +175,20 @@ public class FileTransferService : IFileTransferService
         }
 
         string downloadsFolder = xdgDownloadDir ?? Path.Combine(homeDir, "Downloads");
-
         return Path.Combine(downloadsFolder, "LinkChatDownloads");
     }
 
     public void ChangePermissions(string path)
     {
         var realUser = Environment.GetEnvironmentVariable("SUDO_USER");
-        try
+        var psi = new ProcessStartInfo("chown", $"-R {realUser}:{realUser} \"{path}\"")
         {
-            var psi = new ProcessStartInfo("chown", $"-R {realUser}:{realUser} \"{path}\"")
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false
-            };
-            using var proc = Process.Start(psi);
-            proc?.WaitForExit(3000);
-        }
-        catch { }
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false
+        };
+        using var proc = Process.Start(psi);
+        proc?.WaitForExit(3000);
     }
 
 
@@ -269,7 +265,6 @@ public class FileTransferService : IFileTransferService
                 FileStarts.Add(fileStart.FileId, fileStart);
             }
             FileChunks.Add(fileStart.FileId, []);
-        ;
             Task task = SendStartConfirmation(fileStart);
             userService.UpdateLastSeen(fileStart.UserName);
             await task;
@@ -296,5 +291,4 @@ public class FileTransferService : IFileTransferService
         }
         throw new Exception($"File with Id {messageId} not found");
     }
-
 }

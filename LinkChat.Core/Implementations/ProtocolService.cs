@@ -72,26 +72,10 @@ public class ProtocolService : IProtocolService
     {
         byte[] encryptedPayload = new byte[frame.Length - 14];
         Buffer.BlockCopy(frame, 14, encryptedPayload, 0, encryptedPayload.Length);
-
-        try
-        {
-            byte[] decryptedBytes = AesEncryptor.Decrypt(encryptedPayload);
-            string recoveryMessage = Encoding.UTF8.GetString(decryptedBytes);
-            Message? message = JsonSerializer.Deserialize<Message>(recoveryMessage, options);
-            return message;
-        }
-        catch (CryptographicException ex)
-        {
-            Console.WriteLine("WARNING: Frame received with corrupted data or wrong key (decrypting failure).");
-            Console.WriteLine(ex.Message);
-            return null;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error parsing the decrypted message: {ex.Message}");
-            return null;
-        }
-
+        byte[] decryptedBytes = AesEncryptor.Decrypt(encryptedPayload);
+        string recoveryMessage = Encoding.UTF8.GetString(decryptedBytes);
+        Message? message = JsonSerializer.Deserialize<Message>(recoveryMessage, options);
+        return message;
     }
 
     private void OnFrameReceived(byte[] frameData)

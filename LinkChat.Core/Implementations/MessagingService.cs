@@ -72,7 +72,6 @@ public class MessagingService : IMessagingService
         {
             Conversation.Add(userSender, []);
         }
-
         Conversation[userSender].Add(chatMessage);
     }
 
@@ -83,7 +82,6 @@ public class MessagingService : IMessagingService
             ErrorFounded?.Invoke("Message ID cannot be null or empty");
             throw new ArgumentNullException(nameof(messageId));
         }
-
         if (Messages.TryGetValue(messageId, out var message))
         {
             return message;
@@ -106,14 +104,14 @@ public class MessagingService : IMessagingService
             AddChatMessage(receiverUserName, textMessage);
             TextMessageExchanged?.Invoke(textMessage);
 
-            await Task.Delay(3000);
+            await Task.Delay(1000);
             Task sendAndWait = Task.Run(async () =>
             {
                 while (!Confirmations[textMessage.MessageId])
                 {
                     frame = protocolService.CreateFrameToSend(userService.GetUserByName(receiverUserName), textMessage, false);
                     await networkService.SendFrameAsync(frame, 2);
-                    await Task.Delay(3000);
+                    await Task.Delay(1000);
                 }
             });
         }
@@ -154,6 +152,7 @@ public class MessagingService : IMessagingService
     private async void OnTextMessageFrameReceived(TextMessage textMessage)
     {
         AddChatMessage(textMessage.UserName, textMessage);
+        System.Console.WriteLine(textMessage.Content);
         TextMessageExchanged?.Invoke(textMessage);
         try
         {
