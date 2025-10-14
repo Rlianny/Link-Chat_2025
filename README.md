@@ -24,7 +24,7 @@ LinkChat is a peer-to-peer chat application that operates directly at the link l
 * Administrator/root privileges (required for link layer access)
 * Network interface that supports raw packet manipulation
 
-##Installation
+## Installation
 
 ### From Source
 1.  **Clone the repository**
