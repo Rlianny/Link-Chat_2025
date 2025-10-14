@@ -193,7 +193,7 @@
             <Border Grid.Row="2" Padding="30">
                 <StackPanel Spacing="20">
                     <TextBlock Text="  "></TextBlock>
-                    <TextBlock Text="Select your gender:" Foreground="{DynamicResource FontGrey}" FontFamily="{DynamicResource NotoSans}"></TextBlock>
+                    <TextBlock Text="Select your sex:" Foreground="{DynamicResource FontGrey}" FontFamily="{DynamicResource NotoSans}"></TextBlock>
                     <CheckBox x:Name="Male" 
                               Foreground="{DynamicResource EbonyClay}"
                               Content="Male" 
